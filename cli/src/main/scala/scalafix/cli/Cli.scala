@@ -41,7 +41,7 @@ case class ScalafixOptions(
     ) debug: Boolean = false,
     @Hidden workingDirectory: String = System.getProperty("user.dir"),
     @Hidden out: PrintStream = System.out,
-    @Hidden in: InputStream = System.in,
+@Hidden in: InputStream = System.in,
     @Hidden err: PrintStream = System.err
 ) extends App {
   Cli.runOn(this)

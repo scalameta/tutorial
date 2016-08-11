@@ -1,6 +1,10 @@
 *.class
 *.log
 
+# Intellij Plugin development specific
+idea
+classes
+
 # sbt specific
 .cache
 .history

@@ -152,6 +152,14 @@ lazy val sbtScalafix = project
       scriptedBufferLog := false
     )
 
+//lazy val ideaScalafix = project
+//    .settings(allSettings)
+//    .settings(com.dancingrobot84.sbtidea.Keys.projectSettings)
+//    .settings(
+//      moduleName := "scalafix-idea"
+//    )
+//    .enablePlugins(SbtIdeaPlugin)
+
 
 lazy val readme = scalatex
     .ScalatexReadme(
