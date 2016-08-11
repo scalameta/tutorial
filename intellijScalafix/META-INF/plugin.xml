@@ -1,12 +1,11 @@
 <idea-plugin version="2">
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <id>ch.epfl.scala.scalafix</id>
+  <name>Scalafix</name>
+  <version>0.1.0-RC1</version>
+  <vendor email="olafurpg@gmail.com" url="http://scala.epfl.ch">Scala Center</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      A rewrite tool 
     ]]></description>
 
   <change-notes><![CDATA[

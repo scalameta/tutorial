@@ -153,11 +153,17 @@ lazy val sbtScalafix = project
       scriptedBufferLog := false
     )
 
+ideaBuild in ThisBuild := "145.597.3"
+
 lazy val intellijScalafix = project
     .settings(allSettings)
     .settings(IdeaKey.projectSettings)
     .settings(
       moduleName := "scalafix-intellij"
+//      ,
+//      ideaPublishSettings := PublishSettings(
+//        pluginId = ""
+//      )
     )
     .enablePlugins(SbtIdeaPlugin)
 
