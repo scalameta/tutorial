@@ -1,5 +1,6 @@
 import sbt.ScriptedPlugin
 import sbt.ScriptedPlugin._
+import com.dancingrobot84.sbtidea.{Keys => IdeaKey}
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
 lazy val buildSettings = Seq(
@@ -152,13 +153,13 @@ lazy val sbtScalafix = project
       scriptedBufferLog := false
     )
 
-//lazy val ideaScalafix = project
-//    .settings(allSettings)
-//    .settings(com.dancingrobot84.sbtidea.Keys.projectSettings)
-//    .settings(
-//      moduleName := "scalafix-idea"
-//    )
-//    .enablePlugins(SbtIdeaPlugin)
+lazy val intellijScalafix = project
+    .settings(allSettings)
+    .settings(IdeaKey.projectSettings)
+    .settings(
+      moduleName := "scalafix-intellij"
+    )
+    .enablePlugins(SbtIdeaPlugin)
 
 
 lazy val readme = scalatex
