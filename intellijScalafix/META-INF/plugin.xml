@@ -5,12 +5,11 @@
   <vendor email="olafurpg@gmail.com" url="http://scala.epfl.ch">Scala Center</vendor>
 
   <description><![CDATA[
-      A rewrite tool 
+      Rewrite tool for Scala
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      Rewrites procedure syntax to use regular method syntax.
     ]]>
   </change-notes>
 
@@ -29,6 +28,11 @@
 
   <actions>
     <!-- Add your actions here -->
+    <action id="ScalafixAll" class="scalafix.idea.ScalafixAction" text="Run scalafix"
+            description="Runs all scalafix rewrite rules">
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl L"/>
+      <add-to-group group-id="CodeMenu" anchor="first"/>
+    </action>
   </actions>
 
 </idea-plugin>
