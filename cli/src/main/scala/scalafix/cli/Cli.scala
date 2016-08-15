@@ -55,23 +55,8 @@ object ScalafixOptions {
   val rewriteMap: Map[String, Rewrite] = nameMap(
       ProcedureSyntax
   )
-  implicit val rewriteRead: ArgParser[Rewrite] = ArgParser.instance[Rewrite] {
-    str =>
-      rewriteMap.get(str) match {
-        case Some(x) => Right(x)
-        case _ =>
-          Left(
-              s"invalid input $str, must be one of ${rewriteMap.keys.mkString(", ")}")
-      }
-  }
-
-  implicit val inputStreamRead: ArgParser[InputStream] =
-    ArgParser.instance[InputStream](x => Right(System.in))
-
-  implicit val printStreamRead: ArgParser[PrintStream] =
-    ArgParser.instance[PrintStream](x => Right(System.out))
-
 }
+import AutoCli._
 
 object Cli extends AppOf[ScalafixOptions] {
   val helpMessage: String = Messages[ScalafixOptions].withHelp.helpMessage
@@ -127,7 +112,7 @@ object Cli extends AppOf[ScalafixOptions] {
   }
 
   def parse(args: Seq[String]): Either[String, ScalafixOptions] =
-    CaseApp.parse[ScalafixOptions](args) match {
+    AutoCli.parse(args) match {
       case Right((config, extraFiles)) =>
         Right(config.copy(files = config.files ++ extraFiles))
       case Left(x) => Left(x)
