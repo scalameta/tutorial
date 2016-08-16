@@ -26,10 +26,10 @@ import ScalafixOptions._
 case class ScalafixOptions(
     @HelpMessage(
         s"Rules to run, one of: ${Rewrite.default.mkString(", ")}"
-    ) rewrites: List[Rewrite] = Rewrite.default,
+    ) rewrites: Seq[Rewrite] = Rewrite.default,
     @Hidden @HelpMessage(
         "Files to fix. Runs on all *.scala files if given a directory."
-    ) @ExtraName("f") files: List[String] = List.empty[String],
+    ) @ExtraName("f") files: Seq[String] = List.empty[String],
     @HelpMessage(
         "If true, writes changes to files instead of printing to stdout."
     ) @ExtraName("i") inPlace: Boolean = false,
@@ -58,8 +58,14 @@ object ScalafixOptions {
 }
 import AutoCli._
 
-object Cli extends AppOf[ScalafixOptions] {
-  val helpMessage: String = Messages[ScalafixOptions].withHelp.helpMessage
+case class Config2(
+                  str: String
+                  )
+
+object Cli { // extends AppOf[ScalafixOptions] {
+  val args = Seq.empty[String]
+  CaseApp.parse[Config2](args)
+  val helpMessage: String = "" // Messages[ScalafixOptions].withHelp.helpMessage
 
   val default = ScalafixOptions()
 

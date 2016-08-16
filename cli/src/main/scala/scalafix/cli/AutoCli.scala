@@ -24,8 +24,10 @@ object AutoCli {
 
   implicit val printStreamRead: ArgParser[PrintStream] =
     ArgParser.instance[PrintStream](x => Right(System.out))
+  implicit val stringRead: ArgParser[String] =
+    ArgParser.instance[String](x => Right(x))
 
   def parse(args: Seq[String]): Either[String, (ScalafixOptions, Seq[String])] =
-    CaseApp.parse[ScalafixOptions](args)
+    ???
 
 }

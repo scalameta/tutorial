@@ -130,7 +130,8 @@ lazy val cli = project
         "org.yaml" % "snakeyaml" % "1.17",
         "com.github.alexarchambault" %% "case-app" % "1.0.0-RC3",
         "com.martiansoftware" % "nailgun-server" % "0.9.1",
-        "io.circe" %% "circe-parser" % "0.4.1"
+        "io.circe" %% "circe-parser" % "0.4.1",
+        "io.circe" %% "circe-generic" % "0.4.1"
       )
     )
     .dependsOn(core % "compile->compile;test->test")
