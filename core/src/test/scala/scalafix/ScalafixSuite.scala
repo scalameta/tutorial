@@ -1,5 +1,6 @@
 package scalafix
 
+import scalafix.rewrite.MacroExpansion
 import scalafix.rewrite.ProcedureSyntax
 import scalafix.util.DiffAssertions
 
