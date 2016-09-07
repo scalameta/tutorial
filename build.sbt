@@ -13,6 +13,15 @@ lazy val buildSettings = Seq(
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
 
+// Macro setting is any module that has macros, or manipulates meta trees
+lazy val macroSettings = Seq(
+  libraryDependencies += "org.scalameta" %% "scalameta" % "1.1.0-SNAPSHOT",
+  resolvers += Resolver.sonatypeRepo("snapshots"),
+  addCompilerPlugin(
+    "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),
+  scalacOptions += "-Xplugin-require:macroparadise"
+)
+
 lazy val jvmOptions = Seq(
   "-Xss4m"
 )
@@ -96,6 +105,7 @@ lazy val root = project
   .aggregate(
     core,
     cli,
+    macros,
     readme,
     sbtScalafix
   )
@@ -136,6 +146,14 @@ lazy val cli = project
     )
   )
   .dependsOn(core % "compile->compile;test->test")
+
+lazy val macros = project
+  .settings(allSettings: _*)
+  .settings(macroSettings: _*)
+  .settings(
+    libraryDependencies +=
+      "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+  )
 
 lazy val sbtScalafix = project
   .settings(allSettings)
