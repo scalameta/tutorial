@@ -33,3 +33,11 @@
       PS. I recommend IntelliJ users pre-install IntelliJ IDEA 2016.3 EAP for a sneak peek into new features to help you debug scala.meta based macros.
 
 
+  @sect{Getting started}
+
+    @ol
+      @li
+        Clone the @lnk("workshop repo", "https://github.com/olafurpg/scala.meta-workshop").
+      @li
+        Run @code{sbt test} to make sure everything works.
+
