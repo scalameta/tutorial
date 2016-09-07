@@ -58,7 +58,7 @@ object logger {
                                       enclosing: sourcecode.Enclosing): Unit =
     log(t, LogLevel.error, line, file, enclosing, showSource = false)
 
-  def log(t: Tree, tokensOnly: Boolean = false): String = {
+  def details(t: Tree, tokensOnly: Boolean = false): String = {
     val tokens =
       s"TOKENS: ${t.tokens.map(x => reveal(x.syntax)).mkString(",")}"
     if (tokensOnly) tokens

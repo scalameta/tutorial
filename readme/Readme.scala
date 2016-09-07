@@ -7,4 +7,5 @@ object Readme {
   def repo: String = "https://github.com/scalacenter/scalafix"
   def dotty = a(href := "http://dotty.epfl.ch/", "Dotty")
 
+
 }

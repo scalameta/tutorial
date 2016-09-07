@@ -25,7 +25,7 @@ class ScalafixSuite extends FunSuite with DiffAssertions {
       |object Main {
       |  def main(args: Seq[String]) {
       |  var number = 2
-      |    def increment(n: Int) {
+      |    def increment(n: Int) /* comment */ {
       |      number += n
       |    }
       |    increment(3)
@@ -40,7 +40,7 @@ class ScalafixSuite extends FunSuite with DiffAssertions {
       |object Main {
       |  def main(args: Seq[String]): Unit = {
       |  var number = 2
-      |    def increment(n: Int): Unit = {
+      |    def increment(n: Int): Unit = /* comment */ {
       |      number += n
       |    }
       |    increment(3)
@@ -52,6 +52,10 @@ class ScalafixSuite extends FunSuite with DiffAssertions {
   test("on parse error") {
     val obtained = Scalafix.fix("object A {")
     assert(obtained.isInstanceOf[Fixed.ParseError])
+  }
+
+  test("hello world length") {
+    assert("hello world length".length == 11)
   }
 
 }
