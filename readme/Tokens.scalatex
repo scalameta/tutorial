@@ -3,7 +3,8 @@
 
 @sect{Part 1: Tokens}
   @p
-    Make sure you have setup your environment from @sect.ref{Getting started}.
+  @p
+    Make sure you have setup your environment from @sect.ref{Part 0: Getting started}.
     You can decide to run these examples from the console or from @code{Playground.scala}.
 
   @p
@@ -33,7 +34,7 @@
       scala.meta structures, prefer @code{.syntax}.
 
       @p
-        This is maybe no so exciting right now but comes in handy sometimes.
+        This is maybe no so exciting right now but it will make more sense soon.
 
     @sect(".structure", "Token Structure")
         Another useful method is @code{Tokens.structure}.

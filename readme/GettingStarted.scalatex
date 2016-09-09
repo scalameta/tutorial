@@ -1,0 +1,18 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Part 0: Getting started}
+
+  @ol
+    @li
+      Clone the @lnk("workshop repo", "https://github.com/olafurpg/scala.meta-workshop").
+    @li
+      Run @code{sbt test} to make sure everything works.
+    @li
+      Setup the project in your favorite IDE, for example IntelliJ, ENSIME or vim.
+    @li
+      Open up @code{core/src/test/scala/scalafix/Playground.scala}.
+    @li
+      Run @code{core/src/test/scala/scalafix/Playground.scala}.
+      Run @code{sbt "~core/testOnly scalafix.Playground"}.
+

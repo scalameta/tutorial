@@ -1,0 +1,9 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Resources}
+
+  @ul
+    @li
+      @lnk("Elysium", "https://github.com/DavidDudson/Elysium"). The macro annotation
+      examples were mostly borrowed from here.
