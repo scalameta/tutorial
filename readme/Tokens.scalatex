@@ -8,56 +8,55 @@
     You can decide to run these examples from the console or from @code{Playground.scala}.
 
   @p
-    This whole workshop will assume you have run this import:
+    This whole workshop will assume you have this import in scope:
 
   @repl
-    import scala.meta
+    import scala.meta._
 
-  @sect("Introduction", "Token Introduction")
-    @p
-      Let's start by tokenizing a small expression
+  @p
+    Here's how to tokenize a small expression.
 
-      @meta
-        "val x = 2".tokenize.get
+    @meta
+      "val x = 2".tokenize.get
+
+    Let's discuss the most interesting methods on tokens.
 
     @sect(".syntax", "Token syntax")
       @p
-        The simplest method we can call @code{Tokens.syntax}
+        The simplest method we can call is @code{Tokens.syntax}
+        The method returns a string representation of the actual code behind
+        the tokens, or how the code should look like to a developer.
 
       @meta
         "val x = 2".tokenize.get.syntax
 
-      @code{.syntax} returns a string for the code representation of what we
-      have in our hands.
-      @code{Tokens.toString()} uses @code{.syntax} behind the scenes.
-      However, you should never rely on @code{toString()} when manipulating
-      scala.meta structures, prefer @code{.syntax}.
 
       @p
-        This is maybe no so exciting right now but it will make more sense soon.
+        @code{Tokens.toString()} uses @code{.syntax} behind the scenes.
+        However, you should never rely on @code{toString()} when manipulating
+        scala.meta structures, prefer to explicitly call @code{.syntax}.
+        It's maybe not so obvious why right now but it will make more sense soon.
 
     @sect(".structure", "Token Structure")
         Another useful method is @code{Tokens.structure}.
+        The method shows details that may be relevant to us as metaprogrammers.
 
         @meta
           "val x = 2".tokenize.get.structure
 
       @p
-        @code{.structure} also returns a string, but it shows a lot more details
-        than @code{.syntax}, this is often useful for debugging.
-        However, @code{.structure} is not only useful for debugging as we will see
-        in @sect.ref{Part 2: Trees}.
+        @code{.structure} is often useful for debugging and testing.
 
+    @sect{Tokens vs. Token}
       @p
-        @code{Tokens} is a wrapper around a sequence of @code{Token} objects.
-        We can also run @code{Token.structure}.
+        The class @code{Tokens} is a wrapper around a sequence of @code{Token} objects.
+        There are multiple subtypes of @code{Token} while there only one type @code{Tokens}.
 
         @meta
           "val x = 2".tokenize.get.head
 
        @code{BOF} stands for "Beginning of file".
-       Observe that the token has it's own type, that's pretty neat.
-       Let's see what other types are in the string
+       Let's see what other kinds of token types are in the string
 
         @meta
           "val x = 2".tokenize.get
@@ -105,22 +104,23 @@
 
     @sect(".get", "Tokens.get")
       @p
-        When is it unsafe to run @code{.get} after @code{tokenize}?
         Tokenization can sometimes fail, for example in this case:
 
-      @meta
-       """ val str = "unclosed literal """.tokenize.get
-
-      @p
-        If you prefer, you can safely pattern match on the tokenize result
-
         @meta
-          """ val str = "closed literal" """.tokenize match {
-            case Tokenized.Success(tokenized) => tokenized
-            case Tokenized.Error(e) => ???
-          }
+         """ val str = "unclosed literal """.tokenize.get
+
+        @p
+          If you prefer, you can safely pattern match on the tokenize result
+
+          @meta
+            """ val str = "closed literal" """.tokenize match {
+              case Tokenized.Success(tokenized) => tokenized
+              case Tokenized.Error(e) => ???
+            }
 
   @sect("Exercises", "Token Exercises")
+    @p
+      Enough with explanations. Time to get your hands dirty.
 
     @sect{Check if a string has balanced number of curly braces}
       @p
@@ -132,19 +132,23 @@
 
     @sect{Strip away trailing commas}
       @p
-        This one is quite tricky. Implement a method like this
+        Implement the following method so that @code{TrailingCommaSuite} passes.
 
         @hl.scala
           /** Removes all commas behind the last argument of function calls */
-          def stripTrailingCommas(tokens: Tokens): Tokens = ???
-      @p
-        You only have tokens so you don't know which parentheses belong to function applications.
-        However, the parser can't help you since the tokens may contain trailing commas.
+          def stripTrailingCommas(tokens: Tokens): String = ???
+
+      @info
+        @note. You don't have access to an AST so you can't know for certain
+        which parentheses belong to a function application. For this exercise,
+        it's OK to just guess.
 
   @sect("Conclusion", "Token Conclusions")
     @p
-      Scala.meta tokens look quite boring to start with, but it turns out that they
-      are incredibly useful.
+      Scala.meta tokens are the foundation of scala.meta.
+      Sometimes you don't have access to a parsed AST and then your best shot is
+      work with tokens, for example in the case of @sect.ref{Strip away trailing commas}.
 
     @p
-      The key features fof
+      In the following chapter we will discuss another exciting data structure:
+      the incredible @b{scala.meta.Tree}.

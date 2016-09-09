@@ -3,29 +3,78 @@
 
 @sect{Part 2: Trees}
   @p
-    Metaprogramming enables us to do cool things such as build developer tools and implement macros that extend the functionality of a programming language.
-    However, metaprogramming in Scala has historically been notoriously difficult because of its tight coupling with compiler internals.
+    Reminder. We assume you have this import in scope:
 
-  @p
-    This workshop is an introduction to
-    @lnk("scala.meta", "http://scalameta.org"),
-    a clean-room implementation of a metaprogramming toolkit for Scala,
-    designed to be simple, robust and portable.
-    We will focus on scala.meta's most unique features: high-fidelity tokens
-    and comprehensive trees.
-    You will get a hands-on experience with these features by using scala.meta in two different ways:
+  @repl
+    import scala.meta._
 
-    @ol
-      @li
-        as a library to develop a tool that automatically fixes common linter errors.
-        We will see how a code rewrite can be implemented in a few lines of code, tested on millions of lines of Scala code and be integrated with SBT and your favourite IDE.
+  @sect{.parse[T]}
+    @p
+      The first difference between tokens and trees is that trees are slightly
+      tricker to obtain, you need to pass in a type argument!
 
-      @li
-        as a compiler plugin to implement new-style "inline" macro annotations.
-        We will see how inline style macros offer a much lower learning curve compared to scala.reflect macros.
+    @p
+      Here's how to parse a compilation unit.
 
-  @p
-    At the end of the workshop, I hope you will be inspired to develop the next generation of Scala tooling!
+    @meta
+      "object Main extends App { println(1) }".parse[Source].get
 
-  @p
-    PS. I recommend IntelliJ users pre-install IntelliJ IDEA 2016.3 EAP for a sneak peek into new features to help you debug scala.meta based macros.
+    @p
+      If we try to parse a statement as a compilation unit we will fail.
+
+    @meta
+      "val x = 2".parse[Source].get
+
+    @p
+      We need to explicitly parse it as a statement (@code{Stat}).
+
+    @meta
+      "val x = 2".parse[Stat].get
+
+    @p
+      We can also parse case statement
+
+    @meta
+      "case Foo(bar) if bar > 2 => println(bar)".parse[Case].get
+    @p
+      Scala.meta has dozens of parsers:
+      @image("parse.png")
+      However, @code{.parse[Stat]} and @code{.parse[Source]} are
+      usually all you need.
+
+  @sect{dialects}
+    @p
+      I didn't tell the whole story when I said you need to pass in a type
+      argument to parse statements.
+      You also need to pass in a dialect!
+      However, scala.meta will by default pick the @code{Scala211} dialect
+      for you if you don't provide one explicitly.
+
+    @p
+      With the SBT dialects, we can parse vals as top-level statements.
+
+    @meta
+      dialects.Sbt0137(
+        "lazy val core = project.settings(commonSettings)"
+      ).parse[Source].get
+
+    @p
+      We can even parse multiple top level statements
+
+    @meta
+      dialects.Sbt0137(
+        """
+        lazy val core = project.settings(commonSettings)
+
+        lazy val extra = project.dependsOn(core)
+        """
+      ).parse[Source].get
+
+    @p
+      For the remainder of the workshop, we will only work with the @code{Scala211}
+      dialect.
+
+  @sect{.structure}
+    @p
+  @sect{.syntax}
+    @p

@@ -13,11 +13,11 @@ import scalatags.Text.all._
 import scalatex.Main._
 
 object Readme {
-  def github: String = "https://github.com"
-  def repo: String = "https://github.com/olafurpg/scala.meta-workshop"
-  def dotty = a(href := "http://dotty.epfl.ch/", "Dotty")
-  def issue(id: Int) = a(href := repo + s"/issues/$id", s"#$id")
-  def note = b("NOTE")
+  def github: String    = "https://github.com"
+  def repo: String      = "https://github.com/olafurpg/scala.meta-workshop"
+  def dotty             = a(href := "http://dotty.epfl.ch/", "Dotty")
+  def issue(id: Int)    = a(href := repo + s"/issues/$id", s"#$id")
+  def note              = b("NOTE")
   def issues(ids: Int*) = span(ids.map(issue): _*)
 
   val eval = new Eval()
@@ -44,9 +44,9 @@ object Readme {
   def callout(kind: String, msg: Frag*) =
     div(cls := s"bs-callout bs-callout-${kind}", p(msg))
 
-  def info(msg: Frag*) = callout("info", msg: _*)
+  def info(msg: Frag*)    = callout("info", msg: _*)
   def warning(msg: Frag*) = callout("warning", msg: _*)
-  def danger(msg: Frag*) = callout("danger", msg: _*)
+  def danger(msg: Frag*)  = callout("danger", msg: _*)
 
   def meta(indentedCode: String) = {
     val code = getMetaCode(indentedCode)
@@ -57,6 +57,13 @@ object Readme {
   def repl(code: String): TypedTag[String] = {
     repl(code, 0)
   }
+
+  def image(file: String, caption: String = "") = div(
+    cls := "text-center",
+    img(src := "img/" + file),
+    if (caption.nonEmpty) p("Caption: " + caption)
+    else p()
+  )
 
   /**
     * repl session, inspired by tut.
