@@ -1,6 +1,7 @@
 package scalafix.workshop
 
 import scala.meta._
+// These may come in handy.
 import scala.meta.tokens.Token.LeftBrace
 import scala.meta.tokens.Token.LeftBracket
 import scala.meta.tokens.Token.LeftParen
@@ -10,8 +11,6 @@ import scala.meta.tokens.Token.RightParen
 
 class BalancedSuite extends WorkshopSuite {
   override def run(str: String): Boolean = isBalanced(str.tokenize.get)
-
-  Token
 
   /** Are parentheses balanced? */
   def isBalanced(tokens: Tokens): Boolean = ???

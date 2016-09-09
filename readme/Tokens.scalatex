@@ -124,7 +124,7 @@
 
     @sect{Check if a string has balanced number of curly braces}
       @p
-        Implement a method like this
+        Implement the following method so that @code{BalancedSuite} passes.
 
         @hl.scala
           /** Replaces all var tokens with val tokens */
