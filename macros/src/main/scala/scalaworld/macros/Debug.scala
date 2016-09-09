@@ -5,16 +5,13 @@ import scala.meta._
 
 @compileTimeOnly("@scalaworld.Debug not expanded")
 class Debug extends scala.annotation.StaticAnnotation {
-  def meta[T](thunk: => T): T = thunk
-
-  inline def apply(defn: Any): Any = meta {
+  import autocomplete._
+  def apply(defn: Defn): Any = meta {
     defn match {
       case q"..$mods def $name[..$tparams](...$paramss): $tpeopt = $expr" =>
-        val args = paramss.flatten.map(x => x.name.syntax.parse[Term].get)
-        val body = q"""
+        val body =
+          q"""
                   {
-                    println(..$args)
-
                     val start = System.nanoTime()
                     val result = $expr
                     val elapsed =
