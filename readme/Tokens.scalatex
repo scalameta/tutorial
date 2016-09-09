@@ -45,7 +45,7 @@
         @code{.structure} also returns a string, but it shows a lot more details
         than @code{.syntax}, this is often useful for debugging.
         However, @code{.structure} is not only useful for debugging as we will see
-        in @sect.ref{Trees}.
+        in @sect.ref{Part 2: Trees}.
 
       @p
         @code{Tokens} is a wrapper around a sequence of @code{Token} objects.
@@ -68,20 +68,55 @@
           The @code{[0...3)} part indicates that the @code{val} tokens start at
           offset 0 and ends at offset 3.
 
+    @sect("==", "Tokens.==")
       @p
-        When is it not safe to run @code{.get} after @code{tokenize}?
+        How does token equality look like?
+
+      @meta
+        "foobar".tokenize.get(1) == "foobar kas".tokenize.get(1)
+
+      Huh, why are they not the same?
+
+      @warning
+        Token equality is implemented with reference equality.
+        You need to be explicit if you actually mean syntactic (@code{.syntax}),
+        or structural (@code{.structure}) equality.
+
+      The tokens are syntactically equal.
+
+      @meta
+        "foobar".tokenize.get(1).syntax == "foobar kas".tokenize.get(1).syntax
+
+      Even if we move the tokens around
+
+      @meta
+        "kas foobar".tokenize.get(3).syntax == "foobar kas".tokenize.get(1).syntax
+
+      The tokens are also structurally equal.
+
+      @meta
+        "foobar".tokenize.get(1).structure == "foobar kas".tokenize.get(1).structure
+
+      However, they are not structurally equal if we move them around.
+
+      @meta
+        "kas foobar".tokenize.get(3).structure == "foobar kas".tokenize.get(1).structure
+
+    @sect(".get", "Tokens.get")
+      @p
+        When is it unsafe to run @code{.get} after @code{tokenize}?
         Tokenization can sometimes fail, for example in this case:
 
       @meta
        """ val str = "unclosed literal """.tokenize.get
 
       @p
-        You can safely pattern match on the tokenize result
+        If you prefer, you can safely pattern match on the tokenize result
 
         @meta
           """ val str = "closed literal" """.tokenize match {
             case Tokenized.Success(tokenized) => tokenized
-            case Tokenized.Error(e) => throw e
+            case Tokenized.Error(e) => ???
           }
 
   @sect("Exercises", "Token Exercises")

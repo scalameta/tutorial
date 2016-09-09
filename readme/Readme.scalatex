@@ -20,7 +20,8 @@
         Run @code{core/src/test/scala/scalafix/Playground.scala}.
         Run @code{sbt "~core/testOnly scalafix.Playground"}.
 
-  @scalatex.Part01()
+  @scalatex.Tokens()
+  @scalatex.Trees()
 
   @sect{Resources}
 
