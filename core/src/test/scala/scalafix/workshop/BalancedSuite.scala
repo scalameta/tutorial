@@ -30,6 +30,8 @@ class BalancedSuite extends WorkshopSuite {
   checkNot("(][)")
   checkNot("{(})")
 
+  checkNot(""" val x = "{" + `{` + }  `}` """)
+
   check("val x = { 2 }")
   check("""|def x = {
            |  List(1, 2).map { case x => x }
