@@ -21,7 +21,7 @@
 
     Let's discuss the most interesting methods on tokens.
 
-    @sect(".syntax", "Token syntax")
+    @sect{Tokens.syntax}
       @p
         The simplest method we can call is @code{Tokens.syntax}
         The method returns a string representation of the actual code behind
@@ -37,7 +37,8 @@
         scala.meta structures, prefer to explicitly call @code{.syntax}.
         It's maybe not so obvious why right now but it will make more sense soon.
 
-    @sect(".structure", "Token Structure")
+    @sect{Tokens.structure}
+      @p
         Another useful method is @code{Tokens.structure}.
         The method shows details that may be relevant to us as metaprogrammers.
 

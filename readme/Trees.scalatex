@@ -8,16 +8,51 @@
   @repl
     import scala.meta._
 
+  @sect{q"Quasiquotes"}
+    @p
+      The easiest way to get started with scala.meta trees is using quasiquotes.
+
+    @meta
+      q"case class User(name: String, age: Int)"
+
+    @p
+      Quasiquotes can be composed
+
+    @meta
+      val method = q"def `is a baby` = age < 1"
+      q"""
+      case class User(name: String, age: Int) {
+        $method
+      }
+      """
+
+    @p
+      Quasiquotes can also be used to deconstruct trees with pattern matching
+
+    @meta
+      q"def `is a baby` = age < 1" match {
+        case q"def $name = $body" =>
+          s"You ${name.syntax} if your ${body.syntax}"
+      }
+
   @sect{.parse[T]}
     @p
-      The first difference between tokens and trees is that trees are slightly
-      tricker to obtain, you need to pass in a type argument!
+      If the contents that you want to parse are only known at runtime,
+      you can't use quasiquotes.
+      For example, this happens when you need to parse file contents.
 
     @p
       Here's how to parse a compilation unit.
 
     @meta
       "object Main extends App { println(1) }".parse[Source].get
+
+    @success
+      Pro tip. You can also call @code{.parse[T]} on a @code{File},
+      just like this
+
+      @meta
+        new java.io.File("readme/ParseMe.scala").parse[Source]
 
     @p
       If we try to parse a statement as a compilation unit we will fail.
@@ -74,7 +109,34 @@
       For the remainder of the workshop, we will only work with the @code{Scala211}
       dialect.
 
-  @sect{.structure}
+  @sect{Tree.syntax}
     @p
-  @sect{.syntax}
+      Just like with tokens, we can also run @code{.syntax} on trees.
+
+    @meta
+      "foo(bar)".parse[Stat].get.syntax
+
+    This may not seem impressive or useful.
+    However, take a look at this:
+
+    @meta
+      Term.Apply(
+        Term.Name("foo"),
+        scala.collection.immutable.Seq(
+          Term.Name("bar"): Term.Arg
+        )
+      ).syntax
+
+    @p
+      What happened there?
+      We manually constructed a scala.meta.Tree and scala.meta was able to
+      synthesize the parentheses.
+      We never gave scala.meta parentheses but still it figured out we
+      needed them.
+      Pretty cool huh.
+
+  @sect{Tree.structure}
+    @p
+
+  @sect{Tree hierarchy}
     @p

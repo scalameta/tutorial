@@ -23,6 +23,9 @@
     .bs-callout-info h4 {
       color: #1b809e !IMPORTANT;
     }
+    .bs-callout-success {
+      border-left-color: #5cb85c !IMPORTANT;
+    }
     .bs-callout {
         padding: 20px;
         margin: 20px 0;

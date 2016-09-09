@@ -45,6 +45,7 @@ object Readme {
     div(cls := s"bs-callout bs-callout-${kind}", p(msg))
 
   def info(msg: Frag*)    = callout("info", msg: _*)
+  def success(msg: Frag*) = callout("success", msg: _*)
   def warning(msg: Frag*) = callout("warning", msg: _*)
   def danger(msg: Frag*)  = callout("danger", msg: _*)
 
