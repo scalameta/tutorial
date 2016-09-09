@@ -14,9 +14,7 @@ class BalancedSuite extends WorkshopSuite {
   Token
 
   /** Are parentheses balanced? */
-  def isBalanced(tokens: Tokens): Boolean = {
-    ???
-  }
+  def isBalanced(tokens: Tokens): Boolean = ???
 
   checkNot("{")
   check("{}")
