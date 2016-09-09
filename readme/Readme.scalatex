@@ -3,34 +3,7 @@
 
 @sect("A Whirlwind Tour of scala.meta", "")
 
-  @sect{Abstract}
-    @p
-      Metaprogramming enables us to do cool things such as build developer tools and implement macros that extend the functionality of a programming language.
-      However, metaprogramming in Scala has historically been notoriously difficult because of its tight coupling with compiler internals.
-
-    @p
-      This workshop is an introduction to
-      @lnk("scala.meta", "http://scalameta.org"),
-      a clean-room implementation of a metaprogramming toolkit for Scala,
-      designed to be simple, robust and portable.
-      We will focus on scala.meta's most unique features: high-fidelity tokens
-      and comprehensive trees.
-      You will get a hands-on experience with these features by using scala.meta in two different ways:
-
-      @ol
-        @li
-          as a library to develop a tool that automatically fixes common linter errors.
-          We will see how a code rewrite can be implemented in a few lines of code, tested on millions of lines of Scala code and be integrated with SBT and your favourite IDE.
-
-        @li
-          as a compiler plugin to implement new-style "inline" macro annotations.
-          We will see how inline style macros offer a much lower learning curve compared to scala.reflect macros.
-
-    @p
-      At the end of the workshop, I hope you will be inspired to develop the next generation of Scala tooling!
-
-    @p
-      PS. I recommend IntelliJ users pre-install IntelliJ IDEA 2016.3 EAP for a sneak peek into new features to help you debug scala.meta based macros.
+  @scalatex.Abstract()
 
   @sect{Getting started}
 
@@ -39,6 +12,15 @@
         Clone the @lnk("workshop repo", "https://github.com/olafurpg/scala.meta-workshop").
       @li
         Run @code{sbt test} to make sure everything works.
+      @li
+        Setup the project in your favorite IDE, for example IntelliJ, ENSIME or vim.
+      @li
+        Open up @code{core/src/test/scala/scalafix/Playground.scala}.
+      @li
+        Run @code{core/src/test/scala/scalafix/Playground.scala}.
+        Run @code{sbt "~core/testOnly scalafix.Playground"}.
+
+  @scalatex.Part01()
 
   @sect{Resources}
 
@@ -46,3 +28,33 @@
       @li
         @lnk("Elysium", "https://github.com/DavidDudson/Elysium"). The macro annotation
         examples were mostly borrowed from here.
+@raw
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+    .bs-callout-danger {
+      border-left-color: #ce4844 !IMPORTANT;
+    }
+    .bs-callout-danger h4 {
+      color: #ce4844 !IMPORTANT;
+    }
+    .bs-callout-warning {
+      border-left-color: #aa6708 !IMPORTANT;
+    }
+    .bs-callout-warning h4 {
+      color: #aa6708 !IMPORTANT;
+    }
+    .bs-callout-info {
+      border-left-color: #1b809e !IMPORTANT;
+    }
+    .bs-callout-info h4 {
+      color: #1b809e !IMPORTANT;
+    }
+    .bs-callout {
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #eee;
+        border-left-width: 5px;
+        border-radius: 3px;
+    }
+  </style>

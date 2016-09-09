@@ -1,11 +1,12 @@
-package scalafix
+package scalafix.rewrite
 
-import scalafix.rewrite.ProcedureSyntax
+import scalafix.Fixed
+import scalafix.Scalafix
 import scalafix.util.DiffAssertions
 
 import org.scalatest.FunSuite
 
-class ScalafixSuite extends FunSuite with DiffAssertions {
+class ProcedureSyntaxSuite extends FunSuite with DiffAssertions {
   val rewrites = Seq(ProcedureSyntax)
 
   def testInput(name: String, input: String, expected: String): Unit = {
