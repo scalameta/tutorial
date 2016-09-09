@@ -1,0 +1,114 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Part 1: Tokens}
+  @p
+    Make sure you have setup your environment from @sect.ref{Getting started}.
+    You can decide to run these examples from the console or from @code{Playground.scala}.
+
+  @p
+    This whole workshop will assume you have run this import:
+
+  @repl
+    import scala.meta
+
+  @sect("Introduction", "Token Introduction")
+    @p
+      Let's start by tokenizing a small expression
+
+      @meta
+        "val x = 2".tokenize.get
+
+    @sect(".syntax", "Token syntax")
+      @p
+        The simplest method we can call @code{Tokens.syntax}
+
+      @meta
+        "val x = 2".tokenize.get.syntax
+
+      @code{.syntax} returns a string for the code representation of what we
+      have in our hands.
+      @code{Tokens.toString()} uses @code{.syntax} behind the scenes.
+      However, you should never rely on @code{toString()} when manipulating
+      scala.meta structures, prefer @code{.syntax}.
+
+      @p
+        This is maybe no so exciting right now but comes in handy sometimes.
+
+    @sect(".structure", "Token Structure")
+        Another useful method is @code{Tokens.structure}.
+
+        @meta
+          "val x = 2".tokenize.get.structure
+
+      @p
+        @code{.structure} also returns a string, but it shows a lot more details
+        than @code{.syntax}, this is often useful for debugging.
+        However, @code{.structure} is not only useful for debugging as we will see
+        in @sect.ref{Trees}.
+
+      @p
+        @code{Tokens} is a wrapper around a sequence of @code{Token} objects.
+        We can also run @code{Token.structure}.
+
+        @meta
+          "val x = 2".tokenize.get.head
+
+       @code{BOF} stands for "Beginning of file".
+       Observe that the token has it's own type, that's pretty neat.
+       Let's see what other types are in the string
+
+        @meta
+          "val x = 2".tokenize.get
+            .map(x => f"${x.structure}%10s -> ${x.getClass}")
+            .mkString("\n")
+
+        @p
+          Even spaces get their own tokens.
+          The @code{[0...3)} part indicates that the @code{val} tokens start at
+          offset 0 and ends at offset 3.
+
+      @p
+        When is it not safe to run @code{.get} after @code{tokenize}?
+        Tokenization can sometimes fail, for example in this case:
+
+      @meta
+       """ val str = "unclosed literal """.tokenize.get
+
+      @p
+        You can safely pattern match on the tokenize result
+
+        @meta
+          """ val str = "closed literal" """.tokenize match {
+            case Tokenized.Success(tokenized) => tokenized
+            case Tokenized.Error(e) => throw e
+          }
+
+  @sect("Exercises", "Token Exercises")
+
+    @sect{Check if a string has balanced number of curly braces}
+      @p
+        Implement a method like this
+
+        @hl.scala
+          /** Replaces all var tokens with val tokens */
+          def isBalanced(tokens: Tokens): Boolean = ???
+
+    @sect{Strip away trailing commas}
+      @p
+        This one is quite tricky. Implement a method like this
+
+        @hl.scala
+          /** Removes all commas behind the last argument of function calls */
+          def stripTrailingCommas(tokens: Tokens): Tokens = ???
+      @p
+        You only have tokens so you don't know which parentheses belong to function applications.
+        However, the parser can't help you since the tokens may contain trailing commas.
+
+  @sect("Conclusion", "Token Conclusions")
+    @p
+      Scala.meta tokens look quite boring to start with, but it turns out that they
+      are incredibly useful.
+
+    @p
+      The key features fof

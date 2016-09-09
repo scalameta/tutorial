@@ -1,0 +1,31 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Abstract}
+  @p
+    Metaprogramming enables us to do cool things such as build developer tools and implement macros that extend the functionality of a programming language.
+    However, metaprogramming in Scala has historically been notoriously difficult because of its tight coupling with compiler internals.
+
+  @p
+    This workshop is an introduction to
+    @lnk("scala.meta", "http://scalameta.org"),
+    a clean-room implementation of a metaprogramming toolkit for Scala,
+    designed to be simple, robust and portable.
+    We will focus on scala.meta's most unique features: high-fidelity tokens
+    and comprehensive trees.
+    You will get a hands-on experience with these features by using scala.meta in two different ways:
+
+    @ol
+      @li
+        as a library to develop a tool that automatically fixes common linter errors.
+        We will see how a code rewrite can be implemented in a few lines of code, tested on millions of lines of Scala code and be integrated with SBT and your favourite IDE.
+
+      @li
+        as a compiler plugin to implement new-style "inline" macro annotations.
+        We will see how inline style macros offer a much lower learning curve compared to scala.reflect macros.
+
+  @p
+    At the end of the workshop, I hope you will be inspired to develop the next generation of Scala tooling!
+
+  @p
+    PS. I recommend IntelliJ users pre-install IntelliJ IDEA 2016.3 EAP for a sneak peek into new features to help you debug scala.meta based macros.
