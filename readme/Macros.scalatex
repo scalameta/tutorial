@@ -1,0 +1,6 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Part 4: Macro annotations}
+  @p
+    Enough talking.

@@ -1,0 +1,6 @@
+@import Main._
+@import scalafix.Readme._
+
+@sect{Part 3: Devtools}
+  @p
+    Enough talking.
