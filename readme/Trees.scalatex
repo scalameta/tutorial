@@ -35,6 +35,17 @@
           s"You ${name.syntax} if your ${body.syntax}"
       }
 
+    @warning
+      @note. Quasiquotes currently ignore comments:
+
+      @meta
+        q"val x = 2 // assignment".syntax
+
+      If you need comments, you can use @sect.ref{.parse[T]}
+
+      @meta
+        "val x = 2 // assignment".parse[Stat].get.syntax
+
   @sect{.parse[T]}
     @p
       If the contents that you want to parse are only known at runtime,
@@ -116,8 +127,7 @@
     @meta
       "foo(bar)".parse[Stat].get.syntax
 
-    This may not seem impressive or useful.
-    However, take a look at this:
+    However, scala.meta can also do this even if you manually construct the tree
 
     @meta
       Term.Apply(
@@ -128,15 +138,67 @@
       ).syntax
 
     @p
-      What happened there?
-      We manually constructed a scala.meta.Tree and scala.meta was able to
-      synthesize the parentheses.
-      We never gave scala.meta parentheses but still it figured out we
-      needed them.
+      We never gave scala.meta parentheses but still it figured out we needed
+      them.
       Pretty cool huh.
 
   @sect{Tree.structure}
     @p
+      Just like with tokens, we can also run @code{.structure} on trees.
 
-  @sect{Tree hierarchy}
+    @meta
+      "foo(bar)".parse[Stat].get.structure
+
     @p
+      @code{.structure} ignores any syntactic trivia like whitespace and comments
+
+    @meta
+      "foo  ( /* this is a comment */ bar  ) // eol".parse[Stat].get.structure
+
+    @p
+      This can be useful for example in debugging, testing or equality checking.
+
+  @sect{Tree.==}
+    @p
+      Just like with tokens, tree equality is by default by reference:
+
+    @meta
+      q"foo(bar)" == q"foo(bar)"
+
+    This means you need to be explicit if you mean syntactic equality
+
+    @meta
+      q"foo(bar)".syntax == q"foo(bar)".syntax
+
+    @p
+      or structural equality
+
+    @meta
+      q"foo(bar)".sructure == q"foo(bar)".structure
+
+  @sect{Comprehensive trees}
+    @p
+      A key feature of scala.meta trees is that they comprehensively cover
+      all corners of the Scala syntax.
+      A side effect of this is that the scala.meta tree hierarchy contains a
+      lot of types.
+      For example, there is a different tree node for an abstract @code{def} (@code{Decl.Def})
+  
+      @meta
+        q"def add(a: Int, b: Int)" // Decl.Def
+  
+      and a @code{def} with an implementation (@code{Defn.Def})
+  
+      @meta
+        q"def add(a: Int, b: Int) = a + b" // Defn.Def
+  
+      @p
+        Fortunately, most of the time you won't need to worry about this.
+        Quasiquotes help you create/match/compose/deconstruct the correct instances.
+        However, occasionally you may need to debug the types of the trees you have.
+  
+      @p
+        For your convenience, I've compiled together the most common types in
+        this handy diagram:
+        @image("tree.png")
+  @scalatex.Trees2()

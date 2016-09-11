@@ -61,7 +61,7 @@ object Readme {
 
   def image(file: String, caption: String = "") = div(
     cls := "text-center",
-    img(src := "img/" + file),
+    img(style := "width: 100%", src := "img/" + file),
     if (caption.nonEmpty) p("Caption: " + caption)
     else p()
   )
@@ -85,7 +85,7 @@ object Readme {
     val output = evaluated match {
       case s: String =>
         s"""
-           |"$s"""".stripMargin
+           |"${s.replace("\"", "\\\"")}"""".stripMargin
       case x => x.toString
     }
     val result = s"""${expressions

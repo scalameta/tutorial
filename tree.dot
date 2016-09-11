@@ -1,0 +1,57 @@
+digraph Router {
+  graph [fontname = "Inconsolata"];
+  node [shape=box, fontname = "Inconsolata"];
+  edge [fontname = "Inconsolata"];
+
+  Name1 [label="Name"];
+  Name2 [label="Name"];
+  Type1 [label="Type", style=filled];
+  Type2 [label="Type"];
+  Tuple1 [label="Tuple"];
+  Tuple2 [label="Tuple"];
+  Term [style = filled];
+  Defn [style = filled];
+  Decl [style = filled];
+  Template [style = filled];
+  Import [style = filled];
+  Mod [style = filled];
+
+  Tree -> Stat;
+  Tree -> Template;
+  Tree -> Type1;
+  Tree -> Mod;
+
+  Mod -> Final;
+  Mod -> Lazy;
+  Mod -> Sealed;
+
+  Type1 -> Function;
+  Type1 -> Tuple1;
+  Type1 -> Name1;
+
+  Stat -> Import;
+  Stat -> Term;
+  Stat -> Defn;
+  Stat -> Decl;
+
+  Defn -> Class;
+  Defn -> Trait;
+  Defn -> Object;
+  Defn -> Val;
+  Defn -> Type2;
+
+  Defn -> Def;
+  Decl -> Val;
+  Decl -> Type2;
+  Decl -> Def;
+
+  Term -> Tuple2;
+  Term -> Name2;
+  Term -> Block;
+  Term -> For;
+  Term -> While;
+  Term -> If;
+  Term -> Match;
+  Term -> Apply;
+  Term -> InfixApply;
+}
