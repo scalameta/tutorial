@@ -8,6 +8,8 @@
   @scalatex.GettingStarted()
   @scalatex.Tokens()
   @scalatex.Trees()
+  @scalatex.Devtools()
+  @scalatex.Macros()
   @scalatex.Resources()
   @scalatex.Footer()
 

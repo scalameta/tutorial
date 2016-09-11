@@ -13,9 +13,10 @@
       /** Rewrites lst.filter(cond).headOption to lst.find(cond) */
       def noFilterHeadOption(tree: Tree): Tree = ???
 
-  @sect{sbt settings}
+  @sect{Remove redundant calls to sbt settings}
 
     @hl.scala
+      // Refactor this
       project
         .settings(commonSettings: _*)
         .settings(publishSettings: _*)
@@ -23,9 +24,63 @@
           libraryDeps += ""
         )
 
+      // into this
       project.settings(
         commonSettings,
         publishSettings,
         libraryDeps += ""
       )
 
+  @sect{Don't catch Throwable}
+
+    @hl.scala
+      // Refactor this
+      object A {
+        try danger() {
+          catch e: Throwable =>
+            body
+        }
+      }
+
+      // into this
+      import scala.util.control.NonFatal
+
+      object A {
+        try danger() {
+          catch NonFatal(e) =>
+            body
+        }
+      }
+
+    To start with, it might be easier to skip the import.
+
+  @sect{Never do lst.length == 0}
+
+    @hl.scala
+      // Refactor this
+      lst.length == 0
+
+      // into this
+      lst.nonEmpty
+
+  @sect{Avoid Future.apply when possible}
+
+    @hl.scala
+      // Refactor this
+      Future(<Some literal>)
+      Future { <Some literal> }
+
+      // into this
+      Future.successful(<Some literal>)
+      Future.successful { <Some literal> }
+
+  @sect{Prefer Option(x) to Some(x)}
+    @p
+      To prevent @code{Some(null)}.
+
+    @hl.scala
+      // Refactor this
+      Some(arg)
+
+      // into this
+      Option(arg)
