@@ -1,30 +1,31 @@
 @import Main._
 @import scalafix.Readme._
 
-@sect{Comprehensive trees}
+@sect{Exercises}
   @p
-    A key feature of scala.meta trees is that they comprehensively cover
-    all corners of the Scala syntax.
-    A side effect of this is that the scala.meta tree hierarchy contains a
-    lot of types.
-    For example, there is a different tree node for an abstract @code{def} (@code{Decl.Def})
+    Enough talking.
 
-    @meta
-      q"def add(a: Int, b: Int)" // Decl.Def
-
-    and a @code{def} with an implementation (@code{Defn.Def})
-
-    @meta
-      q"def add(a: Int, b: Int) = a + b" // Defn.Def
-
+  @sect{Rewrite lst.filter(cond).headOption to lst.find(cond)}
     @p
-      Fortunately, most of the time you won't need to worry about this.
-      Quasiquotes help you create/match/compose/deconstruct the correct instances.
-      However, occasionally you may need to debug the types of the trees you have.
+      Implement @code{noFilterHeadOption} so that @code{FilterHeadSuite} passes.
 
-    @p
-      For your convenience, I've compiled together the most common types in
-      this handy diagram:
-      @image("tree.png")
+    @hl.scala
+      /** Rewrites lst.filter(cond).headOption to lst.find(cond) */
+      def noFilterHeadOption(tree: Tree): Tree = ???
 
+  @sect{sbt settings}
+
+    @hl.scala
+      project
+        .settings(commonSettings: _*)
+        .settings(publishSettings: _*)
+        .settings(
+          libraryDeps += ""
+        )
+
+      project.settings(
+        commonSettings,
+        publishSettings,
+        libraryDeps += ""
+      )
 
