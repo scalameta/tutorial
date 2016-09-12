@@ -1,5 +1,5 @@
 @import Main._
-@import scalafix.Readme._
+@import scalaworld.Readme._
 
 @sect{Part 4: Macro annotations}
   @p

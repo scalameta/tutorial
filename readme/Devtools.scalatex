@@ -1,5 +1,5 @@
 @import Main._
-@import scalafix.Readme._
+@import scalaworld.Readme._
 
 @sect{Part 3: Devtools}
   @p
@@ -9,5 +9,5 @@
 
   @sect{NonFatal Rewrite}
     @p
-      To start with, create a new file @code{NonFatal.scala} in the package @code{scalafix.rewrite}.
+      To start with, create a new file @code{NonFatal.scala} in the package @code{scalaworld.rewrite}.
       See @code{Rewrite} rule in the package

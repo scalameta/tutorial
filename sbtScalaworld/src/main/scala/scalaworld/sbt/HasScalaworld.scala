@@ -28,13 +28,13 @@ import sbt.FileFilter
 import sbt.Keys.TaskStreams
 import sbt.ProjectRef
 
-case class HasScalafix(reflective: ScalaworldLike,
-                       configFile: Option[File],
-                       streams: TaskStreams,
-                       sourceDirectories: Seq[File],
-                       includeFilter: FileFilter,
-                       excludeFilter: FileFilter,
-                       ref: ProjectRef) {
+case class HasScalaworld(reflective: ScalaworldLike,
+                         configFile: Option[File],
+                         streams: TaskStreams,
+                         sourceDirectories: Seq[File],
+                         includeFilter: FileFilter,
+                         excludeFilter: FileFilter,
+                         ref: ProjectRef) {
   import sbt.{Future => _}
   import sbt._
 
@@ -65,7 +65,7 @@ case class HasScalafix(reflective: ScalaworldLike,
 
   private def handleFile(callback: ScalafixResult => Unit)(file: File): Unit = {
     val contents = IO.read(file)
-    val fixed = reflective.fix(contents, file.getPath)
+    val fixed    = reflective.fix(contents, file.getPath)
     callback(ScalafixResult(file, contents, fixed))
   }
 }

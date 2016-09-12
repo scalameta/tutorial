@@ -1,5 +1,5 @@
 @import Main._
-@import scalafix.Readme._
+@import scalaworld.Readme._
 
 @sect{Part 0: Getting started}
 
@@ -11,8 +11,8 @@
     @li
       Setup the project in your favorite IDE, for example IntelliJ, ENSIME or vim.
     @li
-      Open up @code{core/src/test/scala/scalafix/Playground.scala}.
+      Open up @code{core/src/test/scala/scalaworld/Playground.scala}.
     @li
-      Run @code{core/src/test/scala/scalafix/Playground.scala}.
-      Run @code{sbt "~core/testOnly scalafix.Playground"}.
+      Run @code{core/src/test/scala/scalaworld/Playground.scala}.
+      Run @code{sbt "~core/testOnly scalaworld.Playground"}.
 

@@ -30,26 +30,26 @@ import sbt._
 import sbt.plugins.JvmPlugin
 import sbt.{IntegrationTest => It}
 
-object ScalafixPlugin extends AutoPlugin {
+object ScalaworldPlugin extends AutoPlugin {
 
   object autoImport {
     lazy val scalaworld: TaskKey[Unit] =
-      taskKey[Unit]("Fix Scala sources using scalafix")
+      taskKey[Unit]("Fix Scala sources using scalaworld")
 
     lazy val scalaworldConfig: TaskKey[Option[File]] =
-      taskKey[Option[File]]("Configuration file for scalafix.")
+      taskKey[Option[File]]("Configuration file for scalaworld.")
 
-    lazy val hasScalaworld: TaskKey[HasScalafix] = taskKey[HasScalafix](
-      "Classloaded Scalafix210 instance to overcome 2.10 incompatibility issues.")
+    lazy val hasScalaworld: TaskKey[HasScalaworld] = taskKey[HasScalaworld](
+      "Classloaded Scalaworld210 instance to overcome 2.10 incompatibility issues.")
 
     def scalaworldSettings: Seq[Setting[_]] =
-      noConfigScalafixSettings ++
-        inConfig(Compile)(configScalafixSettings) ++
-        inConfig(Test)(configScalafixSettings)
+      noConfigScalaworldSettings ++
+        inConfig(Compile)(configScalaworldSettings) ++
+        inConfig(Test)(configScalaworldSettings)
 
-    lazy val scalafixSettingsWithIt: Seq[Setting[_]] =
+    lazy val scalaworldSettingsWithIt: Seq[Setting[_]] =
       scalaworldSettings ++
-        inConfig(IntegrationTest)(configScalafixSettings)
+        inConfig(IntegrationTest)(configScalaworldSettings)
 
   }
   import autoImport._
@@ -60,16 +60,16 @@ object ScalafixPlugin extends AutoPlugin {
 
   override def requires = JvmPlugin
 
-  def noConfigScalafixSettings: Seq[Setting[_]] =
+  def noConfigScalaworldSettings: Seq[Setting[_]] =
     List(
       ivyConfigurations += config("scalaworld").hide,
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-library"     % _root_.scalaworld.Versions.scala   % "scalaworld",
-        "ch.epfl.scala"  % "scalafix-cli_2.11" % _root_.scalaworld.Versions.nightly % "scalaworld"
+        "ch.epfl.scala"  % "scalaworld-cli_2.11" % _root_.scalaworld.Versions.nightly % "scalaworld"
       )
     )
 
-  def configScalafixSettings: Seq[Setting[_]] =
+  def configScalaworldSettings: Seq[Setting[_]] =
     List(
       (sourceDirectories in hasScalaworld) := unmanagedSourceDirectories.value,
       includeFilter in Global in hasScalaworld := "*.scala",
@@ -77,8 +77,8 @@ object ScalafixPlugin extends AutoPlugin {
       hasScalaworld := {
         val report = update.value
         val jars   = report.select(configurationFilter("scalaworld"))
-        HasScalafix(
-          getScalafixLike(new URLClassLoader(jars.map(_.toURI.toURL).toArray,
+        HasScalaworld(
+          getScalaworldLike(new URLClassLoader(jars.map(_.toURI.toURL).toArray,
                                              null),
                           streams.value),
           scalaworldConfig.value,
@@ -91,7 +91,7 @@ object ScalafixPlugin extends AutoPlugin {
       scalaworld := hasScalaworld.value.writeFormattedContentsToFiles()
     )
 
-  private def getScalafixLike(classLoader: URLClassLoader,
+  private def getScalaworldLike(classLoader: URLClassLoader,
                               streams: TaskStreams): ScalaworldLike = {
     val loadedClass =
       new ReflectiveDynamicAccess(classLoader)
@@ -101,8 +101,8 @@ object ScalafixPlugin extends AutoPlugin {
       case Success(x) => x
       case Failure(e) =>
         streams.log.error(
-          s"""Unable to classload Scalafix, please file an issue:
-             |https://github.com/scalacenter/scalafix/issues
+          s"""Unable to classload Scalaworld, please file an issue:
+             |https://github.com/scalacenter/scalaworld/issues
              |
              |URLs: ${classLoader.getURLs.mkString("\n")}
              |Version: ${_root_.scalaworld.Versions.nightly}
