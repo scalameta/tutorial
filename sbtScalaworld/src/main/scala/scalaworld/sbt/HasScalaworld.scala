@@ -53,19 +53,19 @@ case class HasScalaworld(reflective: ScalaworldLike,
     files.foreach(handleFile(writeFixed))
   }
 
-  private def writeFixed(result: ScalafixResult): Unit = {
+  private def writeFixed(result: ScalaworldResult): Unit = {
     if (result.fixedContents != result.originalContents) {
       IO.write(result.file, result.fixedContents)
     }
   }
 
-  private final case class ScalafixResult(file: File,
+  private final case class ScalaworldResult(file: File,
                                           originalContents: String,
                                           fixedContents: String)
 
-  private def handleFile(callback: ScalafixResult => Unit)(file: File): Unit = {
+  private def handleFile(callback: ScalaworldResult => Unit)(file: File): Unit = {
     val contents = IO.read(file)
     val fixed    = reflective.fix(contents, file.getPath)
-    callback(ScalafixResult(file, contents, fixed))
+    callback(ScalaworldResult(file, contents, fixed))
   }
 }

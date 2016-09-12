@@ -27,7 +27,7 @@ case class CommonOptions(
 @AppName("scalafix")
 @AppVersion(scalaworld.Versions.nightly)
 @ProgName("scalafix")
-case class ScalafixOptions(
+case class ScalaworldOptions(
     @HelpMessage(
       s"Rules to run, one of: ${Rewrite.default.mkString(", ")}"
     ) rewrites: List[Rewrite] = Rewrite.default.toList,
@@ -49,12 +49,12 @@ case class ScalafixOptions(
   Cli.runOn(this)
 }
 
-object Cli extends AppOf[ScalafixOptions] {
-  val helpMessage: String = Messages[ScalafixOptions].withHelp.helpMessage
+object Cli extends AppOf[ScalaworldOptions] {
+  val helpMessage: String = Messages[ScalaworldOptions].withHelp.helpMessage
 
-  val default = ScalafixOptions()
+  val default = ScalaworldOptions()
 
-  def handleFile(file: File, config: ScalafixOptions): Unit = {
+  def handleFile(file: File, config: ScalaworldOptions): Unit = {
     Scalaworld.fix(FileOps.readFile(file), config.rewrites) match {
       case Fixed.Success(code) =>
         if (config.inPlace) {
@@ -70,7 +70,7 @@ object Cli extends AppOf[ScalafixOptions] {
     }
   }
 
-  def runOn(config: ScalafixOptions): Unit = {
+  def runOn(config: ScalaworldOptions): Unit = {
     config.files.foreach { pathStr =>
       val path = new File(pathStr)
       val workingDirectory = new File(config.common.workingDirectory)
@@ -102,8 +102,8 @@ object Cli extends AppOf[ScalafixOptions] {
     }
   }
 
-  def parse(args: Seq[String]): Either[String, ScalafixOptions] =
-    CaseApp.parse[ScalafixOptions](args) match {
+  def parse(args: Seq[String]): Either[String, ScalaworldOptions] =
+    CaseApp.parse[ScalaworldOptions](args) match {
       case Right((config, extraFiles)) =>
         Right(config.copy(files = config.files ++ extraFiles))
       case Left(x) => Left(x)

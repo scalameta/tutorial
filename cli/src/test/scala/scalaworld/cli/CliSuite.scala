@@ -32,7 +32,7 @@ class CliSuite extends FunSuite with DiffAssertions {
   import BasicTest._
 
   test("testMain") {
-    val expected = ScalafixOptions(
+    val expected = ScalaworldOptions(
       files = List("foo", "bar"),
       inPlace = true
     )
@@ -44,7 +44,7 @@ class CliSuite extends FunSuite with DiffAssertions {
     val file = File.createTempFile("prefix", ".scala")
     FileOps.writeFile(file, original)
     Cli.runOn(
-      ScalafixOptions(files = List(file.getAbsolutePath), inPlace = true))
+      ScalaworldOptions(files = List(file.getAbsolutePath), inPlace = true))
     assertNoDiff(FileOps.readFile(file), expected)
   }
 
@@ -53,7 +53,7 @@ class CliSuite extends FunSuite with DiffAssertions {
     FileOps.writeFile(file, original)
     val baos = new ByteArrayOutputStream()
     Cli.runOn(
-      ScalafixOptions(
+      ScalaworldOptions(
         common = CommonOptions(
           out = new PrintStream(baos)
         ),
@@ -77,7 +77,7 @@ class CliSuite extends FunSuite with DiffAssertions {
     val file1, file2 = createFile()
 
     Cli.runOn(
-      ScalafixOptions(files = List(dir.getAbsolutePath), inPlace = true))
+      ScalaworldOptions(files = List(dir.getAbsolutePath), inPlace = true))
     assertNoDiff(FileOps.readFile(file1), expected)
     assertNoDiff(FileOps.readFile(file2), expected)
   }
