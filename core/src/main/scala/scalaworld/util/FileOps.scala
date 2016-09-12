@@ -20,7 +20,7 @@ object FileOps {
         files.map(_.getPath) ++ dirs.flatMap(listFilesIter)
       }
       for {
-        f0 <- Option(listFilesIter(file)).toVector
+        f0       <- Option(listFilesIter(file)).toVector
         filename <- f0
       } yield filename
     }
@@ -39,8 +39,8 @@ object FileOps {
 
   def readFile(file: File): String = {
     // Prefer this to inefficient Source.fromFile.
-    val sb = new StringBuilder
-    val br = new BufferedReader(new FileReader(file))
+    val sb            = new StringBuilder
+    val br            = new BufferedReader(new FileReader(file))
     val lineSeparator = System.getProperty("line.separator")
     try {
       var line = ""

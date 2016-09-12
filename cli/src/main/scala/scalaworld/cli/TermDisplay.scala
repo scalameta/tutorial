@@ -27,7 +27,7 @@ object Terminal {
       val nullLog = new ProcessLogger {
         def out(s: => String): Unit = {}
         def err(s: => String): Unit = {}
-        def buffer[T](f: => T): T = f
+        def buffer[T](f: => T): T   = f
       }
       Try(
         Process(Seq("bash", "-c", s"$pathedTput $s 2> /dev/tty"))
@@ -70,7 +70,7 @@ object Terminal {
 object TermDisplay {
   def defaultFallbackMode: Boolean = {
     val env0 = sys.env.get("COURSIER_PROGRESS").map(_.toLowerCase).collect {
-      case "true" | "enable" | "1" => true
+      case "true" | "enable" | "1"   => true
       case "false" | "disable" | "0" => false
     }
     def compatibilityEnv = sys.env.get("COURSIER_NO_TERM").nonEmpty
@@ -78,7 +78,7 @@ object TermDisplay {
     def nonInteractive = System.console() == null
 
     def insideEmacs = sys.env.contains("INSIDE_EMACS")
-    def ci = sys.env.contains("CI")
+    def ci          = sys.env.contains("CI")
 
     val env = env0.getOrElse(compatibilityEnv)
 
@@ -180,10 +180,10 @@ object TermDisplay {
   private sealed abstract class Message extends Product with Serializable
   private object Message {
     case object Update extends Message
-    case object Stop extends Message
+    case object Stop   extends Message
   }
 
-  private val refreshInterval = 1000 / 60
+  private val refreshInterval         = 1000 / 60
   private val fallbackRefreshInterval = 1000
 
   private class UpdateDisplayThread(
@@ -195,7 +195,7 @@ object TermDisplay {
 
     setDaemon(true)
 
-    private var width = 80
+    private var width         = 80
     private var currentHeight = 0
 
     private val q = new LinkedBlockingDeque[Message]
@@ -212,7 +212,7 @@ object TermDisplay {
 
     private val downloads = new ArrayBuffer[String]
     private val doneQueue = new ArrayBuffer[(String, Info)]
-    val infos = new ConcurrentHashMap[String, Info]
+    val infos             = new ConcurrentHashMap[String, Info]
 
     def newEntry(
         url: String,
@@ -289,7 +289,7 @@ object TermDisplay {
             else
               extra
 
-          val total0 = url.length + 1 + extra0.length
+          val total0    = url.length + 1 + extra0.length
           val overflow0 = total0 - width + 1
 
           val url0 = if (total0 >= width)
@@ -319,7 +319,7 @@ object TermDisplay {
       currentHeight = lineCount
 
       Option(q.poll(100L, TimeUnit.MILLISECONDS)) match {
-        case None => updateDisplayLoop(lineCount)
+        case None               => updateDisplayLoop(lineCount)
         case Some(Message.Stop) => // poison pill
         case Some(Message.Update) =>
           val (done0, downloads0) = downloads.synchronized {
@@ -370,7 +370,7 @@ object TermDisplay {
 
     @tailrec private def fallbackDisplayLoop(previous: Set[String]): Unit =
       Option(q.poll(100L, TimeUnit.MILLISECONDS)) match {
-        case None => fallbackDisplayLoop(previous)
+        case None               => fallbackDisplayLoop(previous)
         case Some(Message.Stop) => // poison pill
 
           // clean up display
@@ -430,10 +430,10 @@ object TermDisplay {
 
 object Cache {
   trait Logger {
-    def foundLocally(url: String, f: File): Unit = {}
-    def startTask(url: String, file: File): Unit = {}
-    def taskProgress(url: String, downloaded: Long): Unit = {}
-    def completedTask(url: String, success: Boolean): Unit = {}
+    def foundLocally(url: String, f: File): Unit                         = {}
+    def startTask(url: String, file: File): Unit                         = {}
+    def taskProgress(url: String, downloaded: Long): Unit                = {}
+    def completedTask(url: String, success: Boolean): Unit               = {}
     def checkingUpdates(url: String, currentTimeOpt: Option[Long]): Unit = {}
   }
 }

@@ -72,7 +72,7 @@ object Cli extends AppOf[ScalaworldOptions] {
 
   def runOn(config: ScalaworldOptions): Unit = {
     config.files.foreach { pathStr =>
-      val path = new File(pathStr)
+      val path             = new File(pathStr)
       val workingDirectory = new File(config.common.workingDirectory)
       val realPath: File =
         if (path.isAbsolute) path

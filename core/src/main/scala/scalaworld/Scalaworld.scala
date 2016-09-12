@@ -10,8 +10,7 @@ object Scalaworld {
   }
 
   def fix(code: Input, rewriters: Seq[Rewrite]): Fixed = {
-    rewriters.foldLeft[Fixed](
-      Fixed.Success(String.copyValueOf(code.chars))) {
+    rewriters.foldLeft[Fixed](Fixed.Success(String.copyValueOf(code.chars))) {
       case (newCode: Fixed.Success, rewriter) =>
         try rewriter.rewrite(Input.String(newCode.code))
         catch {
