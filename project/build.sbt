@@ -1,3 +1,3 @@
 sources in Compile += {
-  baseDirectory.value / "../core/src/main/scala/scalafix/Versions.scala"
+  baseDirectory.value / "../core/src/main/scala/scalaworld/Versions.scala"
 }

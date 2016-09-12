@@ -6,10 +6,10 @@ scalafmtConfig in ThisBuild := Some(file(".scalafmt"))
 
 lazy val buildSettings = Seq(
   organization := "ch.epfl.scala",
-  assemblyJarName in assembly := "scalafix.jar",
+  assemblyJarName in assembly := "scalaworld.jar",
   // See core/src/main/scala/ch/epfl/scala/Versions.scala
-  version := scalafix.Versions.nightly,
-  scalaVersion := scalafix.Versions.scala,
+  version := scalaworld.Versions.nightly,
+  scalaVersion := scalaworld.Versions.scala,
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
 
@@ -44,7 +44,7 @@ lazy val compilerOptions = Seq(
 
 lazy val commonSettings = Seq(
   ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages :=
-    ".*Versions;scalafix\\.(sbt|util)",
+    ".*Versions;scalaworld\\.(sbt|util)",
   triggeredMessage in ThisBuild := Watched.clearWhenTriggered,
   scalacOptions in (Compile, console) := compilerOptions :+ "-Yrepl-class-based",
   testOptions in Test += Tests.Argument("-oD")
@@ -64,13 +64,13 @@ lazy val publishSettings = Seq(
   publishArtifact in Test := false,
   licenses := Seq(
     "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  homepage := Some(url("https://github.com/scalacenter/scalafix")),
+  homepage := Some(url("https://github.com/scalacenter/scalaworld")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://scalacenter.github.io/scalafix/docs/")),
+  apiURL := Some(url("https://scalacenter.github.io/scalaworld/docs/")),
   scmInfo := Some(
     ScmInfo(
-      url("https://github.com/scalacenter/scalafix"),
-      "scm:git:git@github.com:scalacenter/scalafix.git"
+      url("https://github.com/scalacenter/scalaworld"),
+      "scm:git:git@github.com:scalacenter/scalaworld.git"
     )
   ),
   pomExtra :=
@@ -92,14 +92,14 @@ lazy val allSettings = commonSettings ++ buildSettings ++ publishSettings
 
 lazy val root = project
   .in(file("."))
-  .settings(moduleName := "scalafix")
+  .settings(moduleName := "scalaworld")
   .settings(allSettings)
   .settings(noPublish)
   .settings(
     initialCommands in console :=
       """
         |import scala.meta._
-        |import scalafix._
+        |import scalaworld._
       """.stripMargin
   )
   .aggregate(
@@ -107,14 +107,14 @@ lazy val root = project
     cli,
     macros,
     readme,
-    sbtScalafix
+    sbtScalaworld
   )
   .dependsOn(core)
 
 lazy val core = project
   .settings(allSettings)
   .settings(
-    moduleName := "scalafix-core",
+    moduleName := "scalaworld-core",
     libraryDependencies ++= Seq(
       "com.lihaoyi"    %% "sourcecode"   % "0.1.2",
       "org.scalameta"  %% "scalameta"    % "1.0.0",
@@ -129,15 +129,15 @@ lazy val cli = project
   .settings(allSettings)
   .settings(packSettings)
   .settings(
-    moduleName := "scalafix-cli",
+    moduleName := "scalaworld-cli",
     packJvmOpts := Map(
-      "scalafix" -> jvmOptions,
-      "scalafix_ng_server" -> jvmOptions
+      "scalaworld" -> jvmOptions,
+      "scalaworld_ng_server" -> jvmOptions
     ),
-    mainClass in assembly := Some("scalafix.cli.Cli"),
+    mainClass in assembly := Some("scalaworld.cli.Cli"),
     packMain := Map(
-      "scalafix" -> "scalafix.cli.Cli",
-      "scalafix_ng_server" -> "com.martiansoftware.nailgun.NGServer"
+      "scalaworld" -> "scalaworld.cli.Cli",
+      "scalaworld_ng_server" -> "com.martiansoftware.nailgun.NGServer"
     ),
     libraryDependencies ++= Seq(
       "com.github.scopt"           %% "scopt"         % "3.5.0",
@@ -155,16 +155,16 @@ lazy val macros = project
       "org.scalatest" %% "scalatest" % "3.0.0" % "test"
   )
 
-lazy val sbtScalafix = project
+lazy val sbtScalaworld = project
   .settings(allSettings)
   .settings(ScriptedPlugin.scriptedSettings)
   .settings(
     sbtPlugin := true,
     coverageHighlighting := false,
     scalaVersion := "2.10.5",
-    moduleName := "sbt-scalafix",
+    moduleName := "sbt-scalaworld",
     sources in Compile +=
-      baseDirectory.value / "../core/src/main/scala/scalafix/Versions.scala",
+      baseDirectory.value / "../core/src/main/scala/scalaworld/Versions.scala",
     scriptedLaunchOpts := Seq(
       "-Dplugin.version=" + version.value,
       // .jvmopts is ignored, simulate here
@@ -178,7 +178,7 @@ lazy val sbtScalafix = project
 lazy val readme = scalatex
   .ScalatexReadme(projectId = "readme",
                   wd = file(""),
-                  url = "https://github.com/scalacenter/scalafix/tree/master",
+                  url = "https://github.com/scalacenter/scalaworld/tree/master",
                   source = "Readme")
   .settings(allSettings)
   .settings(noPublish)

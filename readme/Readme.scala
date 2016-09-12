@@ -1,4 +1,4 @@
-package scalafix
+package scalaworld
 
 import scala.meta.tokenizers.Tokenized
 import scalatags.Text.all._
