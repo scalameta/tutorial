@@ -13,7 +13,7 @@ class BalancedSuite extends WorkshopSuite {
   override def run(str: String): Boolean = isBalanced(str.tokenize.get)
 
   /** Are parentheses balanced? */
-  def isBalanced(tokens: Tokens): Boolean = ???
+  def isBalanced(tokens: Tokens): Boolean = true
 
   checkNot("{")
   check("{}")
