@@ -11,7 +11,11 @@ class NonFatalTest extends FunSuite {
       Input.String(
         """|
            |object a {
-           |  try danger() catch {
+           |  // comment
+           |  try danger()
+           |
+           |
+           |  catch {
            |    case e: Throwable =>
            |      println(e)
            |  }
