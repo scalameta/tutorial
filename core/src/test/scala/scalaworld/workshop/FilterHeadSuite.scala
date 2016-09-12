@@ -9,7 +9,7 @@ import org.scalatest.FunSuite
 class FilterHeadSuite extends FunSuite with DiffAssertions {
 
   def check(a: String, b: String): Unit = {
-    ignore(logger.reveal(a)) {
+    test(logger.reveal(a)) {
       assertNoDiff(
         noFilterHeadOption(a.parse[Stat].get).syntax,
         b

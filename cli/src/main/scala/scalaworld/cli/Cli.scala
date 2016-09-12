@@ -63,6 +63,7 @@ object Cli extends AppOf[ScalaworldOptions] {
       case e: Fixed.ParseError =>
         if (config.files.contains(file.getAbsolutePath)) {
           // Only log if user explicitly specified that file.
+          // Ignore.
 //          config.common.err.write(e.toString.getBytes())
         }
       case Fixed.Failure(e) =>

@@ -9,7 +9,7 @@ abstract class WorkshopSuite extends FunSuite {
 
   def check(str: String, isTrue: Boolean = true): Unit = {
     val prefix = if (isTrue) "     " else "not: "
-    ignore(prefix + logger.reveal(str)) {
+    test(prefix + logger.reveal(str)) {
       val result =
         if (isTrue) run(str)
         else !run(str)

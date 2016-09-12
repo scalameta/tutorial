@@ -15,7 +15,7 @@ class TrailingCommaSuite extends FunSuite with DiffAssertions {
   }
 
   def check(original: String, expected: String): Unit = {
-    ignore(logger.reveal(original)) {
+    test(logger.reveal(original)) {
       val obtained = stripTrailingCommas(original.tokenize.get)
       assertNoDiff(obtained.trim, expected.trim)
     }
