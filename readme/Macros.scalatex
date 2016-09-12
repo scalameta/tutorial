@@ -3,4 +3,53 @@
 
 @sect{Part 4: Macro annotations}
   @p
-    Enough talking.
+    It's possible to write macro annotations on scala.meta trees using
+    scala.meta paradise.
+    From sbt, run your first macro annotation with
+
+  @hl.scala
+    macros/test:run
+
+  The macro annotation is implemented like this:
+
+  @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
+
+  Now it's your turn.
+  Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
+  for @b{methods} that:
+
+  @ul
+    @li
+      Prints out the argument names and their values at the beginning of the method.
+    @li
+      Prints out the time it took to run the method.
+    @li
+      Prints out the value of the method result.
+
+  For extra credit:
+  @ul
+    @li
+      Expand the method into two methods, where one is the original method
+      and the second one has a named suffixed with @code{Debug}
+      and that's where the printing happens.
+      The biggest challenge is to transform the argument list into a
+      function call on the original method.
+
+  @success
+    Pro tip. When experimenting with editing the @code{Main} macro,
+    it can be handy to run this command in SBT
+    @hl.scala
+      ~; macros/test:clean ; macros/test:run
+
+    Incremental compilation caches the macro expansion you need to clean the
+    test project on every run.
+
+
+  @success
+    Your IDE might be all red like this
+    @image("inline.png")
+    Add @code{import autocomplete._} to your file and a semicolon after @code{inline},
+    like this
+    @image("inline2.png")
+    Enjoy autocompletion while developing your macro.
+    Remember to remove the semicolon when you run your macro.

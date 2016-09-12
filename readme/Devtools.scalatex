@@ -3,7 +3,8 @@
 
 @sect{Part 3: Devtools}
   @p
-    Let's build a command line tool to run @sect.ref{Don't catch Throwable} on
+    Let's build a command line tool called @code{scalaworld}.
+    The tool will run the @sect.ref{Don't catch Throwable} rewrite on
     scala source files.
 
   @sect{NonFatal Rewrite}
@@ -14,12 +15,19 @@
 
     @hl.ref(wd/'core/'src/'main/'scala/'scalaworld/'rewrite/"NonFatal.scala")
 
+    @p
+      Plug in your implementation of the @sect.ref{Don't catch Throwable}
+      exercise.
+      Keep running @code{~core/testOnly scalaworld.rewrite.NonFatalTest}
+      until the tests suite passes.
+
+
   @sect{Building CLI}
     @p
       Let's run your NonFatal rewrite rule on some real-world Scala code.
 
     @p
-      Run the following to package and install the @code{scalaworld} CLI
+      Run the following commands to package and install the @code{scalaworld} CLI
       interface.
 
     @hl.scala
@@ -38,3 +46,9 @@
 
     @hl.scala
       scalaworld -i --rewrite NonFatal repos/kafka
+
+    @p
+      Everything ok? Try this now
+
+    @hl.scala
+      scalaworld -i --rewrite NonFatal repos // Run on EVERYTHING
