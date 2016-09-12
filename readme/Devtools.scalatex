@@ -10,3 +10,31 @@
     @p
       To start with, open the file @code{NonFatal.scala} in the package
       @code{scalaworld.rewrite}.
+      The file looks like this:
+
+    @hl.ref(wd/'core/'src/'main/'scala/'scalaworld/'rewrite/"NonFatal.scala")
+
+  @sect{Building CLI}
+    @p
+      Let's run your NonFatal rewrite rule on some real-world Scala code.
+
+    @p
+      Run the following to package and install the @code{scalaworld} CLI
+      interface.
+
+    @hl.scala
+      sbt cli/pack
+      cd cli/target/pack
+      make install // adds `scalaworld` to PATH
+
+    @p
+      Next, clone @lnk("scala-repos", "https://github.com/olafurpg/scala-repos").
+      The repository contains source files
+      over 3 million lines of Scala source code from over 20 Scala open source
+      projects.
+
+    @p
+      Enter the @code{scala-repos} directory and execute
+
+    @hl.scala
+      scalaworld -i --rewrite NonFatal repos/kafka

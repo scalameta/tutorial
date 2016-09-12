@@ -64,7 +64,7 @@ lazy val publishSettings = Seq(
   publishArtifact in Test := false,
   licenses := Seq(
     "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  homepage := Some(url("https://github.com/scalacenter/scalaworld")),
+  homepage := Some(url("https://github.com/olafurpg/scala.meta-workshop")),
   autoAPIMappings := true,
   apiURL := Some(url("https://scalacenter.github.io/scalaworld/docs/")),
   scmInfo := Some(
