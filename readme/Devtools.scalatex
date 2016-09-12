@@ -3,4 +3,11 @@
 
 @sect{Part 3: Devtools}
   @p
-    Enough talking.
+    Let's build a tool that automatically fixes a common mistake in Scala programs:
+    matching on @code{e: Throwable} instead of @code{NonFatal}.
+
+
+  @sect{NonFatal Rewrite}
+    @p
+      To start with, create a new file @code{NonFatal.scala} in the package @code{scalafix.rewrite}.
+      See @code{Rewrite} rule in the package

@@ -2,6 +2,7 @@
 @import scalafix.Readme._
 
 @sect{Exercises}
+
   @p
     Enough talking.
 
@@ -18,6 +19,7 @@
     @hl.scala
       // Refactor this
       project
+
         .settings(commonSettings: _*)
         .settings(publishSettings: _*)
         .settings(
