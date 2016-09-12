@@ -48,8 +48,21 @@
   @success
     Your IDE might be all red like this
     @image("inline.png")
-    Add @code{import autocomplete._} to your file and a semicolon after @code{inline},
-    like this
-    @image("inline2.png")
-    Enjoy autocompletion while developing your macro.
-    Remember to remove the semicolon when you run your macro.
+    There are two possible workarounds:
+
+    @ol
+      @li
+        (Recommended)
+        Install the
+        @lnk("2016.3 EAP", "https://confluence.jetbrains.com/display/IDEADEV/IDEA+2016.3+EAP")
+        and install the Scala plugin from the meta channel:
+        @lnk("https://plugins.jetbrains.com/plugins/meta/1347", "https://plugins.jetbrains.com/plugins/meta/1347").
+        Settings -> Plugins -> Browse Repositories -> Manage Repositories -> "+"
+      @li
+        (hack)
+        Add @code{import autocomplete._} to your file and a semicolon after @code{inline},
+        like this
+        @image("inline2.png")
+        Remember to remove the semicolon when you run your macro.
+
+

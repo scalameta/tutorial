@@ -5,5 +5,8 @@
 
   @ul
     @li
+      Checkout the @code{solutions} branch for rough implementations of
+      some of the exercise.
+    @li
       @lnk("Elysium", "https://github.com/DavidDudson/Elysium"). The macro annotation
       examples were mostly borrowed from here.

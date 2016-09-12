@@ -38,7 +38,7 @@ class NonFatalTest extends FunSuite with DiffAssertions {
        |
        |
        |  catch {
-       |    case e: Throwable =>
+       |    case e :      Throwable => // comment
        |      println(e)
        |  }
        |} """.stripMargin,
@@ -49,7 +49,7 @@ class NonFatalTest extends FunSuite with DiffAssertions {
        |
        |
        |  catch {
-       |    case NonFatal(e) =>
+       |    case NonFatal(e) => // comment
        |      println(e)
        |  }
        |} """.stripMargin

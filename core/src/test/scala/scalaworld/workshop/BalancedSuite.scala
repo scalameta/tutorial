@@ -13,7 +13,15 @@ class BalancedSuite extends WorkshopSuite {
   override def run(str: String): Boolean = isBalanced(str.tokenize.get)
 
   /** Are parentheses balanced? */
-  def isBalanced(tokens: Tokens): Boolean = true
+  def isBalanced(tokens: Tokens): Boolean = {
+    var balance = 0
+    tokens.foreach {
+      case LeftBrace() => balance += 1
+      case RightBrace() => balance -= 1
+      case _ =>
+    }
+    balance == 0
+  }
 
   checkNot("{")
   check("{}")
