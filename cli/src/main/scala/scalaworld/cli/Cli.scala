@@ -60,13 +60,13 @@ object Cli extends AppOf[ScalaworldOptions] {
         if (config.inPlace) {
           FileOps.writeFile(file, code)
         } else config.common.out.write(code.getBytes)
+      case e: Fixed.ParseError =>
+        if (config.files.contains(file.getAbsolutePath)) {
+          // Only log if user explicitly specified that file.
+//          config.common.err.write(e.toString.getBytes())
+        }
       case Fixed.Failure(e) =>
         config.common.err.write(s"Failed to fix $file. Cause: $e".getBytes)
-      case e: Fixed.ParseError =>
-        if (config.files.contains(file)) {
-          // Only log if user explicitly specified that file.
-          config.common.err.write(e.toString.getBytes())
-        }
     }
   }
 

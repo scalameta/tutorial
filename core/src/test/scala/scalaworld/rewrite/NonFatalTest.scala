@@ -15,6 +15,20 @@ class NonFatalTest extends FunSuite with DiffAssertions {
       assertNoDiff(obtained, expected)
     }
   }
+  check(
+    """|object a {
+       |  x match {
+       |    case bar: Throwable => println(bar)
+       |  }
+       |}
+       |""".stripMargin,
+    """|object a {
+       |  x match {
+       |    case NonFatal(bar) => println(bar)
+       |  }
+       |}
+       |""".stripMargin
+  )
 
   check(
     """|
