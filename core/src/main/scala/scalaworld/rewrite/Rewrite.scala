@@ -23,7 +23,8 @@ object Rewrite {
 
   val name2rewrite: Map[String, Rewrite] = nameMap[Rewrite](
     ProcedureSyntax,
-    VolatileLazyVal
+    VolatileLazyVal,
+    NonFatal
   )
 
   val default: Seq[Rewrite] = name2rewrite.values.toSeq

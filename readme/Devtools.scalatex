@@ -3,11 +3,10 @@
 
 @sect{Part 3: Devtools}
   @p
-    Let's build a tool that automatically fixes a common mistake in Scala programs:
-    matching on @code{e: Throwable} instead of @code{NonFatal}.
-
+    Let's build a command line tool to run @sect.ref{Don't catch Throwable} on
+    scala source files.
 
   @sect{NonFatal Rewrite}
     @p
-      To start with, create a new file @code{NonFatal.scala} in the package @code{scalaworld.rewrite}.
-      See @code{Rewrite} rule in the package
+      To start with, open the file @code{NonFatal.scala} in the package
+      @code{scalaworld.rewrite}.

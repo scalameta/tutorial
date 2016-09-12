@@ -4,7 +4,6 @@
 @sect{Exercises}
 
   @sect{Don't catch Throwable}
-
     @hl.scala
       // Refactor this
       object A {
@@ -15,16 +14,26 @@
       }
 
       // into this
-      import scala.util.control.NonFatal
-
       object A {
         try danger() {
-          catch NonFatal(e) =>
+          catch scala.util.control.NonFatal(e) =>
             body
         }
       }
 
-    To start with, it might be easier to skip the import.
+    For extra credit, you can:
+
+    @ul
+      @li
+        Add an @code{import scala.util.control.NonFatal} at the top of the file,
+        if the import doesn't already exist.
+      @li
+        Allow the user to disable the rewrite with a comment like this:
+
+    @hl.scala
+      catch {
+        case e: Throwable => // scalaworld: off
+      }
 
   @sect{Rewrite lst.filter(cond).headOption to lst.find(cond)}
     @p
