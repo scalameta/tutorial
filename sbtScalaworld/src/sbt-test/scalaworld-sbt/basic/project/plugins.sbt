@@ -1,2 +1,2 @@
 addSbtPlugin(
-  "ch.epfl.scala" % "sbt-scalafix" % System.getProperty("plugin.version"))
+  "ch.epfl.scala" % "sbt-scalaworld" % System.getProperty("plugin.version"))

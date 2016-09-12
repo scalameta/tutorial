@@ -12,13 +12,13 @@ if  ! type "${NAILGUN}" > /dev/null; then
 fi
 
 assert-installed $NAILGUN
-assert-installed scalafix_ng_server
+assert-installed scalaworld_ng_server
 
 startNailgun() {
   echo "Starting nailgun..."
-  scalafix_ng_server &
+  scalaworld_ng_server &
   sleep 1
-  $NAILGUN ng-alias scalafix scalafix.cli.Cli
+  $NAILGUN ng-alias scalaworld scalaworld.cli.Cli
 }
 
 
@@ -28,5 +28,5 @@ if [ "$1" = "restart" ]; then
   startNailgun
 else
   $NAILGUN ng-stats &> /dev/null || startNailgun
-  $NAILGUN scalafix "$@"
+  $NAILGUN scalaworld "$@"
 fi

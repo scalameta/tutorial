@@ -24,9 +24,9 @@ case class CommonOptions(
     @Hidden err: PrintStream = System.err
 )
 
-@AppName("scalafix")
+@AppName("scalaworld")
 @AppVersion(scalaworld.Versions.nightly)
-@ProgName("scalafix")
+@ProgName("scalaworld")
 case class ScalaworldOptions(
     @HelpMessage(
       s"Rules to run, one of: ${Rewrite.default.mkString(", ")}"
@@ -86,7 +86,7 @@ object Cli extends AppOf[ScalaworldOptions] {
         }
         val logger = new TermDisplay(new OutputStreamWriter(System.out))
         logger.init()
-        val msg = "Running scalafix..."
+        val msg = "Running scalaworld..."
         logger.startTask(msg, workingDirectory)
         logger.taskLength(msg, filesToFix.length, 0)
         val counter = new AtomicInteger()

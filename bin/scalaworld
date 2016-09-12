@@ -25,6 +25,6 @@ get_full_path () {
 declare -r script_path="$(get_full_path "$BASH_SOURCE")"
 declare -r script_name="${script_path##*/}"
 declare -r script_dir="$(dirname $(dirname $script_path))"
-declare -r script_lib="${script_dir}/cli/target/scala-2.11/scalafix.jar"
+declare -r script_lib="${script_dir}/cli/target/scala-2.11/scalaworld.jar"
 
 java -jar $script_lib $@

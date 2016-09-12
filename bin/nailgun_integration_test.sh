@@ -33,7 +33,7 @@ expected=target/expected.scala
 mkdir -p target
 echoOriginalContents > ${original}
 echoExpectedContents > ${expected}
-./bin/scalafix_ng -i ${original}
+./bin/scalaworld_ng -i ${original}
 
 # Assert there is no diff
 diff ${original} ${expected}
