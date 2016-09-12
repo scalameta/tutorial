@@ -3,8 +3,28 @@
 
 @sect{Exercises}
 
-  @p
-    Enough talking.
+  @sect{Don't catch Throwable}
+
+    @hl.scala
+      // Refactor this
+      object A {
+        try danger() {
+          catch e: Throwable => // swallows stack overflow / out of memory errors
+            body
+        }
+      }
+
+      // into this
+      import scala.util.control.NonFatal
+
+      object A {
+        try danger() {
+          catch NonFatal(e) =>
+            body
+        }
+      }
+
+    To start with, it might be easier to skip the import.
 
   @sect{Rewrite lst.filter(cond).headOption to lst.find(cond)}
     @p
@@ -32,29 +52,6 @@
         publishSettings,
         libraryDeps += ""
       )
-
-  @sect{Don't catch Throwable}
-
-    @hl.scala
-      // Refactor this
-      object A {
-        try danger() {
-          catch e: Throwable =>
-            body
-        }
-      }
-
-      // into this
-      import scala.util.control.NonFatal
-
-      object A {
-        try danger() {
-          catch NonFatal(e) =>
-            body
-        }
-      }
-
-    To start with, it might be easier to skip the import.
 
   @sect{Never do lst.length == 0}
 
