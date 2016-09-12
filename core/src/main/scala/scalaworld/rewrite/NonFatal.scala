@@ -4,6 +4,20 @@ import scala.meta._
 import scalaworld.Fixed
 import scalaworld.util.logger
 
+case class Patch(from: Int, to: Int, replace: String) {
+  def runOn(str: String): String = {
+    str.substring(0, from) + replace + str.substring(to)
+  }
+}
+
+object Patch {
+  def run(input: String, patches: Seq[Patch]): String = {
+    patches.foldLeft(input) {
+      case (s, p) => p.runOn(s)
+    }
+  }
+}
+
 /**
   * Rewrite this
   *   catch {
@@ -21,21 +35,11 @@ object NonFatal extends Rewrite {
     val throwables = tree.collect {
       case t @( p"case ($name: Throwable) => $expr" )=>
         val c = t.asInstanceOf[Case].pat.tokens
-        c.toList -> name.children.head.asInstanceOf[Term.Name]
+        val nonFatal = q"NonFatal(${name.children.head.asInstanceOf[Term.Name]})"
+        Patch(c.head.start, c.last.end, nonFatal.syntax)
     }
-    val toRemove = throwables.flatMap(_._1.toList).toSet
-    val toReplace = throwables.map { case (ts, name) => ts.head -> name }.toMap
-    val sb = new StringBuilder
-    tree.tokens.foreach { token =>
-      if (toReplace.contains(token)) {
-        logger.elem(token.syntax)
-        sb.append(q"NonFatal(${toReplace(token)})".syntax)
-      } else if (!toRemove.contains(token)) {
-        logger.elem(token.syntax)
-        sb.append(token.syntax)
-      }
-    }
+    val result = Patch.run(new String(code.chars), throwables)
     // Your implementation here
-    Fixed.Success(sb.toString())
+    Fixed.Success(result)
   }
 }
