@@ -11,10 +11,7 @@ scala:
 script:
 - ./bin/testAll.sh
 after_success:
-- openssl aes-256-cbc -K $encrypted_3f3a855bcd06_key -iv $encrypted_3f3a855bcd06_iv
-  -in deploy_key.enc -out deploy_key -d
-- eval `ssh-agent -s`
-- ssh-add deploy_key
+- ./bin/travisPublish.sh
 - ./bin/update-gh-pages.sh
 jdk:
 - oraclejdk8
