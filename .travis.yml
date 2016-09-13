@@ -1,28 +1,26 @@
 language: scala
-# Use container-based infrastructure
 sudo: false
-# These directories are cached to S3 at the end of the build
 cache:
   directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/"
 git:
   submodules: false
 scala:
-  - 2.11.8
-before_install:
-  - pip install --user codecov
+- 2.11.8
 script:
-  - ./bin/testAll.sh
+- ./bin/testAll.sh
 after_success:
-  - codecov
+- openssl aes-256-cbc -K $encrypted_3f3a855bcd06_key -iv $encrypted_3f3a855bcd06_iv
+  -in deploy_key.enc -out deploy_key -d
+- eval `ssh-agent -s`
+- ssh-add deploy_key
+- ./bin/update-gh-pages.sh
 jdk:
-  - oraclejdk8
-  - oraclejdk7
+- oraclejdk8
 notifications:
   email:
-    - olafurpg@gmail.com
+  - olafurpg@gmail.com
 branches:
   only:
-    - master
-
+  - master

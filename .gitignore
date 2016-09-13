@@ -1,6 +1,7 @@
 *.class
 *.log
 
+.secrets
 gh-pages
 
 # sbt specific
