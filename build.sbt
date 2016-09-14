@@ -186,7 +186,8 @@ lazy val readme = scalatex
   .dependsOn(cli)
   .settings(
     libraryDependencies ++= Seq(
-      "com.twitter" %% "util-eval" % "6.34.0"
+      "com.twitter" %% "util-eval" % "6.34.0",
+      "org.pegdown" % "pegdown" % "1.6.0"
     ),
     dependencyOverrides += "com.lihaoyi" %% "scalaparse" % "0.3.1"
   )

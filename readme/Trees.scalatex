@@ -174,7 +174,7 @@
       or structural equality
 
     @meta
-      q"foo(bar)".sructure == q"foo(bar)".structure
+      q"foo(bar)".structure == q"foo(bar)".structure
 
   @sect{Comprehensive trees}
     @p

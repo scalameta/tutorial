@@ -2,9 +2,7 @@
 @import scalaworld.Readme._
 
 @sect("A Whirlwind Tour of scala.meta", "")
-
   @scalatex.Abstract()
-
   @scalatex.GettingStarted()
   @scalatex.Tokens()
   @scalatex.Trees()

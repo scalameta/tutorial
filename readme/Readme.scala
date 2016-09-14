@@ -11,6 +11,8 @@ import scala.util.control.NonFatal
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatex.Main._
+import org.pegdown.PegDownProcessor
+
 
 object Readme {
   def github: String    = "https://github.com"
@@ -19,6 +21,7 @@ object Readme {
   def issue(id: Int)    = a(href := repo + s"/issues/$id", s"#$id")
   def note              = b("NOTE")
   def issues(ids: Int*) = span(ids.map(issue): _*)
+  val pegdown           = new PegDownProcessor
 
   val eval = new Eval()
 
@@ -34,6 +37,9 @@ object Readme {
           .min).getOrElse(0)
     frag.lines.map(_.stripPrefix(toStrip)).mkString("\n")
   }
+
+  def markdown(code: Frag*) =
+    raw(pegdown.markdownToHtml(unindent(code.render)))
 
   def getMetaCode(indentedCode: String): String = {
     s"""
