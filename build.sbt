@@ -15,10 +15,10 @@ lazy val buildSettings = Seq(
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += "org.scalameta" %% "scalameta" % "1.1.0-SNAPSHOT",
+  libraryDependencies += "org.scalameta" %% "scalameta" % "1.1.0",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   addCompilerPlugin(
-    "org.scalameta" % "paradise" % "3.0.0-SNAPSHOT" cross CrossVersion.full),
+    "org.scalameta" % "paradise" % "3.0.0-M5" cross CrossVersion.full),
   scalacOptions += "-Xplugin-require:macroparadise"
 )
 
