@@ -10,9 +10,6 @@ scala:
 - 2.11.8
 script:
 - ./bin/testAll.sh
-after_success:
-- ./bin/travisPublish.sh
-- ./bin/update-gh-pages.sh
 jdk:
 - oraclejdk8
 notifications:
