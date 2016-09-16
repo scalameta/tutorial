@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-sbt readme/run
+sbt readme/run --validate-links
 
