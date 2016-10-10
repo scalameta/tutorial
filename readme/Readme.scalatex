@@ -3,6 +3,7 @@
 
 @sect("A Whirlwind Tour of scala.meta", "")
   @scalatex.Abstract()
+  @scalatex.Video()
   @scalatex.GettingStarted()
   @scalatex.Tokens()
   @scalatex.Trees()

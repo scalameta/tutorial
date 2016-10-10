@@ -1,0 +1,8 @@
+@import Main._
+@import scalaworld.Readme._
+
+@sect{Video}
+  @p
+    Here's the video recording from this workshop at Scala World 2016.
+  @raw
+    <iframe width="100%" style="height: 28em" src="https://www.youtube.com/embed/-l7pV0sFq1c" frameborder="0" allowfullscreen></iframe>
