@@ -6,8 +6,9 @@
   @ol
     @li
       Clone the @lnk("workshop repo", "https://github.com/olafurpg/scala.meta-workshop").
-      For a minimal project template that uses the bleeding edge version of scalameta/paradise,
-      clone @lnk("this repo", "https://github.com/olafurpg/scalameta-macro-template").
+      Alternatively, for a minimal project template that uses the bleeding edge
+      version of scalameta/paradise, clone
+      @lnk("this repo", "https://github.com/olafurpg/scalameta-macro-template").
     @li
       Run @code{sbt test} to make sure everything works.
     @li
