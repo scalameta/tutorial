@@ -14,36 +14,53 @@
 
   @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
 
-
   The annotation wraps the body of an object into a @code{main} function, serving
   a similar function as extending @code{App}.
 
-  @sect{Macro exercises}
-    Now it's your turn to write a macro.
+  @sect{Class2Map macro}
+    Implement a @code{Class2Map} macro annotation that injects a @code{toMap} method
+    that creates a @code{Map[String, Any]} from the fields of this class.
 
-    @sect{Class2Map macro}
-      Implement a @code{Class2Map} macro annotation that inject a @code{toMap} method
-      that creates a @code{Map[String, Any]} from the fields of this class.
-    @sect{Debug macro}
-      Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
-      for @b{methods} that:
+    @p
+      Here is the solution.
+      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Class2Map.scala")
+
+  @sect{WithApply macro}
+    Implement a @code{WithApply} macro annotation that creates a @code{apply}
+    method to construct an instance of the class (just like is created for case classes).
+
+    @p
+      The challenge here is to handle the companion object correctly.
 
       @ul
         @li
-          Prints out the argument names and their values at the beginning of the method.
+          If the companion object exists, add the @code{apply} method to it.
         @li
-          Prints out the time it took to run the method.
-        @li
-          Prints out the value of the method result.
+          If the companion object doesn't exists, create it.
+    @p
+      Here is the solution.
+      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"WithApply.scala")
 
-      For extra credit:
-      @ul
-        @li
-          Expand the method into two methods, where one is the original method
-          and the second one has a named suffixed with @code{Debug}
-          and that's where the printing happens.
-          The biggest challenge is to transform the argument list into a
-          function call on the original method.
+  @sect{Debug macro}
+    Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
+    for @b{methods} that:
+
+    @ul
+      @li
+        Prints out the argument names and their values at the beginning of the method.
+      @li
+        Prints out the time it took to run the method.
+      @li
+        Prints out the value of the method result.
+
+    For extra credit:
+    @ul
+      @li
+        Expand the method into two methods, where one is the original method
+        and the second one has a named suffixed with @code{Debug}
+        and that's where the printing happens.
+        The biggest challenge is to transform the argument list into a
+        function call on the original method.
 
   @success
     Pro tip. When experimenting with editing the @code{Main} macro,
