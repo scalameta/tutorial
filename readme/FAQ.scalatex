@@ -66,6 +66,39 @@
         like this
         @image("inline2.png")
         Remember to remove the semicolon when you run your macro.
+  @sect{New-style def macros}
+    Scala.meta doesn't yet provide a possibility to write new-style @b{def} macros,
+    but we are working hard on implementing this functionality.
+    Attend
+    @lnk("Eugene Burmako's talk at Scala eXchange 2016",
+         "https://skillsmatter.com/conferences/7432-scala-exchange-2016#program")
+    to learn more about our progress.
+
+
+  @sect{Compatibility with traditional macros}
+    @p
+      At the moment, new-style macros can only take apart existing Scala syntax
+      and generate new syntax (so called syntactic API). This corresponds to the
+      functionality provided by traditional macro annotations that only use
+      tree constructors and quasiquotes.
+
+    @p
+      Even this limited functionality should be enough to port most of the
+      existing macro annotations to scala.meta. Oleksandr Olgashko has ported
+      @lnk("a large subset of Simulacrum's @typeclass features",
+           "https://gitter.im/mpilquist/simulacrum?at=57fd4a7e68f560d80cf89330")
+      to new-style macros,
+      so we are confident that new-style macros are powerful enough to support
+      even more complex annotations.
+
+    @p
+      For new-style def macros, we are working on semantic API, which will
+      provide compiler information such as type inference, name resolution and
+      other functionality that requires typechecking.
+      It is too early to tell how compatible this API will be with what is
+      provided by scala.reflect. We will provide more information as the design
+      of the semantic API shapes up.
+
 
   @sect{Which versions of Scala do the scala.meta macros support?}
     Only 2.11.x for now.

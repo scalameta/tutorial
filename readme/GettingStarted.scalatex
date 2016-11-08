@@ -18,4 +18,9 @@
     @li
       Run @code{core/src/test/scala/scalaworld/Playground.scala}.
       Run @code{sbt "~core/testOnly scalaworld.Playground"}.
-
+    @li
+      (Optional)
+      To experiment with scala.meta in the REPL, you can run the following
+      in the @lnk("Ammonite-REPL", "http://www.lihaoyi.com/Ammonite/#Ammonite-REPL")
+      @hl.scala
+        import $ivy.`org.scalameta:scalameta_2.11:1.2.0`, scala.meta._

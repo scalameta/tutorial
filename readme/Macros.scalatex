@@ -3,6 +3,35 @@
 
 @sect{Part 4 - Macro annotations}
   @p
+
+    Scala.meta makes it possible to write new-style macro annotations.  In
+    comparison with
+    @lnk("the state of the art based on scala.reflect",
+         "http://docs.scala-lang.org/overviews/macros/annotations.html"),
+    new-style macro annotations are:
+    @ul
+      @li
+        @b{Lightweight}. The new macro system no longer features the split
+        between macro defs and macro impls.  Moreover, writing macros no longer
+        requires carrying around a context and juggling path-dependent types.
+        As a result, macros can be defined with much less ceremony.
+      @li
+        @b{Portable}. New-style macros are based on a platform-independent
+        metaprogramming API defined in scala.meta.  Unlike scala.reflect,
+        scala.meta doesn't depend on compiler internals, so macros based on
+        scala.meta can be run in a multitude of environments, including Scala,
+        IntelliJ IDEA and Dotty.
+
+    In order to define a new-style macro annotation, create a class that
+    extends @code{StaticAnnotation} and create an @code{inline} apply method
+    with a @code{meta} block in it.  Inside the @code{meta} block, you can take
+    apart the annotated member and generate new code using
+    @lnk("scala.meta quasiquotes",
+         "https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
+    @code{inline} and @code{meta} are new language constructs introduced by
+    macro paradise 3.x.
+
+  @p
     It's possible to write macro annotations on scala.meta trees using
     scala.meta paradise.
     From sbt, run your first macro annotation with
@@ -14,8 +43,8 @@
 
   @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
 
-  The annotation wraps the body of an object into a @code{main} function, serving
-  a similar function as extending @code{App}.
+  The annotation wraps the body of an object into a @code{main} function,
+  serving a similar function as extending @code{App}.
 
   @sect{Class2Map macro}
     Implement a @code{Class2Map} macro annotation that injects a @code{toMap} method
@@ -63,6 +92,4 @@
         Expand the method into two methods, where one is the original method
         and the second one has a named suffixed with @code{Debug}
         and that's where the printing happens.
-        The biggest challenge is to transform the argument list into a
-        function call on the original method.
 

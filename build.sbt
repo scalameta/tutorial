@@ -181,7 +181,7 @@ lazy val sbtScalaworld = project
 lazy val readme = scalatex
   .ScalatexReadme(projectId = "readme",
                   wd = file(""),
-                  url = "https://github.com/scalacenter/scalaworld/tree/master",
+                  url = "https://github.com/olafurpg/scala.meta-workshop/tree/master",
                   source = "Readme")
   .settings(allSettings)
   .settings(noPublish)

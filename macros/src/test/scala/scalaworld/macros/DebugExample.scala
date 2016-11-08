@@ -7,5 +7,3 @@ object DebugExample {
     a + b.length + c
   }
 }
-
-
