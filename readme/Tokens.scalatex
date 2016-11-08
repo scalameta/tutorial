@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 1: Tokens}
+@sect{Part 1 - Tokens}
   @p
   @p
     Make sure you have setup your environment from @sect.ref{Part 0: Getting started}.

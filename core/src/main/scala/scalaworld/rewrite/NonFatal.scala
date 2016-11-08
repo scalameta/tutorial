@@ -6,14 +6,18 @@ import scalaworld.util.logger
 
 /**
   * Rewrite this
+  * {{{
   *   catch {
   *     case e: Throwable => ...
   *   }
+  * }}}
   *
   * into this
+  * {{{
   *   catch {
   *     case NonFatal(e) => ...
   *   }
+  * }}}
   *
   */
 object NonFatal extends Rewrite {
@@ -24,7 +28,6 @@ object NonFatal extends Rewrite {
           val pat = c.asInstanceOf[Case].pat
           Patch(pat.tokens.head, pat.tokens.last, s"NonFatal(${name.syntax})")
       }
-      // Your implementation here
       Fixed.Success(Patch.run(tree.tokens, patches))
     }
 }

@@ -1,0 +1,39 @@
+@import Main._
+@import scalaworld.Readme._
+
+@sect{FAQ}
+  Some common questions that have been raised on Gitter.
+
+  @sect{How do I get the type of a tree?}
+    You can't do that with scala.meta 1.x.
+    Semantic information (like inferred type, symbols, resolved names) is
+    on the roadmap for scala.meta 2.x.
+
+  @sect{What is the quasiquote for X?}
+    Here is an overview of quasiquote syntax: @lnk("https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
+
+  @sect{How do I pass an argument to the macro annotation?}
+    You match on @code{this} as a scala.meta tree. For example:
+
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Argument.scala")
+
+  @sect{Do I need to depend on scala.meta at runtime?}
+    No. But your project needs a dependency on scala.meta.
+    If you only use scala.meta at compile time, you can mark the dependency as
+    @code{% "provided"} to exclude it from your runtime application.
+
+  @sect{How do I reuse code between macros?}
+    If you try to call a method inside you macro class you get a "X not found" error.
+
+    @hl.scala
+      class Argument(arg: Int) extends scala.annotation.StaticAnnotation {
+        def helper(t: Any): Stat = ??? // utility method
+        inline def apply(defn: Any): Any = meta {
+          helper(defn) // ERROR: `helper` not found
+          // Why? `this` is a scala.meta tree.
+      }
+
+    You can move the utility method to an external object.
+
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"MacroUtil.scala")
+

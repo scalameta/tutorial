@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 4: Macro annotations}
+@sect{Part 4 - Macro annotations}
   @p
     It's possible to write macro annotations on scala.meta trees using
     scala.meta paradise.
@@ -10,30 +10,40 @@
   @hl.scala
     macros/test:run
 
-  The macro annotation is implemented like this:
+  Here is an example macro annotation:
 
   @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
 
-  Now it's your turn.
-  Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
-  for @b{methods} that:
 
-  @ul
-    @li
-      Prints out the argument names and their values at the beginning of the method.
-    @li
-      Prints out the time it took to run the method.
-    @li
-      Prints out the value of the method result.
+  The annotation wraps the body of an object into a @code{main} function, serving
+  a similar function as extending @code{App}.
 
-  For extra credit:
-  @ul
-    @li
-      Expand the method into two methods, where one is the original method
-      and the second one has a named suffixed with @code{Debug}
-      and that's where the printing happens.
-      The biggest challenge is to transform the argument list into a
-      function call on the original method.
+  @sect{Macro exercises}
+    Now it's your turn to write a macro.
+
+    @sect{Class2Map macro}
+      Implement a @code{Class2Map} macro annotation that inject a @code{toMap} method
+      that creates a @code{Map[String, Any]} from the fields of this class.
+    @sect{Debug macro}
+      Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
+      for @b{methods} that:
+
+      @ul
+        @li
+          Prints out the argument names and their values at the beginning of the method.
+        @li
+          Prints out the time it took to run the method.
+        @li
+          Prints out the value of the method result.
+
+      For extra credit:
+      @ul
+        @li
+          Expand the method into two methods, where one is the original method
+          and the second one has a named suffixed with @code{Debug}
+          and that's where the printing happens.
+          The biggest challenge is to transform the argument list into a
+          function call on the original method.
 
   @success
     Pro tip. When experimenting with editing the @code{Main} macro,
@@ -43,7 +53,6 @@
 
     Incremental compilation caches the macro expansion you need to clean the
     test project on every run.
-
 
   @success
     Your IDE might be all red like this
@@ -64,5 +73,4 @@
         like this
         @image("inline2.png")
         Remember to remove the semicolon when you run your macro.
-
 

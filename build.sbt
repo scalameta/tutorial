@@ -1,6 +1,9 @@
+// NOTE. For a minimal build file to play around with scalameta macros, see:
+// https://github.com/olafurpg/scalameta-macro-template
 import sbt.ScriptedPlugin
 import sbt.ScriptedPlugin._
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
+
 
 scalafmtConfig in ThisBuild := Some(file(".scalafmt"))
 

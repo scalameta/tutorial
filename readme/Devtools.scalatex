@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 3: Devtools}
+@sect{Part 3 - Devtools}
   @p
     Let's build a command line tool called @code{scalaworld}.
     The tool will run the @sect.ref{Don't catch Throwable} rewrite on
