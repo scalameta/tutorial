@@ -1,1 +1,1 @@
-See http://olafurpg.github.io/scala.meta-workshop
+See http://scalameta.org/tutorial/.
