@@ -37,3 +37,33 @@
 
     @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"MacroUtil.scala")
 
+  @sect{Incremental compiler is messing up}
+    @success
+      Pro tip. While editing the macro, it can be handy to keep this command
+      running in SBT
+      @hl.scala
+        ~; macros/test:clean ; macros/test:run
+      Incremental compilation caches the macro expansion you need to clean the
+      test project on every run.
+
+  @sect{My IDE/IntelliJ is showing all red squiggly marks.}
+
+    Your IDE might be all red like this
+    @image("inline.png")
+    There are two possible workarounds:
+
+    @ol
+      @li
+        (Recommended)
+        Install the
+        @lnk("2016.3 EAP", "https://confluence.jetbrains.com/display/IDEADEV/IDEA+2016.3+EAP")
+        and install the Scala plugin from the meta channel:
+        @lnk("https://plugins.jetbrains.com/plugins/meta/1347", "https://plugins.jetbrains.com/plugins/meta/1347").
+        Settings -> Plugins -> Browse Repositories -> Manage Repositories -> "+"
+      @li
+        (hack)
+        Add @code{import autocomplete._} to your file and a semicolon after @code{inline},
+        like this
+        @image("inline2.png")
+        Remember to remove the semicolon when you run your macro.
+
