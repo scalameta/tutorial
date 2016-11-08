@@ -26,9 +26,8 @@ import scala.meta._
 //   result
 // }
 class Debug extends scala.annotation.StaticAnnotation {
-  def meta[T](thunk: => T): T = thunk
-
-  inline def apply(defn: Any): Any = meta {
+  import autocomplete._
+  def apply(defn: Defn): Any = meta {
     defn match {
       case defn: Defn.Def =>
         val printlnStatements = defn.paramss.flatten.map(param =>

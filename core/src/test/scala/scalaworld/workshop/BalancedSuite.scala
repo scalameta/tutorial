@@ -14,13 +14,32 @@ class BalancedSuite extends WorkshopSuite {
 
   /** Are parentheses balanced? */
   def isBalanced(tokens: Tokens): Boolean = {
-    var balance = 0
-    tokens.foreach {
-      case LeftBrace()  => balance += 1
-      case RightBrace() => balance -= 1
-      case _            =>
+    var stack = List.empty[Token]
+    def isMatching(open: Token, close: Token): Boolean = {
+      (open, close) match {
+        case (LeftParen(), RightParen())     => true
+        case (LeftBrace(), RightBrace())     => true
+        case (LeftBracket(), RightBracket()) => true
+        case _                               => false
+      }
     }
-    balance == 0
+    var balanced = true
+    tokens.foreach {
+      case open @ (LeftParen() | LeftBracket() | LeftBrace()) =>
+        stack = open :: stack
+      case close @ (RightParen() | RightBracket() | RightBrace()) =>
+        stack match {
+          case Nil =>
+            balanced = false
+          case open :: tail =>
+            if (!isMatching(open, close)) {
+              balanced = false
+            }
+            stack = stack.tail
+        }
+      case _ =>
+    }
+    balanced && stack.isEmpty
   }
 
   checkNot("{")
