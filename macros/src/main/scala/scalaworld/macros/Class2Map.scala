@@ -23,10 +23,7 @@ class Class2Map extends scala.annotation.StaticAnnotation {
           q"_root_.scala.collection.Map[String, Any](..$namesToValues)"
         val toMap =
           q"def toMap: _root_.scala.collection.Map[String, Any] = $toMapImpl"
-        val templateStats: Seq[Stat] = template.stats match {
-          case Some(stats) => toMap +: stats
-          case None        => toMap +: Nil
-        }
+        val templateStats: Seq[Stat] = toMap +: template.stats.getOrElse(Nil)
         cls.copy(templ = template.copy(stats = Some(templateStats)))
       case _ =>
         println(defn.structure)

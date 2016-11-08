@@ -113,7 +113,10 @@ lazy val macros = project.settings(
   allSettings,
   macroSettings,
   libraryDependencies +=
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
+  // only needed for @generic demo.
+  libraryDependencies +=
+    "com.chuusai" %% "shapeless" % "2.3.2"
 )
 
 lazy val sbtScalaworld = project.settings(

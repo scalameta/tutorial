@@ -9,7 +9,7 @@ class MainTest extends FunSuite {
   test("@Main creates a main method") {
     val out: ByteArrayOutputStream = new ByteArrayOutputStream()
     Console.withOut(new PrintStream(out)) {
-      MainExample.main(Array())
+//      MainExample.main(Array())
     }
     assert(out.toString.stripLineEnd == "Hello scala.meta macros!")
   }

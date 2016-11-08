@@ -25,10 +25,8 @@ class WithApply extends scala.annotation.StaticAnnotation {
           Seq(cls @ Defn.Class(_, name, _, ctor, _),
               companion: Defn.Object)) =>
         val applyMethod = createApply(name, ctor.paramss)
-        val templateStats: Seq[Stat] = companion.templ.stats match {
-          case Some(stats) => applyMethod +: stats
-          case None        => applyMethod :: Nil
-        }
+        val templateStats: Seq[Stat] =
+          applyMethod +: companion.templ.stats.getOrElse(Nil)
         val newCompanion = companion.copy(
           templ = companion.templ.copy(stats = Some(templateStats)))
         Term.Block(Seq(cls, newCompanion))
