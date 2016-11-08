@@ -22,7 +22,7 @@
     that creates a @code{Map[String, Any]} from the fields of this class.
 
     @p
-      Here is the solution.
+      Solution:
       @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Class2Map.scala")
 
   @sect{WithApply macro}
@@ -38,7 +38,7 @@
         @li
           If the companion object doesn't exists, create it.
     @p
-      Here is the solution.
+      Solution:
       @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"WithApply.scala")
 
   @sect{Debug macro}
@@ -52,6 +52,10 @@
         Prints out the time it took to run the method.
       @li
         Prints out the value of the method result.
+
+    @p
+      Solution:
+      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Debug.scala")
 
     For extra credit:
     @ul

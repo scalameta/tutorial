@@ -3,31 +3,47 @@ package scalaworld.macros
 import scala.annotation.compileTimeOnly
 import scala.meta._
 
-@compileTimeOnly("@scalaworld.Debug not expanded")
+// Before:
+// @Debug
+// def complicated(a: Int, b: String)(c: Int): Int = {
+//   Thread.sleep(500)
+//   a + b.length + c
+// }
+// After:
+// def complicated(a: Int, b: String)(c: Int): Int = {
+//   {
+//     println("a" + ": " + a)
+//     println("b" + ": " + b)
+//     println("c" + ": " + c)
+//   }
+//   val start = System.currentTimeMillis()
+//   val result = {
+//     Thread.sleep(500)
+//     a + b.length + c
+//   }
+//   val elapsed = System.currentTimeMillis() - start
+//   println("Method " + "complicated" + " ran in " + elapsed + "ms")
+//   result
+// }
 class Debug extends scala.annotation.StaticAnnotation {
   def meta[T](thunk: => T): T = thunk
 
   inline def apply(defn: Any): Any = meta {
     defn match {
-      case q"..$mods def $name[..$tparams](...$paramss): $tpeopt = $expr" =>
-        val args = paramss.flatten.map(x => x.name.syntax.parse[Term].get)
-        val body = q"""
-                  {
-                    println(..$args)
-
-                    val start = System.nanoTime()
-                    val result = $expr
-                    val elapsed =
-                      _root_.java.util.concurrent.TimeUnit.MILLISECONDS.convert(
-                      System.nanoTime() - start,
-                      _root_.java.util.concurrent.TimeUnit.NANOSECONDS
-                    )
-                    println("Method " + ${name.syntax} + " ran in " + elapsed + "ms")
-                    result
-                  }
-                  """
-        q"..$mods def $name[..$tparams](...$paramss): $tpeopt = $body"
-      case _ => defn
+      case defn: Defn.Def =>
+        val printlnStatements = defn.paramss.flatten.map(param =>
+          q"""println(${param.name.syntax} + ": " + ${Term.Name(param.name.value)})""")
+        val body: Term = q"""
+          { ..$printlnStatements }
+          val start = System.currentTimeMillis()
+          val result = ${defn.body}
+          val elapsed = System.currentTimeMillis() - start
+          println("Method " + ${defn.name.syntax} + " ran in " + elapsed + "ms")
+          result
+          """
+        defn.copy(body = body)
+      case _ =>
+        abort("@Debug most annotate a def")
     }
   }
 }
