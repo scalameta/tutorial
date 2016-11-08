@@ -2,6 +2,7 @@
 @import scalaworld.Readme._
 
 @sect{Abstract}
+
   @p
     Metaprogramming enables us to do cool things such as build developer tools and implement macros that extend the functionality of a programming language.
     However, metaprogramming in Scala has historically been notoriously difficult because of its tight coupling with compiler internals.

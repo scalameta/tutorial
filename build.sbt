@@ -5,7 +5,7 @@ import sbt.ScriptedPlugin._
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
 lazy val buildSettings = Seq(
-  organization := "ch.epfl.scala",
+  organization := "org.scalameta",
   assemblyJarName in assembly := "scalaworld.jar",
   // See core/src/main/scala/ch/epfl/scala/Versions.scala
   version := scalaworld.Versions.nightly,

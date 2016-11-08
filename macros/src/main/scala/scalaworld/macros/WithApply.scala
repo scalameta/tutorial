@@ -39,7 +39,7 @@ class WithApply extends scala.annotation.StaticAnnotation {
         Term.Block(Seq(cls, companion))
       case _ =>
         println(defn.structure)
-        abort("@WithApply must be annotated on a class.")
+        abort("@WithApply must annotate a class.")
     }
   }
 }

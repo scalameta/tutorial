@@ -1,11 +1,10 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 0: Getting started}
-
+@sect{Part 0: Setup}
   @ol
     @li
-      Clone the @lnk("workshop repo", "https://github.com/olafurpg/scala.meta-workshop").
+      Clone the @lnk("workshop repo", "https://github.com/scalameta/tutorial").
       Alternatively, for a minimal project template that uses the bleeding edge
       version of scalameta/paradise, clone
       @lnk("this repo", "https://github.com/olafurpg/scalameta-macro-template").
@@ -24,3 +23,10 @@
       in the @lnk("Ammonite-REPL", "http://www.lihaoyi.com/Ammonite/#Ammonite-REPL")
       @hl.scala
         import $ivy.`org.scalameta:scalameta_2.11:1.2.0`, scala.meta._
+
+  @sect{Video}
+    @p
+      To accompany the workshop, here is the recording from the original
+      scala.world conference talk.
+    @raw
+      <iframe width="100%" style="height: 28em" src="https://www.youtube.com/embed/-l7pV0sFq1c" frameborder="0" allowfullscreen></iframe>
