@@ -46,7 +46,7 @@
   The annotation wraps the body of an object into a @code{main} function,
   serving a similar function as extending @code{App}.
 
-  @sect{Class2Map macro}
+  @sect{Class2Map}
     Implement a @code{Class2Map} macro annotation that injects a @code{toMap} method
     that creates a @code{Map[String, Any]} from the fields of this class.
 
@@ -54,7 +54,7 @@
       Solution:
       @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Class2Map.scala")
 
-  @sect{WithApply macro}
+  @sect{WithApply}
     Implement a @code{WithApply} macro annotation that creates a @code{apply}
     method to construct an instance of the class (just like is created for case classes).
 
@@ -70,7 +70,7 @@
       Solution:
       @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"WithApply.scala")
 
-  @sect{Debug macro}
+  @sect{Debug}
     Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
     for @b{methods} that:
 

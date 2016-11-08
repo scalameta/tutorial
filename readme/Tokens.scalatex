@@ -4,7 +4,7 @@
 @sect{Part 1 - Tokens}
   @p
   @p
-    Make sure you have setup your environment from @sect.ref{Part 0: Setup}.
+    Make sure you have setup your environment from @sect.ref{Part 0 - Setup}.
 
     You can decide to run these examples from the console or from @code{Playground.scala}.
 

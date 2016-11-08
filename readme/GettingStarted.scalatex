@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 0: Setup}
+@sect{Part 0 - Setup}
   @ol
     @li
       Clone the @lnk("workshop repo", "https://github.com/scalameta/tutorial").

@@ -158,6 +158,32 @@
     @p
       This can be useful for example in debugging, testing or equality checking.
 
+  @sect{Tree.collect}
+    @p
+      You can collect on scala.meta.Tree just like regular collections.
+
+    @meta
+      source"""sealed trait Op[A]
+          object Op extends B {
+            case class Foo(i: Int) extends Op[Int]
+            case class Bar(s: String) extends Op[String]
+          }""".collect { case cls: Defn.Class => cls.name }
+
+  @sect{Tree.transform}
+    @p
+      Transform scala.meta.Tree with @code{.transform}.
+
+    @meta
+      q"myList.filter(_ > 3 + a).headOption // comments are removed :(".transform {
+        case q"$lst.filter($cond).headOption" => q"$lst.find($cond)"
+      }
+
+    @warning
+      @code{.transform} does not preserve syntactic details such as comments
+      and formatting. There has been made some work on source aware transformation,
+      see @lnk("#457", "https://github.com/scalameta/scalameta/pull/457"),
+      but it still requires a bit more work.
+
   @sect{Tree.==}
     @p
       Just like with tokens, tree equality is by default by reference:
