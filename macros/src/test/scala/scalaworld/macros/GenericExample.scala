@@ -6,6 +6,7 @@ case class Foo(i: Int, s: String)
 @generic
 sealed trait Bar
 object Bar {
+  class IgnoreMe // is not included in Generic[Bar]
   case class Baz(i: Int)     extends Bar
   case class Quux(s: String) extends Bar
 }

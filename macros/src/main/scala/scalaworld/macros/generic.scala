@@ -15,6 +15,7 @@ import scala.meta._
 // }
 //
 // After:
+// // observe that infix operators are used where possible, no ::[A, B]
 // case class Foo(i: Int, s: String)
 // object Foo {
 //   implicit val FooGeneric: _root_.shapeless.Generic[Foo] =
@@ -57,22 +58,25 @@ object ClassOrTrait {
   }
 }
 
+// This implementation contains quite a bit of boilerplate because we
+// generate almost the same code in term, type and pattern position.
 class generic extends scala.annotation.StaticAnnotation {
   inline def apply(defn: Any): Any = meta {
     def mkCoproductTerm(depth: Int): Term =
       if (depth <= 0) q"Inl(t)"
       else q"Inr(${mkCoproductTerm(depth - 1)})"
 
-    def mkCoproductPat(depth: Int): Pat =
+    def mkCoproductPattern(depth: Int): Pat =
       if (depth <= 0) p"Inl(t)"
-      else p"Inr(${mkCoproductPat(depth - 1)})"
+      else p"Inr(${mkCoproductPattern(depth - 1)})"
 
+    // final unreachable case in `from` for coproduct generic.
     def mkCantHappen(depth: Int): Pat =
       if (depth <= 0) p"Inr(_)"
       else p"Inr(${mkCantHappen(depth - 1)})"
 
-    def mkSealedGeneric(superName: Type.Name,
-                        subTypes: Seq[Defn.Class]): Stat = {
+    def mkCoproductGeneric(superName: Type.Name,
+                           subTypes: Seq[Defn.Class]): Stat = {
       val coproductType: Type = subTypes.foldRight[Type](t"CNil") {
         case (cls, accum) =>
           Type.ApplyInfix(cls.name, t":+:", accum)
@@ -84,7 +88,7 @@ class generic extends scala.annotation.StaticAnnotation {
       val coproductTerm = q"t match { ..case $coproductTermCases }"
       val coproductPat: Seq[Case] = subTypes.zipWithIndex.map {
         case (cls, i) =>
-          p"case ${mkCoproductPat(i)} => t"
+          p"case ${mkCoproductPattern(i)} => t"
       }
       val cantHappen =
         p"""case ${mkCantHappen(subTypes.length - 1)} =>
@@ -116,7 +120,7 @@ class generic extends scala.annotation.StaticAnnotation {
        """
     }
 
-    def mkClassGeneric(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Stat = {
+    def mkHListGeneric(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Stat = {
       val params = paramss match {
         case params :: Nil => params
         case _             => abort("Can't create generic for curried functions yet.")
@@ -147,42 +151,46 @@ class generic extends scala.annotation.StaticAnnotation {
 
     def isSealed(mods: Seq[Mod]): Boolean = mods.exists(_.syntax == "sealed")
 
+    // Slightly tricky case, a Defn.Class parent constructor is a
+    // Term.Apply(Ctor.Ref.Name(), Nil) that we deconstruct here.
+    def inherits(superType: Type.Name)(cls: Defn.Class): Boolean =
+      cls.templ.parents.headOption.exists {
+        case q"$parent()" => parent.syntax == superType.syntax
+        case _            => false
+      }
+
     defn match {
+      // Sealed ADT.
       case Term.Block(
           Seq(t @ ClassOrTrait(mods, name), companion: Defn.Object))
           if isSealed(mods) =>
         val oldTemplStats = companion.templ.stats.getOrElse(Nil)
         val subTypes = oldTemplStats.collect {
-          case t: Defn.Class => t
+          case t: Defn.Class if inherits(name)(t) => t
         }
-        val newStats = mkSealedGeneric(name, subTypes) +: oldTemplStats
+        val newStats = mkCoproductGeneric(name, subTypes) +: oldTemplStats
         val newCompanion =
           companion.copy(templ = companion.templ.copy(stats = Some(newStats)))
-        println(newCompanion)
         Term.Block(Seq(t, newCompanion))
-      // companion object exists
+      // Plain class with companion object.
       case Term.Block(
           Seq(cls @ Defn.Class(_, name, _, ctor, _),
               companion: Defn.Object)) =>
         val newStats =
-          mkClassGeneric(name, ctor.paramss) +:
+          mkHListGeneric(name, ctor.paramss) +:
             companion.templ.stats.getOrElse(Nil)
         val newCompanion =
           companion.copy(templ = companion.templ.copy(stats = Some(newStats)))
-        println(newCompanion.syntax)
         Term.Block(Seq(cls, newCompanion))
-      // companion object does not exists
+      // Plain class without companion object.
       case cls @ Defn.Class(_, name, _, ctor, _) =>
         val companion =
-          q"object ${Term.Name(name.value)} { ${mkClassGeneric(name, ctor.paramss)} } "
-        println(companion.syntax)
+          q"object ${Term.Name(name.value)} { ${mkHListGeneric(name, ctor.paramss)} } "
         Term.Block(Seq(cls, companion))
       case cls @ Defn.Class(_, name, _, ctor, _) =>
         val companion =
-          q"object ${Term.Name(name.value)} { ${mkClassGeneric(name, ctor.paramss)} } "
-        println(companion.syntax)
+          q"object ${Term.Name(name.value)} { ${mkHListGeneric(name, ctor.paramss)} } "
         Term.Block(Seq(cls, companion))
-      // Sealed ADT
       case _ =>
         println(defn.structure)
         abort("@generic must annotate a class or a sealed trait/class.")
