@@ -9,7 +9,7 @@ class Main extends scala.annotation.StaticAnnotation {
         val main = q"def main(args: Array[String]): Unit = { ..$stats }"
         q"object $name { $main }"
       case _ =>
-        abort("@main must annotated on an object.")
+        abort("@main must annotate an object.")
     }
   }
 }
