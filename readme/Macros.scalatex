@@ -93,3 +93,11 @@
         and the second one has a named suffixed with @code{Debug}
         and that's where the printing happens.
 
+  @sect{generic}
+    Implement a @code{generic} macro annotation to automatically derive
+    a shapeless @code{Generic[T]} instance.
+
+    @p
+      Solution:
+      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"generic.scala")
+
