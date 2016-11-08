@@ -4,9 +4,6 @@ import sbt.ScriptedPlugin
 import sbt.ScriptedPlugin._
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
-
-scalafmtConfig in ThisBuild := Some(file(".scalafmt"))
-
 lazy val buildSettings = Seq(
   organization := "ch.epfl.scala",
   assemblyJarName in assembly := "scalaworld.jar",
@@ -53,52 +50,13 @@ lazy val commonSettings = Seq(
   testOptions in Test += Tests.Argument("-oD")
 )
 
-lazy val publishSettings = Seq(
-  publishMavenStyle := true,
-  publishMavenStyle := true,
-  publishArtifact := true,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
-  publishArtifact in Test := false,
-  licenses := Seq(
-    "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  homepage := Some(url("https://github.com/olafurpg/scala.meta-workshop")),
-  autoAPIMappings := true,
-  apiURL := Some(url("https://scalacenter.github.io/scalaworld/docs/")),
-  scmInfo := Some(
-    ScmInfo(
-      url("https://github.com/scalacenter/scalaworld"),
-      "scm:git:git@github.com:scalacenter/scalaworld.git"
-    )
-  ),
-  pomExtra :=
-    <developers>
-      <developer>
-        <id>olafurpg</id>
-        <name>Ólafur Páll Geirsson</name>
-        <url>https://geirsson.com</url>
-      </developer>
-    </developers>
-)
-
-lazy val noPublish = Seq(
-  publish := {},
-  publishLocal := {}
-)
-
-lazy val allSettings = commonSettings ++ buildSettings ++ publishSettings
+lazy val allSettings = commonSettings ++ buildSettings
 
 lazy val root = project
   .in(file("."))
-  .settings(moduleName := "scalaworld")
-  .settings(allSettings)
-  .settings(noPublish)
   .settings(
+    allSettings,
+    moduleName := "scalaworld",
     initialCommands in console :=
       """
         |import scala.meta._
@@ -114,24 +72,23 @@ lazy val root = project
   )
   .dependsOn(core)
 
-lazy val core = project
-  .settings(allSettings)
-  .settings(
-    moduleName := "scalaworld-core",
-    libraryDependencies ++= Seq(
-      "com.lihaoyi"    %% "sourcecode"   % "0.1.2",
-      "org.scalameta"  %% "scalameta"    % "1.0.0",
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      // Test dependencies
-      "org.scalatest"                  %% "scalatest" % "3.0.0" % "test",
-      "com.googlecode.java-diff-utils" % "diffutils"  % "1.3.0" % "test"
-    )
+lazy val core = project.settings(
+  allSettings,
+  moduleName := "scalaworld-core",
+  libraryDependencies ++= Seq(
+    "com.lihaoyi" %% "sourcecode" % "0.1.2",
+    "org.scalameta" %% "scalameta" % "1.0.0",
+    "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    // Test dependencies
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
+    "com.googlecode.java-diff-utils" % "diffutils" % "1.3.0" % "test"
   )
+)
 
 lazy val cli = project
-  .settings(allSettings)
-  .settings(packSettings)
   .settings(
+    allSettings,
+    packSettings,
     moduleName := "scalaworld-cli",
     packJvmOpts := Map(
       "scalaworld" -> jvmOptions,
@@ -143,54 +100,50 @@ lazy val cli = project
       "scalaworld_ng_server" -> "com.martiansoftware.nailgun.NGServer"
     ),
     libraryDependencies ++= Seq(
-      "com.github.scopt"           %% "scopt"         % "3.5.0",
-      "com.github.alexarchambault" %% "case-app"      % "1.1.0-RC3",
-      "com.martiansoftware"        % "nailgun-server" % "0.9.1"
+      "com.github.scopt" %% "scopt" % "3.5.0",
+      "com.github.alexarchambault" %% "case-app" % "1.1.0-RC3",
+      "com.martiansoftware" % "nailgun-server" % "0.9.1"
     )
   )
   .dependsOn(core % "compile->compile;test->test")
 
-lazy val macros = project
-  .settings(allSettings: _*)
-  .settings(macroSettings: _*)
-  .settings(
-    libraryDependencies +=
-      "org.scalatest" %% "scalatest" % "3.0.0" % "test"
-  )
+lazy val macros = project.settings(
+  allSettings,
+  macroSettings,
+  libraryDependencies +=
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+)
 
-lazy val sbtScalaworld = project
-  .settings(allSettings)
-  .settings(ScriptedPlugin.scriptedSettings)
-  .settings(
-    sbtPlugin := true,
-    coverageHighlighting := false,
-    scalaVersion := "2.10.5",
-    moduleName := "sbt-scalaworld",
-    sources in Compile +=
-      baseDirectory.value / "../core/src/main/scala/scalaworld/Versions.scala",
-    scriptedLaunchOpts := Seq(
-      "-Dplugin.version=" + version.value,
-      // .jvmopts is ignored, simulate here
-      "-XX:MaxPermSize=256m",
-      "-Xmx2g",
-      "-Xss2m"
-    ),
-    scriptedBufferLog := false
-  )
+lazy val sbtScalaworld = project.settings(
+  allSettings,
+  ScriptedPlugin.scriptedSettings,
+  sbtPlugin := true,
+  coverageHighlighting := false,
+  scalaVersion := "2.10.5",
+  moduleName := "sbt-scalaworld",
+  sources in Compile +=
+    baseDirectory.value / "../core/src/main/scala/scalaworld/Versions.scala",
+  scriptedLaunchOpts := Seq(
+    "-Dplugin.version=" + version.value,
+    // .jvmopts is ignored, simulate here
+    "-XX:MaxPermSize=256m",
+    "-Xmx2g",
+    "-Xss2m"
+  ),
+  scriptedBufferLog := false
+)
 
 lazy val readme = scalatex
   .ScalatexReadme(projectId = "readme",
                   wd = file(""),
-                  url = "https://github.com/olafurpg/scala.meta-workshop/tree/master",
+                  url = "https://github.com/scalameta/tutorial/tree/master",
                   source = "Readme")
-  .settings(allSettings)
-  .settings(noPublish)
-  .dependsOn(core)
-  .dependsOn(cli)
   .settings(
+    allSettings,
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
       "org.pegdown" % "pegdown" % "1.6.0"
     ),
     dependencyOverrides += "com.lihaoyi" %% "scalaparse" % "0.3.1"
   )
+  .dependsOn(core, cli)
