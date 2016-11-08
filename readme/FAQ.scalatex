@@ -67,3 +67,5 @@
         @image("inline2.png")
         Remember to remove the semicolon when you run your macro.
 
+  @sect{Which versions of Scala do the scala.meta macros support?}
+    Only 2.11.x for now.

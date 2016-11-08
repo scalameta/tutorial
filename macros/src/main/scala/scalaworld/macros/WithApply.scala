@@ -3,6 +3,15 @@ package scalaworld.macros
 import scala.collection.immutable.Seq
 import scala.meta._
 
+// Before:
+// @WithApply
+// class WithApplyExample(a: Int)(b: String)
+// After:
+// class WithApplyExample(a: Int)(b: String)
+// object WithApplyExample {
+//   def apply(a: Int)(b: String): WithApplyExample = new WithApplyExample(a)(b)
+// }
+
 class WithApply extends scala.annotation.StaticAnnotation {
   inline def apply(defn: Any): Any = meta {
     def createApply(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Defn.Def = {
