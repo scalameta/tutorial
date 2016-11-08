@@ -13,7 +13,6 @@ import scalatags.Text.all._
 import scalatex.Main._
 import org.pegdown.PegDownProcessor
 
-
 object Readme {
   def github: String    = "https://github.com"
   def repo: String      = "https://github.com/olafurpg/scala.meta-workshop"

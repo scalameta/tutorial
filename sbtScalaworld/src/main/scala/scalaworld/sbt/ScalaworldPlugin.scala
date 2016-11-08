@@ -64,7 +64,7 @@ object ScalaworldPlugin extends AutoPlugin {
     List(
       ivyConfigurations += config("scalaworld").hide,
       libraryDependencies ++= Seq(
-        "org.scala-lang" % "scala-library"     % _root_.scalaworld.Versions.scala   % "scalaworld",
+        "org.scala-lang" % "scala-library"       % _root_.scalaworld.Versions.scala   % "scalaworld",
         "ch.epfl.scala"  % "scalaworld-cli_2.11" % _root_.scalaworld.Versions.nightly % "scalaworld"
       )
     )
@@ -79,8 +79,8 @@ object ScalaworldPlugin extends AutoPlugin {
         val jars   = report.select(configurationFilter("scalaworld"))
         HasScalaworld(
           getScalaworldLike(new URLClassLoader(jars.map(_.toURI.toURL).toArray,
-                                             null),
-                          streams.value),
+                                               null),
+                            streams.value),
           scalaworldConfig.value,
           streams.value,
           (sourceDirectories in hasScalaworld).value.toList,
@@ -92,10 +92,11 @@ object ScalaworldPlugin extends AutoPlugin {
     )
 
   private def getScalaworldLike(classLoader: URLClassLoader,
-                              streams: TaskStreams): ScalaworldLike = {
+                                streams: TaskStreams): ScalaworldLike = {
     val loadedClass =
       new ReflectiveDynamicAccess(classLoader)
-        .createInstanceFor[ScalaworldLike]("scalaworld.cli.Scalaworld210", Seq.empty)
+        .createInstanceFor[ScalaworldLike]("scalaworld.cli.Scalaworld210",
+                                           Seq.empty)
 
     loadedClass match {
       case Success(x) => x

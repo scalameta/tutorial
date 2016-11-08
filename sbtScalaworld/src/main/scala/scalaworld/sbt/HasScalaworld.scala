@@ -60,10 +60,11 @@ case class HasScalaworld(reflective: ScalaworldLike,
   }
 
   private final case class ScalaworldResult(file: File,
-                                          originalContents: String,
-                                          fixedContents: String)
+                                            originalContents: String,
+                                            fixedContents: String)
 
-  private def handleFile(callback: ScalaworldResult => Unit)(file: File): Unit = {
+  private def handleFile(callback: ScalaworldResult => Unit)(
+      file: File): Unit = {
     val contents = IO.read(file)
     val fixed    = reflective.fix(contents, file.getPath)
     callback(ScalaworldResult(file, contents, fixed))

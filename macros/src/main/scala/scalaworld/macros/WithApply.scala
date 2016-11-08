@@ -27,7 +27,7 @@ class WithApply extends scala.annotation.StaticAnnotation {
         val applyMethod = createApply(name, ctor.paramss)
         val templateStats: Seq[Stat] = companion.templ.stats match {
           case Some(stats) => applyMethod +: stats
-          case None => applyMethod :: Nil
+          case None        => applyMethod :: Nil
         }
         val newCompanion = companion.copy(
           templ = companion.templ.copy(stats = Some(templateStats)))
@@ -35,7 +35,7 @@ class WithApply extends scala.annotation.StaticAnnotation {
       // companion object does not exists
       case cls @ Defn.Class(_, name, _, ctor, _) =>
         val applyMethod = createApply(name, ctor.paramss)
-        val companion = q"object ${Term.Name(name.value)} { $applyMethod }"
+        val companion   = q"object ${Term.Name(name.value)} { $applyMethod }"
         Term.Block(Seq(cls, companion))
       case _ =>
         println(defn.structure)

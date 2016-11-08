@@ -76,12 +76,12 @@ lazy val core = project.settings(
   allSettings,
   moduleName := "scalaworld-core",
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "sourcecode" % "0.1.2",
-    "org.scalameta" %% "scalameta" % "1.0.0",
+    "com.lihaoyi"    %% "sourcecode"   % "0.1.2",
+    "org.scalameta"  %% "scalameta"    % "1.0.0",
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     // Test dependencies
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-    "com.googlecode.java-diff-utils" % "diffutils" % "1.3.0" % "test"
+    "org.scalatest"                  %% "scalatest" % "3.0.0" % "test",
+    "com.googlecode.java-diff-utils" % "diffutils"  % "1.3.0" % "test"
   )
 )
 
@@ -91,18 +91,18 @@ lazy val cli = project
     packSettings,
     moduleName := "scalaworld-cli",
     packJvmOpts := Map(
-      "scalaworld" -> jvmOptions,
+      "scalaworld"           -> jvmOptions,
       "scalaworld_ng_server" -> jvmOptions
     ),
     mainClass in assembly := Some("scalaworld.cli.Cli"),
     packMain := Map(
-      "scalaworld" -> "scalaworld.cli.Cli",
+      "scalaworld"           -> "scalaworld.cli.Cli",
       "scalaworld_ng_server" -> "com.martiansoftware.nailgun.NGServer"
     ),
     libraryDependencies ++= Seq(
-      "com.github.scopt" %% "scopt" % "3.5.0",
-      "com.github.alexarchambault" %% "case-app" % "1.1.0-RC3",
-      "com.martiansoftware" % "nailgun-server" % "0.9.1"
+      "com.github.scopt"           %% "scopt"         % "3.5.0",
+      "com.github.alexarchambault" %% "case-app"      % "1.1.0-RC3",
+      "com.martiansoftware"        % "nailgun-server" % "0.9.1"
     )
   )
   .dependsOn(core % "compile->compile;test->test")
@@ -142,7 +142,7 @@ lazy val readme = scalatex
     allSettings,
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
-      "org.pegdown" % "pegdown" % "1.6.0"
+      "org.pegdown" % "pegdown"    % "1.6.0"
     ),
     dependencyOverrides += "com.lihaoyi" %% "scalaparse" % "0.3.1"
   )

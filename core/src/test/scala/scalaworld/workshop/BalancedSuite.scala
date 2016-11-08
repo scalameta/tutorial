@@ -16,9 +16,9 @@ class BalancedSuite extends WorkshopSuite {
   def isBalanced(tokens: Tokens): Boolean = {
     var balance = 0
     tokens.foreach {
-      case LeftBrace() => balance += 1
+      case LeftBrace()  => balance += 1
       case RightBrace() => balance -= 1
-      case _ =>
+      case _            =>
     }
     balance == 0
   }

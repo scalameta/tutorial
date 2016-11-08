@@ -45,12 +45,12 @@ class ReflectiveDynamicAccess(val classLoader: ClassLoader) {
       clazz: Class[_],
       args: immutable.Seq[(Class[_], AnyRef)]): Try[T] =
     Try {
-      val types = args.map(_._1).toArray
-      val values = args.map(_._2).toArray
+      val types       = args.map(_._1).toArray
+      val values      = args.map(_._2).toArray
       val constructor = clazz.getDeclaredConstructor(types: _*)
       constructor.setAccessible(true)
       val obj = constructor.newInstance(values: _*)
-      val t = implicitly[ClassTag[T]].runtimeClass
+      val t   = implicitly[ClassTag[T]].runtimeClass
       if (t.isInstance(obj)) obj.asInstanceOf[T]
       else
         throw new ClassCastException(

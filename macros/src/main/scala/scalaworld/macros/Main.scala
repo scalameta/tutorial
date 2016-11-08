@@ -13,4 +13,3 @@ class Main extends scala.annotation.StaticAnnotation {
     }
   }
 }
-
