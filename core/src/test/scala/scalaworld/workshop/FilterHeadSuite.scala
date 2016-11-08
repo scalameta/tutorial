@@ -18,11 +18,13 @@ class FilterHeadSuite extends FunSuite with DiffAssertions {
   }
 
   /** Rewrites lst.filter(cond).headOption to lst.find(cond) */
-  def noFilterHeadOption(tree: Tree): Tree = tree
+  def noFilterHeadOption(tree: Tree): Tree = tree.transform {
+    case q"$lst.filter($cond).headOption" => q"$lst.find($cond)"
+  }
 
   check(
-    """lst.filter(cond).headOption""",
-    """lst.find(cond)"""
+    """lst.filter(_ > 2).headOption""",
+    """lst.find(_ > 2)"""
   )
 
 }
