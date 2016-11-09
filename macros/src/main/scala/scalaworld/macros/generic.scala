@@ -113,10 +113,10 @@ object GenericMacro {
     val implicitName = Pat.Var.Term(Term.Name(name.syntax + "Generic"))
     q"""implicit val $implicitName: _root_.shapeless.Generic[$name] =
             new _root_.shapeless.Generic[$name] {
-              import shapeless._
+              import shapeless.{::, HNil, CNil, :+:, Inr, Inl}
               $reprTyp
-              $fromDef
               $toDef
+              $fromDef
             }
        """
   }
@@ -125,7 +125,7 @@ object GenericMacro {
                          subTypes: Seq[Defn.Class]): Stat = {
     val coproductType: Type = subTypes.foldRight[Type](t"CNil") {
       case (cls, accum) =>
-        Type.ApplyInfix(cls.name, t":+:", accum)
+        t"${cls.name} :+: $accum"
     }
     val coproductTermCases: Seq[Case] = subTypes.zipWithIndex.map {
       case (cls, i) =>
@@ -153,32 +153,28 @@ object GenericMacro {
     }
     val hlistType: Type = params.foldRight[Type](t"HNil") {
       case (Term.Param(_, _, Some(decltpe: Type), _), accum) =>
-        // why is the downcast required?
-        Type.ApplyInfix(decltpe, t"::", accum)
+        t"$decltpe :: $accum"
+      case (param, _) =>
+        abort(s"Unsupported parameter ${param.syntax}")
     }
     val hlistTerm: Term = params.foldRight[Term](q"HNil") {
       case (param, accum) =>
-        Term.ApplyInfix(q"t.${Term.Name(param.name.value)}",
-                        q"::",
-                        Nil,
-                        Seq(accum))
+        q"t.${Term.Name(param.name.value)} :: $accum"
     }
     val hlistPat: Pat = params.foldRight[Pat](q"HNil") {
       case (param, accum) =>
-        Pat.ExtractInfix(Pat.Var.Term(Term.Name(param.name.value)),
-                         q"::",
-                         Seq(accum))
+        p"${Pat.Var.Term(Term.Name(param.name.value))} :: $accum"
     }
     val args = params.map(param => Term.Name(param.name.value))
     val patmat =
-      Case(hlistPat, None, q"new ${Ctor.Ref.Name(name.value)}(..$args)")
+      p"case $hlistPat => new ${Ctor.Ref.Name(name.value)}(..$args)"
     mkGeneric(name, hlistType, hlistTerm, Seq(patmat))
   }
 
   def isSealed(mods: Seq[Mod]): Boolean = mods.exists(_.syntax == "sealed")
 
-  // Slightly tricky case, a Defn.Class parent constructor is a
-  // Term.Apply(Ctor.Ref.Name(), Nil) that we deconstruct here.
+  // Poor man's semantic API, we check that X in `class Foo extends X`
+  // matches syntactically the name of the annotated sealed type.
   def inherits(superType: Type.Name)(cls: Defn.Class): Boolean =
     cls.templ.parents.headOption.exists {
       case q"$parent()" => parent.syntax == superType.syntax

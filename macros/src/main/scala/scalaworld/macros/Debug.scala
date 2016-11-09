@@ -30,14 +30,16 @@ class Debug extends scala.annotation.StaticAnnotation {
   def apply(defn: Defn): Any = meta {
     defn match {
       case defn: Defn.Def =>
-        val printlnStatements = defn.paramss.flatten.map(param =>
-          q"""println(${param.name.syntax} + ": " + ${Term.Name(
-            param.name.value)})""")
+        val printlnStatements = defn.paramss.flatten.map { param =>
+          q"""println(
+                ${param.name.syntax} + ": " +
+                ${Term.Name(param.name.value)})"""
+        }
         val body: Term = q"""
           { ..$printlnStatements }
-          val start = System.currentTimeMillis()
+          val start = _root_.java.lang.System.currentTimeMillis()
           val result = ${defn.body}
-          val elapsed = System.currentTimeMillis() - start
+          val elapsed = _root_.java.lang.System.currentTimeMillis() - start
           println("Method " + ${defn.name.syntax} + " ran in " + elapsed + "ms")
           result
           """

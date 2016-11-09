@@ -23,6 +23,9 @@
       in the @lnk("Ammonite-REPL", "http://www.lihaoyi.com/Ammonite/#Ammonite-REPL")
       @hl.scala
         import $ivy.`org.scalameta:scalameta_2.11:1.2.0`, scala.meta._
+      @b{Note.} The macro annotation examples will not run in the REPL, follow
+      @lnk("scalameta/paradise#10", "https://github.com/scalameta/paradise/issues/10")
+      for updates.
 
   @sect{Video}
     @p
