@@ -37,7 +37,7 @@ import scala.meta._
 //       def from(r: Repr): Bar = r match {
 //         case Inl(t)      => t
 //         case Inr(Inl(t)) => t
-//         case Inr(Inr(_)) => sys.error("This can't happen")
+//         case Inr(Inr(cnil)) => cnil.impossible
 //       }
 //       def to(t: Bar): Repr = t match {
 //         case t: Baz  => Inl(t)
@@ -102,7 +102,7 @@ object GenericMacro {
 
   // final unreachable case in `from` for coproduct generic.
   def mkCantHappen(depth: Int): Pat =
-    if (depth <= 0) p"Inr(_)"
+    if (depth <= 0) p"Inr(cnil)"
     else p"Inr(${mkCantHappen(depth - 1)})"
 
   def mkGeneric(name: Type.Name, repr: Type, to: Term, from: Seq[Case]): Stat = {
@@ -138,7 +138,7 @@ object GenericMacro {
     }
     val cantHappen =
       p"""case ${mkCantHappen(subTypes.length - 1)} =>
-              sys.error("This can't happen")
+              cnil.impossible
          """
     mkGeneric(superName,
               coproductType,
