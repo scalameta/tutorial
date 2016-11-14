@@ -105,15 +105,20 @@ object GenericMacro {
     if (depth <= 0) p"Inr(cnil)"
     else p"Inr(${mkCantHappen(depth - 1)})"
 
-  def mkGeneric(name: Type.Name, repr: Type, to: Term, from: Seq[Case]): Stat = {
+  def mkGeneric(name: Type.Name,
+                repr: Type,
+                to: Term,
+                from: Seq[Case],
+                importStat: Stat): Stat = {
     val reprTyp: Stat = q"type Repr = $repr"
     val toDef: Stat   = q"def to(t: $name): Repr = $to"
     val fromDef: Stat =
       q"def from(r: Repr): $name = r match { ..case $from }"
     val implicitName = Pat.Var.Term(Term.Name(name.syntax + "Generic"))
+
     q"""implicit val $implicitName: _root_.shapeless.Generic[$name] =
             new _root_.shapeless.Generic[$name] {
-              import shapeless.{::, HNil, CNil, :+:, Inr, Inl}
+              $importStat
               $reprTyp
               $toDef
               $fromDef
@@ -143,7 +148,8 @@ object GenericMacro {
     mkGeneric(superName,
               coproductType,
               coproductTerm,
-              coproductPat :+ cantHappen)
+              coproductPat :+ cantHappen,
+              q"import shapeless.{CNil, :+:, Inr, Inl}")
   }
 
   def mkHListGeneric(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Stat = {
@@ -168,7 +174,11 @@ object GenericMacro {
     val args = params.map(param => Term.Name(param.name.value))
     val patmat =
       p"case $hlistPat => new ${Ctor.Ref.Name(name.value)}(..$args)"
-    mkGeneric(name, hlistType, hlistTerm, Seq(patmat))
+    mkGeneric(name,
+              hlistType,
+              hlistTerm,
+              Seq(patmat),
+              q"import shapeless.{::, HNil}")
   }
 
   def isSealed(mods: Seq[Mod]): Boolean = mods.exists(_.syntax == "sealed")

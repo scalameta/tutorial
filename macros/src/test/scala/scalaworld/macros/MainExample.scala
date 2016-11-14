@@ -1,7 +1,6 @@
 package scalaworld.macros
 
-//@Main
+@Main
 object MainExample {
-
   println("Hello scala.meta macros!")
 }
