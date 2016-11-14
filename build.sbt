@@ -15,7 +15,7 @@ lazy val buildSettings = Seq(
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += "org.scalameta" %% "scalameta" % "1.3.0.544",
+  libraryDependencies += "org.scalameta" %% "scalameta" % "1.3.0",
   resolvers += Resolver.url(
     "scalameta",
     url("http://dl.bintray.com/scalameta/maven"))(Resolver.ivyStylePatterns),
