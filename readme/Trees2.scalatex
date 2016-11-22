@@ -7,16 +7,18 @@
     @hl.scala
       // Refactor this
       object A {
-        try danger() {
-          catch e: Throwable => // swallows stack overflow / out of memory errors
+        try danger()
+        catch {
+          case e: Throwable => // swallows stack overflow / out of memory errors
             body
         }
       }
 
       // into this
       object A {
-        try danger() {
-          catch scala.util.control.NonFatal(e) =>
+        try danger()
+        catch {
+          case scala.util.control.NonFatal(e) =>
             body
         }
       }
