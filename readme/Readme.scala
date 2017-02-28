@@ -42,7 +42,7 @@ object Readme {
 
   def getMetaCode(indentedCode: String): String = {
     s"""
-       |import scala.meta._
+       |import scala.meta._, contrib._
        |${unindent(indentedCode)}
        """.stripMargin
   }

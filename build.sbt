@@ -4,6 +4,10 @@ import sbt.ScriptedPlugin
 import sbt.ScriptedPlugin._
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
+lazy val MetaVersion     = "1.6.0"
+lazy val ParadiseVersion = "3.0.0-M7"
+lazy val scalameta       = "org.scalameta" %% "contrib" % MetaVersion
+
 lazy val buildSettings = Seq(
   organization := "org.scalameta",
   assemblyJarName in assembly := "scalaworld.jar",
@@ -15,12 +19,10 @@ lazy val buildSettings = Seq(
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += "org.scalameta" %% "scalameta" % "1.4.0",
-  resolvers += Resolver.url(
-    "scalameta",
-    url("http://dl.bintray.com/scalameta/maven"))(Resolver.ivyStylePatterns),
+  libraryDependencies += scalameta,
+  resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
   addCompilerPlugin(
-    "org.scalameta" % "paradise" % "3.0.0-beta4" cross CrossVersion.full),
+    "org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full),
   scalacOptions += "-Xplugin-require:macroparadise"
 )
 
@@ -78,8 +80,8 @@ lazy val core = project.settings(
   allSettings,
   moduleName := "scalaworld-core",
   libraryDependencies ++= Seq(
-    "com.lihaoyi"    %% "sourcecode"   % "0.1.2",
-    "org.scalameta"  %% "scalameta"    % "1.0.0",
+    "com.lihaoyi" %% "sourcecode" % "0.1.2",
+    scalameta,
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     // Test dependencies
     "org.scalatest"                  %% "scalatest" % "3.0.0" % "test",
@@ -148,7 +150,6 @@ lazy val readme = scalatex
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
       "org.pegdown" % "pegdown"    % "1.6.0"
-    ),
-    dependencyOverrides += "com.lihaoyi" %% "scalaparse" % "0.3.1"
+    )
   )
   .dependsOn(core, cli)
