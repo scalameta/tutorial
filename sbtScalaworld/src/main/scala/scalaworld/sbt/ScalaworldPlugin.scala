@@ -86,7 +86,8 @@ object ScalaworldPlugin extends AutoPlugin {
           (sourceDirectories in hasScalaworld).value.toList,
           (includeFilter in hasScalaworld).value,
           (excludeFilter in hasScalaworld).value,
-          thisProjectRef.value)
+          thisProjectRef.value
+        )
       },
       scalaworld := hasScalaworld.value.writeFormattedContentsToFiles()
     )
