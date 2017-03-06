@@ -25,6 +25,42 @@
     If you only use scala.meta at compile time, you can mark the dependency as
     @code{% "provided"} to exclude it from your runtime application.
 
+@sect{How do I use macro annotations provided by a third-party library?}
+    If your project depends on a library that provides macro annotations, you need
+    to enable the `paradise` compiler plugin and declare a dependency on `scala-meta`
+    so that macro annotations could be expanded:
+    
+    @hl.scala
+      addCompilerPlugin(
+        ("org.scalameta" % "paradise" % paradiseVersion).cross(CrossVersion.full)
+      )
+
+      libraryDependencies += 
+        "org.scalameta" %% "scalameta" % scalametaVersion % Provided
+      
+
+    Here is a complete `settings` definition necessary and sufficient to enable 
+    dependent project to use the library (including workarounds for features
+    that are being currently worked on):
+    
+    @hl.scala
+      lazy val enableMacroAnnotations: Seq[Def.Setting[_]] = Seq(
+        addCompilerPlugin(
+          ("org.scalameta" % "paradise" % paradiseVersion).cross(CrossVersion.full)
+        ),
+
+        libraryDependencies += 
+          "org.scalameta" %% "scalameta" % scalametaVersion % Provided,
+
+        scalacOptions += "-Xplugin-require:macroparadise",
+
+        // macroparadise plugin doesn't work in repl yet.
+        scalacOptions in (Compile, console) := Seq(),
+
+        // macroparadise doesn't work with scaladoc yet
+        sources in (Compile, doc) := Nil
+      )
+
   @sect{How do I reuse code between macros?}
     If you try to call a method inside you macro class you get a "X not found" error.
 
