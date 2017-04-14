@@ -1,6 +1,6 @@
 @import Main._
 @import scalaworld.Readme._
-@import scalaworld.Versions
+@import scala.meta.tutorial.BuildInfo
 
 @sect{Part 0 - Setup}
   @ol
@@ -23,7 +23,7 @@
       To experiment with scala.meta in the REPL, you can run the following
       in the @lnk("Ammonite-REPL", "http://www.lihaoyi.com/Ammonite/#Ammonite-REPL")
       @hl.scala
-        import $ivy.`org.scalameta:scalameta_2.11:@(Versions.scalameta)`, scala.meta._
+        import $ivy.`org.scalameta:scalameta_2.11:@(BuildInfo.scalameta)`, scala.meta._
       @b{Note.} The macro annotation examples will not run in the REPL, follow
       @lnk("scalameta/paradise#10", "https://github.com/scalameta/paradise/issues/10")
       for updates.

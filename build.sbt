@@ -1,147 +1,37 @@
-// NOTE. For a minimal build file to play around with scalameta macros, see:
-// https://github.com/olafurpg/scalameta-macro-template
-import sbt.ScriptedPlugin
-import sbt.ScriptedPlugin._
-import scoverage.ScoverageSbtPlugin.ScoverageKeys._
+lazy val MetaVersion     = "1.7.0"
+lazy val ParadiseVersion = "3.0.0-M8"
+lazy val scala211        = "2.11.10"
+lazy val scalameta       = "org.scalameta" %% "scalameta" % MetaVersion
+lazy val contrib         = "org.scalameta" %% "contrib" % MetaVersion
+lazy val testkit         = "org.scalameta" %% "testkit" % MetaVersion
+lazy val paradise        = "org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full
 
-lazy val MetaVersion     = scalaworld.Versions.scalameta
-lazy val ParadiseVersion = scalaworld.Versions.paradise
-lazy val scalameta       = "org.scalameta" %% "contrib" % MetaVersion
-
-lazy val buildSettings = Seq(
+lazy val allSettings = Seq(
   organization := "org.scalameta",
-  assemblyJarName in assembly := "scalaworld.jar",
-  // See core/src/main/scala/ch/epfl/scala/Versions.scala
-  version := scalaworld.Versions.nightly,
-  scalaVersion := scalaworld.Versions.scala,
+  scalaVersion := scala211,
+  resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
+  libraryDependencies ++= Seq(
+    "org.scalatest" %% "scalatest" % "3.0.1" % Test,
+    // TODO(olafur) remove after testkit adds this utility
+    "com.googlecode.java-diff-utils" % "diffutils" % "1.3.0" % Test
+  ),
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
 
-// Macro setting is any module that has macros, or manipulates meta trees
-lazy val macroSettings = Seq(
-  libraryDependencies += scalameta,
-  resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
-  addCompilerPlugin(
-    "org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full),
-  scalacOptions += "-Xplugin-require:macroparadise"
-)
+allSettings
 
-lazy val jvmOptions = Seq(
-  "-Xss4m"
-)
+name := "scalameta-tutorial"
 
-lazy val compilerOptions = Seq(
-  "-deprecation",
-  "-encoding",
-  "UTF-8",
-  "-feature",
-  "-language:existentials",
-  "-language:higherKinds",
-  "-language:implicitConversions",
-  "-unchecked",
-  "-Yno-adapted-args",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
-  "-Xfuture",
-  "-Xlint"
-)
-
-lazy val commonSettings = Seq(
-  ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages :=
-    ".*Versions;scalaworld\\.(sbt|util)",
-  triggeredMessage in ThisBuild := Watched.clearWhenTriggered,
-  scalacOptions in (Compile, console) := compilerOptions :+ "-Yrepl-class-based",
-  testOptions in Test += Tests.Argument("-oD")
-)
-
-lazy val allSettings = commonSettings ++ buildSettings
-
-lazy val root = project
-  .in(file("."))
-  .settings(
-    allSettings,
-    moduleName := "scalaworld",
-    commands += Command.command("ci-test") { s =>
-      "readme/run --validate-links" ::
-        s
-    },
-    initialCommands in console :=
-      """
-        |import scala.meta._
-        |import scalaworld._
-      """.stripMargin
-  )
-  .aggregate(
-    core,
-    cli,
-    macros,
-    readme,
-    sbtScalaworld
-  )
-  .dependsOn(core)
-
-lazy val core = project.settings(
+lazy val library = project.settings(
   allSettings,
-  moduleName := "scalaworld-core",
-  libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "sourcecode" % "0.1.2",
-    scalameta,
-    "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    // Test dependencies
-    "org.scalatest"                  %% "scalatest" % "3.0.0" % "test",
-    "com.googlecode.java-diff-utils" % "diffutils"  % "1.3.0" % "test"
-  )
+  libraryDependencies += scalameta
 )
-
-lazy val cli = project
-  .settings(
-    allSettings,
-    packSettings,
-    moduleName := "scalaworld-cli",
-    packJvmOpts := Map(
-      "scalaworld"           -> jvmOptions,
-      "scalaworld_ng_server" -> jvmOptions
-    ),
-    mainClass in assembly := Some("scalaworld.cli.Cli"),
-    packMain := Map(
-      "scalaworld"           -> "scalaworld.cli.Cli",
-      "scalaworld_ng_server" -> "com.martiansoftware.nailgun.NGServer"
-    ),
-    libraryDependencies ++= Seq(
-      "com.github.scopt"           %% "scopt"         % "3.5.0",
-      "com.github.alexarchambault" %% "case-app"      % "1.1.0-RC3",
-      "com.martiansoftware"        % "nailgun-server" % "0.9.1"
-    )
-  )
-  .dependsOn(core % "compile->compile;test->test")
 
 lazy val macros = project.settings(
   allSettings,
   macroSettings,
-  libraryDependencies +=
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
   // only needed for @generic demo.
-  libraryDependencies +=
-    "com.chuusai" %% "shapeless" % "2.3.2"
-)
-
-lazy val sbtScalaworld = project.settings(
-  allSettings,
-  ScriptedPlugin.scriptedSettings,
-  sbtPlugin := true,
-  coverageHighlighting := false,
-  scalaVersion := "2.10.5",
-  moduleName := "sbt-scalaworld",
-  sources in Compile +=
-    baseDirectory.value / "../core/src/main/scala/scalaworld/Versions.scala",
-  scriptedLaunchOpts := Seq(
-    "-Dplugin.version=" + version.value,
-    // .jvmopts is ignored, simulate here
-    "-XX:MaxPermSize=256m",
-    "-Xmx2g",
-    "-Xss2m"
-  ),
-  scriptedBufferLog := false
+  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
 )
 
 lazy val readme = scalatex
@@ -151,10 +41,12 @@ lazy val readme = scalatex
                   source = "Readme")
   .settings(
     allSettings,
+    buildInfoSettings,
     siteSourceDirectory := target.value / "scalatex",
+    test := run.in(Compile).toTask(" --validate-links").value,
     publish := {
       ghpagesPushSite
-        .dependsOn(run.in(Compile).toTask(" --validate-links"))
+        .dependsOn(run.in(Compile).toTask(""))
         .value
     },
     git.remoteRepo := "git@github.com:scalameta/tutorial.git",
@@ -163,5 +55,27 @@ lazy val readme = scalatex
       "org.pegdown" % "pegdown"    % "1.6.0"
     )
   )
-  .dependsOn(core, cli)
-  .enablePlugins(GhpagesPlugin)
+  .dependsOn(library)
+  .enablePlugins(
+    GhpagesPlugin,
+    BuildInfoPlugin
+  )
+
+// Macro setting is any module that has macros, or manipulates meta trees
+lazy val macroSettings = Seq(
+  libraryDependencies += scalameta,
+  addCompilerPlugin(paradise),
+  scalacOptions += "-Xplugin-require:macroparadise"
+)
+
+lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
+  buildInfoKeys := Seq[BuildInfoKey](
+    name,
+    version,
+    "scalameta" -> MetaVersion,
+    "paradise"  -> ParadiseVersion,
+    scalaVersion,
+    sbtVersion
+  ),
+  buildInfoPackage := "scala.meta.tutorial"
+)
