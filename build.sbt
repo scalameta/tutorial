@@ -4,6 +4,10 @@ import sbt.ScriptedPlugin
 import sbt.ScriptedPlugin._
 import scoverage.ScoverageSbtPlugin.ScoverageKeys._
 
+lazy val MetaVersion = scalaworld.Versions.scalameta
+lazy val ParadiseVersion = scalaworld.Versions.paradise
+lazy val scalameta = "org.scalameta" %% "contrib" % MetaVersion
+
 lazy val buildSettings = Seq(
   organization := "org.scalameta",
   assemblyJarName in assembly := "scalaworld.jar",
@@ -15,12 +19,9 @@ lazy val buildSettings = Seq(
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += "org.scalameta" %% "scalameta" % "1.4.0",
-  resolvers += Resolver.url(
-    "scalameta",
-    url("http://dl.bintray.com/scalameta/maven"))(Resolver.ivyStylePatterns),
-  addCompilerPlugin(
-    "org.scalameta" % "paradise" % "3.0.0-beta4" cross CrossVersion.full),
+  libraryDependencies += scalameta,
+  resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
+  addCompilerPlugin("org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full),
   scalacOptions += "-Xplugin-require:macroparadise"
 )
 
@@ -59,6 +60,10 @@ lazy val root = project
   .settings(
     allSettings,
     moduleName := "scalaworld",
+    commands += Command.command("ci-test") { s =>
+      "readme/run --validate-links" ::
+        s
+    },
     initialCommands in console :=
       """
         |import scala.meta._
@@ -78,12 +83,12 @@ lazy val core = project.settings(
   allSettings,
   moduleName := "scalaworld-core",
   libraryDependencies ++= Seq(
-    "com.lihaoyi"    %% "sourcecode"   % "0.1.2",
-    "org.scalameta"  %% "scalameta"    % "1.0.0",
+    "com.lihaoyi" %% "sourcecode" % "0.1.2",
+    scalameta,
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     // Test dependencies
-    "org.scalatest"                  %% "scalatest" % "3.0.0" % "test",
-    "com.googlecode.java-diff-utils" % "diffutils"  % "1.3.0" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
+    "com.googlecode.java-diff-utils" % "diffutils" % "1.3.0" % "test"
   )
 )
 
@@ -93,18 +98,18 @@ lazy val cli = project
     packSettings,
     moduleName := "scalaworld-cli",
     packJvmOpts := Map(
-      "scalaworld"           -> jvmOptions,
+      "scalaworld" -> jvmOptions,
       "scalaworld_ng_server" -> jvmOptions
     ),
     mainClass in assembly := Some("scalaworld.cli.Cli"),
     packMain := Map(
-      "scalaworld"           -> "scalaworld.cli.Cli",
+      "scalaworld" -> "scalaworld.cli.Cli",
       "scalaworld_ng_server" -> "com.martiansoftware.nailgun.NGServer"
     ),
     libraryDependencies ++= Seq(
-      "com.github.scopt"           %% "scopt"         % "3.5.0",
-      "com.github.alexarchambault" %% "case-app"      % "1.1.0-RC3",
-      "com.martiansoftware"        % "nailgun-server" % "0.9.1"
+      "com.github.scopt" %% "scopt" % "3.5.0",
+      "com.github.alexarchambault" %% "case-app" % "1.1.0-RC3",
+      "com.martiansoftware" % "nailgun-server" % "0.9.1"
     )
   )
   .dependsOn(core % "compile->compile;test->test")
@@ -147,8 +152,7 @@ lazy val readme = scalatex
     allSettings,
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
-      "org.pegdown" % "pegdown"    % "1.6.0"
-    ),
-    dependencyOverrides += "com.lihaoyi" %% "scalaparse" % "0.3.1"
+      "org.pegdown" % "pegdown" % "1.6.0"
+    )
   )
   .dependsOn(core, cli)

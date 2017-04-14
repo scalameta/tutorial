@@ -1,0 +1,69 @@
+@import Main._
+@import scalaworld.Readme._
+
+@sect{Part 6 - Contrib}
+  Scala.meta contrib is a module that provides common utilities for handling
+  scala.meta data structures.
+
+  @p
+    To use contrib, @code{import scala.meta.contrib._}.
+
+  @p
+    Contrib exposes some collection-like methods on @code{Tree}.
+    @meta
+      source"""
+      class A
+      trait B
+      object C
+      object D
+      """.find(_.is[Defn.Object])
+
+    @meta
+      source"""
+      class A
+      trait B
+      object C {
+        val x = 2
+        val y = 3
+      }
+      object D
+      """.collectFirst { case q"val y = $body" =>  body.structure }
+
+    @meta
+      source"""
+      class A
+      trait B
+      object C {
+        val x = 2
+        val y = 3
+      }
+      object D
+      """.exists(_.is[Defn.Def])
+
+  @p
+    Contrib has a @code{Equal} typeclass for comparing trees by structural or
+    syntactic equality.
+    @meta
+      q"val x = 2".isEqual(q"def x = 2")
+    @meta
+      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
+    @meta
+      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
+    @meta
+      q"lazy val x = 2".mods.exists(_.isEqual(mod"lazy"))
+    @meta
+      q"lazy val x = 2".contains(q"3")
+    @meta
+      q"lazy val x = 2".contains(q"2")
+
+  @p
+    Contrib has an @code{AssociatedCommments} helper to extract leading
+    and trailing comments of tree nodes.
+    @meta
+      val code: Source = """
+      /** This is a docstring */
+      trait MyTrait // leading comment
+      """.parse[Source].get
+      val comments = AssociatedComments(code)
+      val myTrait = code.find(_.is[Defn.Trait]).get
+      comments.leading(myTrait) -> comments.trailing(myTrait)

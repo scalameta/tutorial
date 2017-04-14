@@ -1,15 +1,18 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -eu
 
 echo "Updating gh-pages..."
 
 SUBDIR="gh-pages"
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
+AUTH=${GITHUB_AUTH:-}
+SETUP_GIT=${DRONE:-false}
 
 git checkout master
 REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+HTTP_REPO=${REPO/github.com/${AUTH}github.com}
 SHA=`git rev-parse --verify HEAD`
 sbt "readme/run --validate-links"
 
@@ -27,15 +30,18 @@ if [[ -z `git diff --exit-code` ]]; then
     exit 0
 fi
 
+if [[ ${SETUP_GIT} == "true" ]]; then
+  git config user.name "scalametabot"
+  git config user.email "scalametabot@gmail.com"
+fi
+
 git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
-if [ ${TRAVIS} = "true" ]; then
-  git config user.name "Travis CI"
-  git config user.email "olafurpg@gmail.com"
-fi
-
-git push -f origin gh-pages
+git push -f $HTTP_REPO gh-pages
 git checkout master
+cd ..
+rm -rf gh-pages
 
 echo "Done!"
+

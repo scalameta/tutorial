@@ -21,6 +21,8 @@
   @scalatex.Trees()
   @scalatex.Devtools()
   @scalatex.Macros()
+  @scalatex.Semantic()
+  @scalatex.Contrib()
   @scalatex.FAQ()
   @scalatex.Resources()
   @scalatex.Footer()
