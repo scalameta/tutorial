@@ -1,12 +1,35 @@
-# Trigger build 8
-build:
-  image: olafurpg/scalafix:0.0.1
-  commands:
-    - apt-get install nailgun
-    - alias ng=ng-nailgun
-    - export PATH=$PATH:/root/local/bin
-    - pip install --user codecov
-    - ./bin/testAll.sh
-    # I can't be bothered to hide this token.
-    - $HOME/.local/bin/codecov -t 5f2117aa-0a01-4cf1-8bf7-631a62ccb47a
+pipeline:
+  # Fetch folders from distributed cache
+  sftp_cache_restore:
+    image: plugins/sftp-cache
+    restore: true
+    mount:
+      - /drone/.ivy2
+      - /drone/.coursier-cache
+      - /drone/.sbt
+      - /drone/.git
+    when:
+      event: [push, pull_request, tag, deployment]
 
+  tests:
+    image: scalaplatform/scala:0.6
+    commands:
+      - sbt ci-test
+
+  publish:
+    image: olafurpg/scalafix:0.3.0
+    commands:
+      - ./bin/update-gh-pages.sh
+    when:
+      event: push
+      branch: [master]
+
+  # Save folders in distributed cache
+  sftp_cache_rebuild:
+    image: plugins/sftp-cache
+    rebuild: true
+    mount:
+      - /drone/.ivy2
+      - /drone/.coursier-cache
+      - /drone/.sbt
+      - /drone/.git
