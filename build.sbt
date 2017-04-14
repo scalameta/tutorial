@@ -60,7 +60,7 @@ lazy val root = project
   .settings(
     allSettings,
     moduleName := "scalaworld",
-    commands += Command.command("ci-fast") { s =>
+    commands += Command.command("ci-test") { s =>
       "readme/run --validate-links" ::
         s
     },
