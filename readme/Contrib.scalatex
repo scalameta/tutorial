@@ -44,17 +44,17 @@
     Contrib has a @code{Equal} typeclass for comparing trees by structural or
     syntactic equality.
     @meta
-      q"val x = 2".equal[Structurally](q"def x = 2")
+      q"val x = 2".isEqual(q"def x = 2")
     @meta
-      q"val x = 2".equal[Structurally]("val x = 2 // comment".parse[Stat].get)
+      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
     @meta
-      q"val x = 2".equal[Syntactically]("val x = 2 // comment".parse[Stat].get)
+      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
     @meta
-      q"lazy val x = 2".mods.exists(_.equal[Structurally](mod"lazy"))
+      q"lazy val x = 2".mods.exists(_.isEqual(mod"lazy"))
     @meta
-      q"lazy val x = 2".contains[Structurally](q"3")
+      q"lazy val x = 2".contains(q"3")
     @meta
-      q"lazy val x = 2".contains[Structurally](q"2")
+      q"lazy val x = 2".contains(q"2")
 
   @p
     Contrib has an @code{AssociatedCommments} helper to extract leading
