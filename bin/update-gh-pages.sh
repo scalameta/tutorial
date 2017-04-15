@@ -37,10 +37,8 @@ if [[ ${SETUP_GIT} == "true" ]]; then
   git config user.email "olafurpg@gmail.com"
   mkdir -p ~/.ssh
   echo "$DEPLOY_KEY" > ~/.ssh/github_rsa
-  cat <<EOT >> ~/.ssh/config
-Host github.com
-  IdentityFile ~/.ssh/github_rsa
-EOT
+  export GIT_SSH_COMMAND="ssh -i ~/.ssh/github_rsa"
+  echo "SSH_REPO: $SSH_REPO"
 fi
 
 git add .
