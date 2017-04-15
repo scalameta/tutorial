@@ -7,6 +7,7 @@ SUBDIR="gh-pages"
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 AUTH=${GITHUB_AUTH:-}
+DEPLOY_KEY=${GITHUB_DEPLOY_KEY:-UNKNOWN}
 SETUP_GIT=${DRONE:-false}
 
 git checkout master
@@ -30,15 +31,21 @@ if [[ -z `git diff --exit-code` ]]; then
     exit 0
 fi
 
+
 if [[ ${SETUP_GIT} == "true" ]]; then
-  git config user.name "scalametabot"
-  git config user.email "scalametabot@gmail.com"
+  git config user.name "olafur pall"
+  git config user.email "olafurpg@gmail.com"
+  echo $DEPLOY_KEY > ~/.ssh/github_rsa
+  cat <<EOT >> ~/.ssh/config
+Host github.com
+  IdentityFile ~/.ssh/github_rsa
+EOT
 fi
 
 git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
-git push -f $HTTP_REPO gh-pages
+git push -f $SSH_REPO gh-pages
 git checkout master
 cd ..
 rm -rf gh-pages
