@@ -37,7 +37,7 @@ if [[ ${SETUP_GIT} == "true" ]]; then
   git config user.email "olafurpg@gmail.com"
   mkdir -p ~/.ssh
   echo "$DEPLOY_KEY" > ~/.ssh/github_rsa
-  sudo chmod 600 ~/.ssh/github_rsa
+  chmod 600 ~/.ssh/github_rsa
   export GIT_SSH_COMMAND="ssh -i ~/.ssh/github_rsa"
   echo "SSH_REPO: $SSH_REPO"
 fi
