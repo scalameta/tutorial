@@ -16,13 +16,13 @@ pipeline:
     commands:
       - sbt ci-test
 
-  publish:
-    image: olafurpg/scalafix:0.3.0
-    commands:
-      - ./bin/update-gh-pages.sh
-    when:
-      event: push
-      branch: [master]
+#  publish:
+#    image: olafurpg/scalafix:0.3.0
+#    commands:
+#      - ./bin/update-gh-pages.sh
+#    when:
+#      event: push
+#      branch: [master]
 
   # Save folders in distributed cache
   sftp_cache_rebuild:
