@@ -36,7 +36,7 @@ if [[ ${SETUP_GIT} == "true" ]]; then
   git config user.name "olafur pall"
   git config user.email "olafurpg@gmail.com"
   mkdir -p ~/.ssh
-  echo $DEPLOY_KEY > ~/.ssh/github_rsa
+  echo "$DEPLOY_KEY" > ~/.ssh/github_rsa
   cat <<EOT >> ~/.ssh/config
 Host github.com
   IdentityFile ~/.ssh/github_rsa
