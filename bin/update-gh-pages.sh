@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
-set -eux
+set -eu
 
 echo "Updating gh-pages..."
 
 SUBDIR="gh-pages"
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
-AUTH=${GITHUB_AUTH:-}
-DEPLOY_KEY=${GITHUB_DEPLOY_KEY:-UNKNOWN}
 SETUP_GIT=${DRONE:-false}
 
 git checkout master
 REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
-HTTP_REPO=${REPO/github.com/${AUTH}github.com}
 SHA=`git rev-parse --verify HEAD`
 sbt "readme/run --validate-links"
 
@@ -31,25 +28,22 @@ if [[ -z `git diff --exit-code` ]]; then
     exit 0
 fi
 
-
 if [[ ${SETUP_GIT} == "true" ]]; then
+  mkdir -p $HOME/.ssh
+  RSA_FILE="$HOME/.ssh/github_rsa"
   git config user.name "olafur pall"
   git config user.email "olafurpg@gmail.com"
-  mkdir -p ~/.ssh
-  echo "$DEPLOY_KEY" > ~/.ssh/github_rsa
-  chmod 600 ~/.ssh/github_rsa
-  export GIT_SSH_COMMAND="ssh -i ~/.ssh/github_rsa"
-  echo "SSH_REPO: $SSH_REPO"
+  echo "$GITHUB_DEPLOY_KEY" > ${RSA_FILE}
+  chmod 600 ${RSA_FILE}
+  export GIT_SSH_COMMAND="ssh -i $RSA_FILE"
 fi
 
 git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
-git push -f $SSH_REPO gh-pages
+git push -f ${SSH_REPO} gh-pages
 git checkout master
 cd ..
 rm -rf gh-pages
 
 echo "Done!"
-
-
