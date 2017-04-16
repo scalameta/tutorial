@@ -18,12 +18,8 @@ pipeline:
 
   publish:
     image: olafurpg/scalafix:0.3.0
-    environment:
-      - DEPLOY_KEY=$HOME/github_rsa
     commands:
-      - echo "$GITHUB_DEPLOY_KEY" > $DEPLOY_KEY
-      - chmod 600 $DEPLOY_KEY
-      - ssh-agent bash -c "ssh-add $DEPLOY_KEY; sbt -Dsbt.ivy.home=/drone/.ivy2/ readme/publish"
+      - ./bin/ci-publish.sh
     when:
       event: push
       branch: [master]
