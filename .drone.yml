@@ -19,7 +19,8 @@ pipeline:
   publish:
     image: olafurpg/scalafix:0.3.0
     commands:
-      - ./bin/update-gh-pages.sh
+      - echo "$GITHUB_DEPLOY_KEY" > ~/github_rsa
+      - ssh-agent bash -c 'ssh-add ~/github_rsa; sbt readme/publish'
     when:
       event: push
       branch: [master]
