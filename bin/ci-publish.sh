@@ -2,6 +2,8 @@
 set -eu
 mkdir -p $HOME/.ssh
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+git config --global user.email "olafurpg@gmail.com"
+git config --global user.name "Drone CI bot"
 DEPLOY_KEY_FILE=$HOME/.ssh/id_rsa
 echo "$GITHUB_DEPLOY_KEY" > ${DEPLOY_KEY_FILE}
 chmod 600 ${DEPLOY_KEY_FILE}
