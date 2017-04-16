@@ -14,7 +14,7 @@ pipeline:
   tests:
     image: scalaplatform/scala:0.6
     commands:
-      - sbt ci-test
+      - sbt test
 
   publish:
     image: olafurpg/scalafix:0.3.0

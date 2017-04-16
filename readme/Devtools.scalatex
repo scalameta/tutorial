@@ -13,7 +13,7 @@
       @code{scalaworld.rewrite}.
       The file looks like this:
 
-    @hl.ref(wd/'core/'src/'main/'scala/'scalaworld/'rewrite/"NonFatal.scala")
+    @hl.ref(wd/'library/'src/'main/'scala/'scalaworld/'rewrite/"NonFatal.scala")
 
     @p
       Plug in your implementation of the @sect.ref{Don't catch Throwable}
