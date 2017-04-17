@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 2 - Trees}
+@sect{Trees}
   @p
     Reminder. We assume you have this import in scope:
 

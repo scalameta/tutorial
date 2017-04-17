@@ -22,11 +22,6 @@ allSettings
 
 name := "scalameta-tutorial"
 
-lazy val library = project.settings(
-  allSettings,
-  libraryDependencies += scalameta
-)
-
 lazy val macros = project.settings(
   allSettings,
   macroSettings,

@@ -2,7 +2,7 @@
 @import scalaworld.Readme._
 @import scala.meta.tutorial.BuildInfo
 
-@sect{Part 0 - Setup}
+@sect{Setup}
   @ol
     @li
       Clone the @lnk("workshop repo", "https://github.com/scalameta/tutorial").
