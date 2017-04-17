@@ -39,6 +39,7 @@ lazy val readme = scalatex
     buildInfoSettings,
     siteSourceDirectory := target.value / "scalatex",
     test := run.in(Compile).toTask(" --validate-links").value,
+    libraryDependencies += contrib,
     publish := {
       ghpagesPushSite
         .dependsOn(run.in(Compile).toTask(""))
@@ -50,7 +51,6 @@ lazy val readme = scalatex
       "org.pegdown" % "pegdown"    % "1.6.0"
     )
   )
-  .dependsOn(library)
   .enablePlugins(
     GhpagesPlugin,
     BuildInfoPlugin

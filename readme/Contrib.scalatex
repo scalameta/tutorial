@@ -44,11 +44,11 @@
     Contrib has a @code{Equal} typeclass for comparing trees by structural or
     syntactic equality.
     @meta
-      q"val x = 2".isEqual(q"def x = 2")
+      q"val x = 2".isEqual(q"val x = 1")
     @meta
-      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
+      (q"val x = 2": Stat).isEqual("val x = 2 // comment".parse[Stat].get)
     @meta
-      q"val x = 2".isEqual("val x = 2 // comment".parse[Stat].get)
+      (q"val x = 2": Stat).isEqual[Syntactically]("val x = 2 // comment".parse[Stat].get)
     @meta
       q"lazy val x = 2".mods.exists(_.isEqual(mod"lazy"))
     @meta

@@ -69,7 +69,7 @@
       If we try to parse a statement as a compilation unit we will fail.
 
     @meta
-      "val x = 2".parse[Source].get
+      "val x = 2".parse[Source] // compilation error
 
     @p
       We need to explicitly parse it as a statement (@code{Stat}).
@@ -227,4 +227,3 @@
         For your convenience, I've compiled together the most common types in
         this handy diagram:
         @image("tree.png")
-  @scalatex.Trees2()
