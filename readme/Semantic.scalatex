@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 5 - Semantic}
+@sect{Semantic}
   Scala.meta v1.6 released a new semantic API.
   See @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
   on how to get started with the semantic API.

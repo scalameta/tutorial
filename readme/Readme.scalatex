@@ -19,7 +19,6 @@
   @scalatex.GettingStarted()
   @scalatex.Tokens()
   @scalatex.Trees()
-  @scalatex.Devtools()
   @scalatex.Macros()
   @scalatex.Semantic()
   @scalatex.Contrib()

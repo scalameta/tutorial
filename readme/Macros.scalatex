@@ -1,7 +1,7 @@
 @import Main._
 @import scalaworld.Readme._
 
-@sect{Part 4 - Macro annotations}
+@sect{Macro annotations}
   @p
 
     Scala.meta makes it possible to write new-style macro annotations.  In
