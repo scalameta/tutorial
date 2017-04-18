@@ -61,7 +61,7 @@
 
         @meta
           "val x = 2".tokenize.get.
-            map(x => f"${x.structure}%10s -> ${x.getClass}").
+            map(x => f"${x.structure}%10s -> ${x.productPrefix}").
             mkString("\n")
 
         @p
