@@ -17,8 +17,6 @@
       object C
       object D
       """.find(_.is[Defn.Object])
-
-    @meta
       source"""
       class A
       trait B
@@ -28,8 +26,6 @@
       }
       object D
       """.collectFirst { case q"val y = $body" =>  body.structure }
-
-    @meta
       source"""
       class A
       trait B
@@ -45,15 +41,10 @@
     syntactic equality.
     @meta
       q"val x = 2".isEqual(q"val x = 1")
-    @meta
       (q"val x = 2": Stat).isEqual("val x = 2 // comment".parse[Stat].get)
-    @meta
       (q"val x = 2": Stat).isEqual[Syntactically]("val x = 2 // comment".parse[Stat].get)
-    @meta
       q"lazy val x = 2".mods.exists(_.isEqual(mod"lazy"))
-    @meta
       q"lazy val x = 2".contains(q"3")
-    @meta
       q"lazy val x = 2".contains(q"2")
 
   @p

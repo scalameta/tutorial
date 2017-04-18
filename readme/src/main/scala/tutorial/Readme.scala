@@ -1,13 +1,11 @@
 package scalaworld
 import scala.collection.mutable
+import scala.compat.Platform.EOL
 import scala.meta.tokenizers.Tokenized
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.ILoop
-import scala.tools.nsc.interpreter.IMain
 import scala.util.Try
-import scala.util.control.NonFatal
 import scalatags.Text.TypedTag
-import scala.compat.Platform.EOL
 import scalatags.Text.all._
 import scalatex.Main._
 
@@ -18,16 +16,13 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
-import java.util
-import java.util
 
 import org.pegdown.PegDownProcessor
-import org.scalameta.logger
-import java.{util => ju}
 
 object Readme {
 
-  lazy val iloopCacheFile = Paths.get("target", "iloopCache.serialized").toFile
+  lazy val iloopCacheFile: File =
+    Paths.get("target", "iloopCache.serialized").toFile
   lazy val iloopCache: mutable.Map[String, String] = {
     Try {
       val ois = new ObjectInputStream(new FileInputStream(iloopCacheFile))
@@ -47,13 +42,12 @@ object Readme {
   def github: String = {
     "https://github.com"
   }
-  def repo: String      = "https://github.com/olafurpg/scala.meta-workshop"
+  def repo: String      = "http://scalameta.org/tutorial"
   def dotty             = a(href := "http://dotty.epfl.ch/", "Dotty")
   def issue(id: Int)    = a(href := repo + s"/issues/$id", s"#$id")
   def note              = b("NOTE")
   def issues(ids: Int*) = span(ids.map(issue): _*)
   val pegdown           = new PegDownProcessor
-
 
   def url(src: String) = a(href := src, src)
 
@@ -93,7 +87,7 @@ object Readme {
     */
   def meta(code0: String) = {
     val code1   = s"import scala.meta._, contrib._$EOL${unindent(code0).trim}"
-    val result0 = iloopCache.getOrElseUpdate(code0, executeInRepl(code1))
+    val result0 = executeInRepl(code1)
     val result1 = result0.split(EOL).drop(4).mkString(EOL)
     hl.scala(result1)
   }
@@ -125,7 +119,11 @@ object Readme {
     s.classpath.value = classpath.mkString(File.pathSeparator)
     val postprocessedCode = redFlags.foldLeft(code)((acc, curr) =>
       acc.replace("// " + curr.directive, ""))
-    val lines = ILoop.runForTranscript(postprocessedCode, s).lines.toList
+    val lines = iloopCache
+      .getOrElseUpdate(postprocessedCode,
+                       ILoop.runForTranscript(postprocessedCode, s))
+      .lines
+      .toList
     validatePrintout(lines.mkString(EOL))
     lines
       .drop(3)
