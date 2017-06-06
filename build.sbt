@@ -1,6 +1,6 @@
-lazy val MetaVersion     = "1.7.0"
-lazy val ParadiseVersion = "3.0.0-M8"
-lazy val scala211        = "2.11.10"
+lazy val MetaVersion     = "1.8.0"
+lazy val ParadiseVersion = "3.0.0-M9"
+lazy val scala211        = "2.11.11"
 lazy val scalameta       = "org.scalameta" %% "scalameta" % MetaVersion
 lazy val contrib         = "org.scalameta" %% "contrib" % MetaVersion
 lazy val testkit         = "org.scalameta" %% "testkit" % MetaVersion
@@ -9,11 +9,9 @@ lazy val paradise        = "org.scalameta" % "paradise" % ParadiseVersion cross 
 lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
-  resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
+  resolvers += Resolver.bintrayRepo("scalameta", "maven"),
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.1" % Test,
-    // TODO(olafur) remove after testkit adds this utility
-    "com.googlecode.java-diff-utils" % "diffutils" % "1.3.0" % Test
+    "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
@@ -22,11 +20,17 @@ allSettings
 
 name := "scalameta-tutorial"
 
+lazy val library = project.settings(
+  allSettings,
+  libraryDependencies += scalameta
+)
+
 lazy val macros = project.settings(
   allSettings,
   macroSettings,
   // only needed for @generic demo.
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
+  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
+  libraryDependencies += testkit       % Test
 )
 
 lazy val readme = scalatex

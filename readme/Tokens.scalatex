@@ -3,9 +3,10 @@
 
 @sect{Tokens}
   @p
-    Make sure you have setup your environment from @sect.ref{Setup}.
+    Make sure you have Scalameta installed as a library from @sect.ref{Setup}.
 
-    You can decide to run these examples from the console or from @code{Playground.scala}.
+    You can decide to run these examples from the console or from sbt,
+    for example in the tutorial repo.
 
   @p
     This whole workshop will assume you have this import in scope:
@@ -34,7 +35,7 @@
       @p
         @code{Tokens.toString()} uses @code{.syntax} behind the scenes.
         However, you should never rely on @code{toString()} when manipulating
-        scala.meta structures, prefer to explicitly call @code{.syntax}.
+        Scalameta structures, prefer to explicitly call @code{.syntax}.
         It's maybe not so obvious why right now but it will make more sense soon.
 
     @sect{Tokens.structure}
@@ -121,7 +122,7 @@
 
   @sect("Conclusion", "Token Conclusions")
     @p
-      Scala.meta tokens are the foundation of scala.meta.
+      Scalameta tokens are the foundation of Scalameta.
       Sometimes you don't have access to a parsed AST and then your best shot is
       work with tokens.
 

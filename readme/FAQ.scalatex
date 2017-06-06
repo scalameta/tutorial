@@ -3,6 +3,23 @@
 
 @sect{FAQ}
 
+  @sect{How do I get the type of a tree?}
+    It is not possible to query for type information from a macro annotation.
+    Macro annotations are purely syntactic, and there is no plan to add support
+    for capabilities such as getting the fields/member of a type/class. Why?
+    Because you hit on chicken vs. egg problems. There
+    is a cyclic dependency between
+    @ul
+      @li
+        type checking source code to provide type information
+      @li
+        expanding a macro annotation to generate new definitions.
+
+    The generated definitions are necessary to type check the source file,
+    and the type checker is necessary provide type information to the macro
+    annotation.
+
+
   @sect{Where can I ask more questions?}
     @ul
       @li
@@ -14,25 +31,30 @@
         @raw
           <a href="https://gitter.im/scalameta/scalameta?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/scalameta/scalameta" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
 
-  @sect{How do I get the type of a tree?}
-    You can't do that with scala.meta 1.x.
-    Semantic information (like inferred type, symbols, resolved names) is
-    on the roadmap for scala.meta 2.x.
+  @sect{How do I test a macro annotation?}
+    You can either unit test or integration test your macro annotation.
+    See @sect.ref{Testing macro annotations}
+
+  @sect{How do identify a particular annotation?}
+    Maybe this help, @lnk{https://stackoverflow.com/questions/43394357/scalameta-identify-particular-annotations}
 
   @sect{What is the quasiquote for X?}
     Here is an overview of quasiquote syntax: @lnk("https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
 
-  @sect{Can I use scala.meta with Scala.js?}
-    Yes, the main scala.meta modules support Scala.js.
+  @sect{';' expected but 'def' found. inline def apply}
+    Be sure that the org.scalameta:paradise compiler plugin is enabled.
+
+  @sect{Can I use Scalameta with Scala.js?}
+    Yes, the main Scalameta modules support Scala.js.
 
   @sect{How do I pass an argument to the macro annotation?}
-    You match on @code{this} as a scala.meta tree. For example:
+    You match on @code{this} as a Scalameta tree. For example:
 
     @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Argument.scala")
 
-  @sect{Do I need to depend on scala.meta at runtime?}
-    No. But your project needs a dependency on scala.meta.
-    If you only use scala.meta at compile time, you can mark the dependency as
+  @sect{Do I need to depend on Scalameta at runtime?}
+    No. But your project needs a dependency on Scalameta.
+    If you only use Scalameta at compile time, you can mark the dependency as
     @code{% "provided"} to exclude it from your runtime application.
 
   @sect{How do I use macro annotations provided by a third-party library?}
@@ -70,7 +92,7 @@
         def helper(t: Any): Stat = ??? // utility method
         inline def apply(defn: Any): Any = meta {
           helper(defn) // ERROR: `helper` not found
-          // Why? `this` is a scala.meta tree.
+          // Why? `this` is a Scalameta tree.
       }
 
     You can move the utility method to an external object.
@@ -105,7 +127,7 @@
         @image("inline2.png")
         Remember to remove the semicolon when you run your macro.
   @sect{New-style def macros}
-    Scala.meta doesn't yet provide a possibility to write new-style @b{def} macros,
+    Scalameta doesn't yet provide a possibility to write new-style @b{def} macros,
     but we are working hard on implementing this functionality.
     Attend
     @lnk("Eugene Burmako's talk at Scala eXchange 2016",
@@ -122,7 +144,7 @@
 
     @p
       Even this limited functionality should be enough to port most of the
-      existing macro annotations to scala.meta. Oleksandr Olgashko has ported
+      existing macro annotations to Scalameta. Oleksandr Olgashko has ported
       @lnk("a large subset of Simulacrum's @typeclass features",
            "https://gitter.im/mpilquist/simulacrum?at=57fd4a7e68f560d80cf89330")
       to new-style macros,
@@ -138,5 +160,5 @@
       of the semantic API shapes up.
 
 
-  @sect{Which versions of Scala do the scala.meta macros support?}
+  @sect{Which versions of Scala do the Scalameta macros support?}
     2.11.x and 2.12.x.

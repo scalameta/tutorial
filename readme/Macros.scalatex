@@ -1,10 +1,10 @@
 @import Main._
 @import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
 
 @sect{Macro annotations}
   @p
-
-    Scala.meta makes it possible to write new-style macro annotations.  In
+    Scalameta makes it possible to write new-style macro annotations.  In
     comparison with
     @lnk("the state of the art based on scala.reflect",
          "http://docs.scala-lang.org/overviews/macros/annotations.html"),
@@ -17,34 +17,56 @@
         As a result, macros can be defined with much less ceremony.
       @li
         @b{Portable}. New-style macros are based on a platform-independent
-        metaprogramming API defined in scala.meta.  Unlike scala.reflect,
-        scala.meta doesn't depend on compiler internals, so macros based on
-        scala.meta can be run in a multitude of environments, including Scala,
+        metaprogramming API defined in Scalameta.  Unlike scala.reflect,
+        Scalameta doesn't depend on compiler internals, so macros based on
+        Scalameta can be run in a multitude of environments, including Scala,
         IntelliJ IDEA and Dotty.
 
     In order to define a new-style macro annotation, create a class that
     extends @code{StaticAnnotation} and create an @code{inline} apply method
     with a @code{meta} block in it.  Inside the @code{meta} block, you can take
     apart the annotated member and generate new code using
-    @lnk("scala.meta quasiquotes",
+    @lnk("Scalameta quasiquotes",
          "https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
     @code{inline} and @code{meta} are new language constructs introduced by
     macro paradise 3.x.
 
-  @p
-    It's possible to write macro annotations on scala.meta trees using
-    scala.meta paradise.
-    From sbt, run your first macro annotation with
+  @sect{Setup build}
+    It's possible to write macro annotations on Scalameta trees using
+    the Scalameta paradise compiler plugin.
+    To configure the Scalameta paradise plugin, you need to enable it in your build
+    for both the projects that define macro annotation and the projects
+    that use macro annotations
+    @hl.scala
+      lazy val macroAnnotationSettings = Seq(
+        addCompilerPlugin("org.scalameta" % "paradise" % "@BuildInfo.paradise" cross CrossVersion.full),
+        scalacOptions += "-Xplugin-require:macroparadise",
+        scalacOptions in (Compile, console) := Seq() // macroparadise plugin doesn't work in repl yet.
+      )
+      lazy val projectThatDefinesMacroAnnotations = project.settings(
+        libraryDependencies += "org.scalameta" %% "scalameta" % "@BuildInfo.scalameta" % Provided,
+        macroAnnotationSettings
+        // ... your other project settings
+      )
+      lazy val projectThatUsesMacroAnnotations = project.settings(
+        macroAnnotationSettings,
+        // ... your other project settings
+      )
+
+    These settings are already configured in the tutorial repo.
+    If you have cloned the tutorial repo, you can run the macro expansion
+    with
 
   @hl.scala
     macros/test:run
 
-  Here is an example macro annotation:
+  @sect{Hello World}
+    Here is an example macro annotation:
 
-  @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
 
-  The annotation wraps the body of an object into a @code{main} function,
-  serving a similar function as extending @code{App}.
+    The annotation wraps the body of an object into a @code{main} function,
+    serving a similar function as extending @code{App}.
 
   @sect{Class2Map}
     Implement a @code{Class2Map} macro annotation that injects a @code{toMap} method
@@ -100,4 +122,9 @@
     @p
       Solution:
       @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"generic.scala")
+
+  @sect{Testing macro annotations}
+    See MainTest for an example of to both unit test and integration test a
+    macro annotation.
+    @hl.ref(wd/'macros/'src/'test/'scala/'scalaworld/'macros/"MainTest.scala")
 
