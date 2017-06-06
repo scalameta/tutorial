@@ -1,14 +1,21 @@
 package scalaworld
 
-import scalaworld.util.logger
+import scala.meta._
+import org.scalameta.logger // useful for debugging
 
-import org.scalatest.FunSuite
-
-class Playground extends FunSuite {
+class Playground extends org.scalatest.FunSuite {
   import scala.meta._
 
   test("part 1: tokens") {
-    assert(true)
+    val tokens = "val x = 2".tokenize.get
+    logger.elem(tokens.syntax)
+    logger.elem(tokens.structure)
+  }
+
+  test("part 2: trees") {
+    val tree = "val x = 2".parse[Stat].get
+    logger.elem(tree.syntax)
+    logger.elem(tree.structure)
   }
 
 }

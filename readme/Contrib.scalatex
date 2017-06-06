@@ -2,8 +2,8 @@
 @import scalaworld.Readme._
 
 @sect{Contrib}
-  Scala.meta contrib is a module that provides common utilities for handling
-  scala.meta data structures.
+  Scalameta contrib is a module that provides common utilities for handling
+  Scalameta data structures.
 
   @p
     To use contrib, @code{import scala.meta.contrib._}.

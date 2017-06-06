@@ -5,9 +5,9 @@
 
   @ul
     @li
-      scala.meta website: @lnk("http://scalameta.org")
+      Scalameta website: @lnk("http://scalameta.org")
     @li
-      Please report macro annotation bug issues to scala.meta paradise:
+      Please report macro annotation bug issues to Scalameta paradise:
       @lnk("https://github.com/scalameta/paradise/").
     @li
       For more macro annotation examples, see

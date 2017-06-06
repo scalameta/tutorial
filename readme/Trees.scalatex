@@ -10,7 +10,7 @@
 
   @sect{q"Quasiquotes"}
     @p
-      The easiest way to get started with scala.meta trees is using quasiquotes.
+      The easiest way to get started with Scalameta trees is using quasiquotes.
 
     @meta
       q"case class User(name: String, age: Int)"
@@ -83,7 +83,7 @@
     @meta
       "case Foo(bar) if bar > 2 => println(bar)".parse[Case].get
     @p
-      Scala.meta has dozens of parsers:
+      Scalameta has dozens of parsers:
       @image("parse.png")
       However, @code{.parse[Stat]} and @code{.parse[Source]} are
       usually all you need.
@@ -93,7 +93,7 @@
       I didn't tell the whole story when I said you need to pass in a type
       argument to parse statements.
       You also need to pass in a dialect!
-      However, scala.meta will by default pick the @code{Scala211} dialect
+      However, Scalameta will by default pick the @code{Scala211} dialect
       for you if you don't provide one explicitly.
 
     @p
@@ -127,7 +127,7 @@
     @meta
       "foo(bar)".parse[Stat].get.syntax
 
-    However, scala.meta can also do this even if you manually construct the tree
+    However, Scalameta can also do this even if you manually construct the tree
 
     @meta
       Term.Apply(
@@ -138,7 +138,7 @@
       ).syntax
 
     @p
-      We never gave scala.meta parentheses but still it figured out we needed
+      We never gave Scalameta parentheses but still it figured out we needed
       them.
       Pretty cool huh.
 
@@ -160,7 +160,7 @@
 
   @sect{Tree.collect}
     @p
-      You can collect on scala.meta.Tree just like regular collections.
+      You can collect on Scalameta.Tree just like regular collections.
 
     @meta
       source"""sealed trait Op[A]
@@ -171,7 +171,7 @@
 
   @sect{Tree.transform}
     @p
-      Transform scala.meta.Tree with @code{.transform}.
+      Transform Scalameta.Tree with @code{.transform}.
 
     @meta
       q"myList.filter(_ > 3 + a).headOption // comments are removed :(".transform {
@@ -204,9 +204,9 @@
 
   @sect{Comprehensive trees}
     @p
-      A key feature of scala.meta trees is that they comprehensively cover
+      A key feature of Scalameta trees is that they comprehensively cover
       all corners of the Scala syntax.
-      A side effect of this is that the scala.meta tree hierarchy contains a
+      A side effect of this is that the Scalameta tree hierarchy contains a
       lot of types.
       For example, there is a different tree node for an abstract @code{def} (@code{Decl.Def})
 
