@@ -3,11 +3,10 @@
 @import scalaworld.Readme._
 @import scala.meta.tutorial.BuildInfo
 
-
 @sect{sbt-semantic-example}
-  For plug and play example, clone
+  For a plug and play example repository, clone
   @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
-  and follow the readme instructions.
+  and run @code{sbt app/run}
 
 @sect{sbt}
   @hl.scala
