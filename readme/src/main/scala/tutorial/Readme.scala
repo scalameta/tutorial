@@ -53,9 +53,13 @@ object Readme {
   def issues(ids: Int*) = span(ids.map(issue): _*)
   val pegdown           = new PegDownProcessor
   def database: Database = {
-    val db =
-      Database.load(Classpath(BuildInfo.semanticClassdirectory))
-    assert(db.entries.nonEmpty, "db.entries.nonEmpty")
+    val cp = Classpath(BuildInfo.semanticClassdirectory)
+    val db = Database.load(cp)
+    assert(db.entries.nonEmpty,
+      s"""db.entries.nonEmpty.
+         |$db
+         |$cp
+         |""".stripMargin)
     db
   }
 
@@ -102,6 +106,19 @@ object Readme {
     hl.scala(result1)
   }
 
+  val settings = {
+    val s = new Settings
+    s.deprecation.value = true
+    s.Xnojline.value = true
+    s.usejavacp.value = false
+    s.classpath.value = classpath.mkString(File.pathSeparator)
+    s
+  }
+
+  def evaluateCode(code: String): String = {
+    iloopCache.getOrElseUpdate(code, ILoop.runForTranscript(code, settings))
+  }
+
   private def executeInRepl(code: String): String = {
     case class RedFlag(pattern: String, directive: String, message: String)
     val redFlags = List(
@@ -122,18 +139,9 @@ object Readme {
           }
       }
     }
-    val s = new Settings
-    s.deprecation.value = true
-    s.Xnojline.value = true
-    s.usejavacp.value = false
-    s.classpath.value = classpath.mkString(File.pathSeparator)
-    val postprocessedCode = redFlags.foldLeft(code)((acc, curr) =>
-      acc.replace("// " + curr.directive, ""))
-    val lines = iloopCache
-      .getOrElseUpdate(postprocessedCode,
-                       ILoop.runForTranscript(postprocessedCode, s))
-      .lines
-      .toList
+    val postprocessedCode = redFlags
+      .foldLeft(code)((acc, curr) => acc.replace("// " + curr.directive, ""))
+    val lines = evaluateCode(postprocessedCode).lines.toList
     validatePrintout(lines.mkString(EOL))
     lines
       .drop(3)
