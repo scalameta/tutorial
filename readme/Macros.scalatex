@@ -118,12 +118,13 @@
   @sect{generic}
     Implement a @code{generic} macro annotation to automatically derive
     a shapeless @code{Generic[T]} instance.
-    
-    Note that at this point, Scalameta works purely at the syntactic level.
-    As a result, to find subclasses of a sealed trait, we depend on the assumption
-    that all the subclasses are put under the companion class of the sealed
-    trait. The implementation below looks inside the companion class and 
-    extracts definitions of classes which extend the sealed trait.
+
+    @p
+      Note, macro annotations are purely syntactic, see @sect.ref{How do I get the type of a tree?}.
+      As a result, to find subclasses of a sealed trait, we depend on the assumption
+      that all the subclasses are put under the companion class of the sealed
+      trait. The implementation below looks inside the companion class and
+      extracts definitions of classes which extend the sealed trait.
 
     @p
       Solution:

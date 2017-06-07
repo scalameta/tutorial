@@ -1,15 +1,10 @@
-lazy val MetaVersion     = "1.8.0"
-lazy val ParadiseVersion = "3.0.0-M9"
-lazy val scala211        = "2.11.11"
-lazy val scalameta       = "org.scalameta" %% "scalameta" % MetaVersion
-lazy val contrib         = "org.scalameta" %% "contrib" % MetaVersion
-lazy val testkit         = "org.scalameta" %% "testkit" % MetaVersion
-lazy val paradise        = "org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full
+import Dependencies._
 
 lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
   resolvers += Resolver.bintrayRepo("scalameta", "maven"),
+  scalametaSemanticdb := ScalametaSemanticdb.Disabled,
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
@@ -33,6 +28,36 @@ lazy val macros = project.settings(
   libraryDependencies += testkit       % Test
 )
 
+lazy val scalahostSettings = Seq(
+  addCompilerPlugin(
+    "org.scalameta" % "scalahost" % MetaVersion cross CrossVersion.full),
+  scalacOptions ++= Seq(
+    "-Yrangepos",
+    "-Xplugin-require:scalahost"
+  )
+)
+
+lazy val semanticInput = project
+  .in(file("semantic/input"))
+  .settings(
+    allSettings,
+    scalahostSettings
+  )
+
+lazy val semantic = project
+  .in(file("semantic/app"))
+  .settings(
+    allSettings,
+    libraryDependencies += scalameta,
+    buildInfoPackage := "scalaworld.semantic",
+    buildInfoKeys := Seq[BuildInfoKey](
+      "semanticClassdirectory" ->
+        classDirectory.in(semanticInput, Compile).value
+    )
+  )
+  .enablePlugins(BuildInfoPlugin)
+  .dependsOn(semanticInput)
+
 lazy val readme = scalatex
   .ScalatexReadme(projectId = "readme",
                   wd = file(""),
@@ -43,6 +68,7 @@ lazy val readme = scalatex
     buildInfoSettings,
     siteSourceDirectory := target.value / "scalatex",
     test := run.in(Compile).toTask(" --validate-links").value,
+    libraryDependencies += scalameta,
     libraryDependencies += contrib,
     publish := {
       ghpagesPushSite
@@ -55,6 +81,7 @@ lazy val readme = scalatex
       "org.pegdown" % "pegdown"    % "1.6.0"
     )
   )
+  .dependsOn(semanticInput)
   .enablePlugins(
     GhpagesPlugin,
     BuildInfoPlugin
@@ -74,6 +101,11 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     "scalameta" -> MetaVersion,
     "paradise"  -> ParadiseVersion,
     scalaVersion,
+    "managedSourceDirectory" ->
+      managedSourceDirectories.in(Compile).value.head.getAbsolutePath,
+    "semanticClassdirectory" ->
+      classDirectory.in(semanticInput, Compile).value.getAbsolutePath,
+    "semanticScalaVersions" -> List(scala211, scala212),
     sbtVersion
   ),
   buildInfoPackage := "scala.meta.tutorial"
