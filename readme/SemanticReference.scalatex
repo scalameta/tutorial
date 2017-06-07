@@ -1,0 +1,49 @@
+@import Main._
+@import ammonite.ops._
+@import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
+
+@sect{Names}
+  @p
+    The @code{Names} section is a map from names/identifiers to the @sect.ref{Symbol} they reference.
+    A name is an identifier such as @code{List} or @code{+}.
+    A name can have different symbols depending on where the name appears.
+    For example, @code{+} references three different symbols in the example above
+    @hl.scala
+      // Int + Int
+      [88..89): +   => _root_.scala.Int#`+`(I)I.
+      // Bar + Bar
+      [62..63): +   => _root_.scalaworld.semantic.Input#`+`(Lscalaworld/semantic/Input;)Lscalaworld/semantic/Input;.
+      // Bar + Int
+      [105..106): + => _root_.scalaworld.semantic.Input#`+`(I)Lscalaworld/semantic/Input;.
+
+@sect{Denotations}
+  The @code{Denotations} section is a map from @sect.ref{Symbol}s that appear
+  in the source file to the @sect.ref{Denotation} of the symbol.
+
+@sect{Messages}
+  The @code{Messages} section is a list of the reporter compiler messages (info/warn/error).
+  Note, some reported messages like deprecation warnings are not yet collected, see @issue(759).
+
+@sect{Sugars}
+  @b{EXPERIMENTAL/NEW}.
+  The @code{Sugars} section is a list "sugars" that are inserted by the compiler.
+  Sugars don't have positions in the original source file.
+  Sugars include inferred type parameters, type annotations of definitions
+  and implicit arguments.
+  Note that sugars are currently not enriched with semantic information
+  such as symbols or denotations, see @issue(822).
+
+@sect{Symbol}
+  Every definition such as a class/trait/val/var/def/object has a unique identifier.
+  This unique identifier is called a @code{Symbol}.
+  The string representation of a symbol is the erased JVM signature of the definition.
+  This makes it possible to distinguish between overloaded methods.
+  To understand what a symbol means, inspect its @sect.ref{Denotation}.
+
+@sect{Denotation}
+  A denotation represents a @sect.ref{Symbol}'s meaning, including modifiers,
+  annotations, visibility restrictions and type signature.
+  A denotation can for example tell you if a definition is a trait or a class,
+  of if it has the @code{implicit} modifier.
+
