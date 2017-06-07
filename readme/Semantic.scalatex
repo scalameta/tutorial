@@ -1,10 +1,144 @@
 @import Main._
+@import ammonite.ops._
 @import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
 
-@sect{Semantic}
-  Scala.meta v1.6 released a new semantic API.
-  See @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
-  on how to get started with the semantic API.
+@sect{Semantic API}
+  The Scalameta Semantic API offers operations to query information from the Scala
+  compiler such as naming resolution (@code{println} => @code{_root_.scala.Predef.println}),
+  inferred type annotations, reported compiler messages and more.
+  These operations can for example be used by tools like
+  @lnk("scalafix", "https://scalacenter.github.io/scalafix") to refactor Scala code.
+  The Semantic API cannot be used from @sect.ref{Macro annotations}.
 
-  @p
-    This section will be expanded once the API becomes more mature.
+  @sect{Mirror}
+    The Semantic API is based on the concept of mirrors.
+    In Scalameta parlance, a mirror is an entity that encapsulates a compilation
+    context, providing a classpath and a sourcepath to perform semantic operations
+    such as name resolution, type inference and others.
+    Most Semantic APIs take an implicit parameter of type Mirror.
+
+    @p
+      Unlike the syntactic API, which is implemented completely in house,
+      Scalameta delegates implementations of Mirror to external projects.
+      In Scala, performing even the simplest semantic operations requires a
+      full-blown typechecker, so implementing even a simple Mirror in house would
+      require us to reinvent a Scala typechecker, which is a multi-man-year effort.
+      Currently, we provide a Mirror implementation that is backed by the Scala
+      compiler, and there are plans to implement mirrors for Dotty and IntelliJ.
+
+  @sect{Semantic DB}
+    @p
+      One of the properties of semantic databases is their @b{portability}. Unlike
+      typical representations of semantic information in Scala, semantic
+      databases are not tied to a particular implementation of the Scala
+      typechecker. This makes it possible for metaprograms written against the
+      scala.meta Semantic API to run on multiple platforms.
+
+    @p
+      Another important property is @b{persistence}. Since semantic databases are
+      portable, they can be created and consumed in separate environments. This
+      is a key insight that we promote in scala.meta, and we are confident that
+      it will revolutionize the developer tool ecosystem in Scala.
+
+    @p
+      Currently, a typical approach to semantic developer tools in Scala is
+      implementing them as compiler plugins and then using them inside builds.
+      Apart from being a hassle to configure, this approach is also quite slow,
+      because it needs to run a Scala typechecker every time when a tool is
+      invoked.
+
+    @p
+      Scala.meta enables a much more convenient workflow. First, we use our
+      scalahost compiler plugin to typecheck a given codebase and generate a
+      semantic database for it. This is done only once per unique snapshot of the
+      codebase. Afterwards, using the persisted semantic database, we can launch
+      any number of developer tools any number of times without having to
+      typecheck the codebase again.
+    @p
+      The storage format used for the Semantic DB is defined using
+      @lnk("Protocol Buffers", "https://www.google.ch/search?q=protocol+buffers&oq=protocol+buffer&aqs=chrome.0.0j69i61j69i57j69i61j0l2.6856j0j7&sourceid=chrome&ie=UTF-8"),
+      or "protobuf" for short.  The Semantic DB protobuf schema is small, at
+      the time of this writing it is ~50 lines of code.  The full schema is
+      available
+      @lnk("here",
+           "https://github.com/scalameta/scalameta/blob/master/scalameta/semantic/shared/src/main/protobuf/semanticdb.proto").
+      Files containing Semantic DB binary data use the @code{.semanticdb} file
+      extension.
+
+  @sect{Scalahost}
+    To build a @sect.ref{Semantic DB} with the Scala 2.x compiler, you will need
+    the "Scalahost" compiler plugin.
+    The Scalahost compiler plugin is developed in the main Scalameta repository.
+    There are several ways to @sect.ref("Installation", "install") Scalahost into your build.
+
+  @sect{Installation}
+    The setup to run the Semantic API is more involved than running the
+    Syntactic API (parsing/tokenizing).
+    Most importantly, we first need to compile source files with the Scala compiler
+    in order to collect information such as types, symbols and more.
+    It's possible to tokenize or parse code that doesn't compile.  However, in
+    order to analyze a file with the Semantic API, the file must be able to compile.
+
+    @scalatex.SemanticInstallation()
+
+  @sect{Example}
+
+    @p
+      Let's take a look at the inside of a @code{.semanticdb} file.
+      Given a source file @code{Input.scala}
+      @hl.ref(cwd/'semantic/'input/'src/'main/'scala/'scalaworld/'semantic/"Input.scala")
+      the pretty printed representation of its corresponding @code{Input.semanticdb}
+      is the following:
+      @hl.scala(database.toString)
+      That is a lot of output, let's take a closer look at each of
+      the sections:
+      @sect.ref{Names},
+      @sect.ref{Messages},
+      @sect.ref{Denotations}, and
+      @sect.ref{Sugars}.
+
+  @sect{Names}
+    @p
+      The @code{Names} section is a map from names/identifiers to the @sect.ref{Symbol} they reference.
+      A name is an identifier such as @code{List} or @code{+}.
+      A name can have different symbols depending on where the name appears.
+      For example, @code{+} references three different symbols in the example above
+      @hl.scala
+        // Int + Int
+        [88..89): +   => _root_.scala.Int#`+`(I)I.
+        // Bar + Bar
+        [62..63): +   => _root_.scalaworld.semantic.Input#`+`(Lscalaworld/semantic/Input;)Lscalaworld/semantic/Input;.
+        // Bar + Int
+        [105..106): + => _root_.scalaworld.semantic.Input#`+`(I)Lscalaworld/semantic/Input;.
+
+  @sect{Denotations}
+    The @code{Denotations} section is a map from @sect.ref{Symbol}s that appear
+    in the source file to the @sect.ref{Denotation} of the symbol.
+
+  @sect{Messages}
+    The @code{Messages} section is a list of the reporter compiler messages (info/warn/error).
+    Note, some reported messages like deprecation warnings are not yet collected, see @issue(759).
+
+  @sect{Sugars}
+    @b{EXPERIMENTAL/NEW}.
+    The @code{Sugars} section is a list "sugars" that are inserted by the compiler.
+    Sugars don't have positions in the original source file.
+    Sugars include inferred type parameters, type annotations of definitions
+    and implicit arguments.
+    Note that sugars are currently not enriched with semantic information
+    such as symbols or denotations, see @issue(822).
+
+  @sect{Symbol}
+    Every definition such as a class/trait/val/var/def/object has a unique identifier.
+    This unique identifier is called a @code{Symbol}.
+    The string representation of a symbol is the erased JVM signature of the definition.
+    This makes it possible to distinguish between overloaded methods.
+    To understand what a symbol means, inspect its @sect.ref{Denotation}.
+
+  @sect{Denotation}
+    A denotation represents a @sect.ref{Symbol}'s meaning, including modifiers,
+    annotations, visibility restrictions and type signature.
+    A denotation can for example tell you if a definition is a trait or a class,
+    of if it has the @code{implicit} modifier.
+
