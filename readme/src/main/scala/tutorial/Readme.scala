@@ -1,4 +1,6 @@
 package scalaworld
+
+import scala.meta._
 import scala.collection.mutable
 import scala.compat.Platform.EOL
 import scala.meta.tokenizers.Tokenized
@@ -8,7 +10,6 @@ import scala.util.Try
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatex.Main._
-
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -16,7 +17,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
-
+import scala.meta.tutorial.BuildInfo
 import org.pegdown.PegDownProcessor
 
 object Readme {
@@ -39,6 +40,9 @@ object Readme {
     fos.close()
     println("Wrote iloop cache...")
   }
+  def gitter = raw(
+    """<a href="https://gitter.im/scalameta/scalameta?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/scalameta/scalameta" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>"""
+  )
   def github: String = {
     "https://github.com"
   }
@@ -48,6 +52,16 @@ object Readme {
   def note              = b("NOTE")
   def issues(ids: Int*) = span(ids.map(issue): _*)
   val pegdown           = new PegDownProcessor
+  def database: Database = {
+    val cp = Classpath(BuildInfo.semanticClassdirectory)
+    val db = Database.load(cp)
+    assert(db.entries.nonEmpty,
+      s"""db.entries.nonEmpty.
+         |$db
+         |$cp
+         |""".stripMargin)
+    db
+  }
 
   def url(src: String) = a(href := src, src)
 
@@ -92,6 +106,19 @@ object Readme {
     hl.scala(result1)
   }
 
+  val settings = {
+    val s = new Settings
+    s.deprecation.value = true
+    s.Xnojline.value = true
+    s.usejavacp.value = false
+    s.classpath.value = classpath.mkString(File.pathSeparator)
+    s
+  }
+
+  def evaluateCode(code: String): String = {
+    iloopCache.getOrElseUpdate(code, ILoop.runForTranscript(code, settings))
+  }
+
   private def executeInRepl(code: String): String = {
     case class RedFlag(pattern: String, directive: String, message: String)
     val redFlags = List(
@@ -112,18 +139,9 @@ object Readme {
           }
       }
     }
-    val s = new Settings
-    s.deprecation.value = true
-    s.Xnojline.value = true
-    s.usejavacp.value = false
-    s.classpath.value = classpath.mkString(File.pathSeparator)
-    val postprocessedCode = redFlags.foldLeft(code)((acc, curr) =>
-      acc.replace("// " + curr.directive, ""))
-    val lines = iloopCache
-      .getOrElseUpdate(postprocessedCode,
-                       ILoop.runForTranscript(postprocessedCode, s))
-      .lines
-      .toList
+    val postprocessedCode = redFlags
+      .foldLeft(code)((acc, curr) => acc.replace("// " + curr.directive, ""))
+    val lines = evaluateCode(postprocessedCode).lines.toList
     validatePrintout(lines.mkString(EOL))
     lines
       .drop(3)
