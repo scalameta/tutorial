@@ -31,7 +31,7 @@ lazy val macros = project.settings(
 lazy val scalahostSettings = Seq(
   addCompilerPlugin(
     "org.scalameta" % "scalahost" % MetaVersion cross CrossVersion.full),
-  scalacOptions ++= Seq(
+  scalacOptions := Seq(
     "-Yrangepos",
     "-Xplugin-require:scalahost"
   )
