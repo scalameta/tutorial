@@ -1,1 +1,1 @@
-unmanagedSources.in(Compile) += baseDirectory.value / ".." / "Dependencies.scala"
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC3")

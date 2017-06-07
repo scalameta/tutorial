@@ -4,7 +4,6 @@ lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
   resolvers += Resolver.bintrayRepo("scalameta", "maven"),
-  scalametaSemanticdb := ScalametaSemanticdb.Disabled,
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
@@ -50,10 +49,8 @@ lazy val semantic = project
     allSettings,
     libraryDependencies += scalameta,
     buildInfoPackage := "scalaworld.semantic",
-    buildInfoKeys := Seq[BuildInfoKey](
-      "semanticClassdirectory" ->
-        classDirectory.in(semanticInput, Compile).value
-    )
+    test := run.in(Compile).toTask("").value,
+    buildInfoKeys := Seq[BuildInfoKey](semanticClassDirectory.value)
   )
   .enablePlugins(BuildInfoPlugin)
   .dependsOn(semanticInput)
@@ -101,12 +98,14 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     "scalameta" -> MetaVersion,
     "paradise"  -> ParadiseVersion,
     scalaVersion,
-    "managedSourceDirectory" ->
-      managedSourceDirectories.in(Compile).value.head.getAbsolutePath,
-    "semanticClassdirectory" ->
-      classDirectory.in(semanticInput, Compile).value.getAbsolutePath,
+    semanticClassDirectory.value,
     "semanticScalaVersions" -> List(scala211, scala212),
     sbtVersion
   ),
   buildInfoPackage := "scala.meta.tutorial"
+)
+
+lazy val semanticClassDirectory = Def.setting(
+  "semanticClassdirectory" ->
+    classDirectory.in(semanticInput, Compile).value.getAbsolutePath
 )
