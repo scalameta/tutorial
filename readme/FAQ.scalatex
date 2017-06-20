@@ -81,7 +81,7 @@
         libraryDependencies += "org.scalameta" %% "scalameta" % scalametaVersion % Provided,
         scalacOptions += "-Xplugin-require:macroparadise",
         // macroparadise plugin doesn't work in repl yet.
-        scalacOptions in (Compile, console) := Seq()
+        scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise"))
       )
 
   @sect{How do I reuse code between macros?}
