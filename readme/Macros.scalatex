@@ -41,7 +41,7 @@
       lazy val macroAnnotationSettings = Seq(
         addCompilerPlugin("org.scalameta" % "paradise" % "@BuildInfo.paradise" cross CrossVersion.full),
         scalacOptions += "-Xplugin-require:macroparadise",
-        scalacOptions in (Compile, console) := Seq() // macroparadise plugin doesn't work in repl yet.
+        scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
       )
       lazy val projectThatDefinesMacroAnnotations = project.settings(
         libraryDependencies += "org.scalameta" %% "scalameta" % "@BuildInfo.scalameta" % Provided,
