@@ -4,32 +4,25 @@
 
 @sect{Macro annotations}
   @p
-    Scalameta makes it possible to write new-style macro annotations.  In
-    comparison with
-    @lnk("the state of the art based on scala.reflect",
-         "http://docs.scala-lang.org/overviews/macros/annotations.html"),
-    new-style macro annotations are:
+    Note, Scalameta-based macro annotations will soon be superseded by
+    @lnk{https://github.com/scalamacros/scalamacros}, see also
+    @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+    Scalameta-based macro annotations have several limitations such as
+    not working with
     @ul
       @li
-        @b{Lightweight}. The new macro system no longer features the split
-        between macro defs and macro impls.  Moreover, writing macros no longer
-        requires carrying around a context and juggling path-dependent types.
-        As a result, macros can be defined with much less ceremony.
+        @lnk("ENSIME/ScalaIDE", "https://github.com/scalameta/paradise/pull/218"), (although IntelliJ support is good)
       @li
-        @b{Portable}. New-style macros are based on a platform-independent
-        metaprogramming API defined in Scalameta.  Unlike scala.reflect,
-        Scalameta doesn't depend on compiler internals, so macros based on
-        Scalameta can be run in a multitude of environments, including Scala,
-        IntelliJ IDEA and Dotty.
-
-    In order to define a new-style macro annotation, create a class that
-    extends @code{StaticAnnotation} and create an @code{inline} apply method
-    with a @code{meta} block in it.  Inside the @code{meta} block, you can take
-    apart the annotated member and generate new code using
-    @lnk("Scalameta quasiquotes",
-         "https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
-    @code{inline} and @code{meta} are new language constructs introduced by
-    macro paradise 3.x.
+        @lnk("Scala REPL/console", "https://github.com/scalameta/paradise/issues/10")
+      @li
+        @lnk("Scaladoc", "https://github.com/scalameta/paradise/issues/216")
+      @li
+        @lnk("Scoverage", "https://github.com/scalameta/paradise/issues/201")
+    In addition, efforts to support def macros and Dotty have been moved to
+    scalamacros/scalamacros.
+    New scalameta/paradise bug reports or feature requests will not be addressed.
+    New scalameta/paradise pull requests to fix known issues will continue to be
+    reviewed and we are happy to cut new releases with contributed fixes.
 
   @sect{Setup build}
     It's possible to write macro annotations on Scalameta trees using
@@ -54,8 +47,6 @@
       )
 
     These settings are already configured in the tutorial repo.
-    If you have cloned the tutorial repo, you can run the macro expansion
-    with
 
   @hl.scala
     macros/test:run
