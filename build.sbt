@@ -99,6 +99,8 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     "paradise"  -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,
+    "scala211" -> scala211,
+    "scala212" -> scala212,
     "semanticScalaVersions" -> List(scala211, scala212),
     sbtVersion
   ),
