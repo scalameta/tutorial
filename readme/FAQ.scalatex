@@ -162,3 +162,32 @@
 
   @sect{Which versions of Scala do the Scalameta macros support?}
     2.11.x and 2.12.x.
+
+  @sect{I'd like to use the semantic api as a replacement for scalac's presentation compiler, is this doable? intended usage?}
+    It's not doable and it's not the intended usage. The prime application we
+    are focused on at the moment is refactoring with scalafix.
+
+  @sect{How do I use the Semantic API}
+    See
+    @ul
+      @li
+        @sect.ref{Installation}
+      @li
+        @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
+      @li
+        @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8")
+
+  @sect{Does Scalameta integrate with Zinc in order to achieve the semantic api?}
+    No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
+    API is enabled with the scalac compiler plugin @sect.ref{Scalahost}.
+    Scalahost is designed to accommodate incremental compilation in order to
+    play nicely with Zinc.
+
+  @sect{What's the status on new macros style with Dotty?}
+    See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+
+  @sect{Will newstyle macros would remove the limitation of two tiered compilation?}
+    No.
+    The major focus of the new macro system is portability (same implementation
+    running on scalac + dotty + intellij).
+    See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
