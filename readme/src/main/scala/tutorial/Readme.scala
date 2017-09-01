@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
 import scala.meta.tutorial.BuildInfo
+import scalatags.Text
 import org.pegdown.PegDownProcessor
 
 object Readme {
@@ -32,7 +33,7 @@ object Readme {
       obj
     }.getOrElse(mutable.Map.empty[String, String])
   }
-  def saveCache() = {
+  def saveCache(): Unit = {
     val fos = new FileOutputStream(iloopCacheFile)
     val oos = new ObjectOutputStream(fos)
     oos.writeObject(iloopCache)
@@ -40,22 +41,23 @@ object Readme {
     fos.close()
     println("Wrote iloop cache...")
   }
-  def gitter = raw(
+  def gitter: Text.RawFrag = raw(
     """<a href="https://gitter.im/scalameta/scalameta?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/scalameta/scalameta" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>"""
   )
   def github: String = {
     "https://github.com"
   }
-  def repo: String      = "http://scalameta.org/tutorial"
-  def dotty             = a(href := "http://dotty.epfl.ch/", "Dotty")
-  def issue(id: Int)    = a(href := repo + s"/issues/$id", s"#$id")
-  def note              = b("NOTE")
+  def repo: String = "http://scalameta.org/tutorial"
+  def dotty = a(href := "http://dotty.epfl.ch/", "Dotty")
+  def issue(id: Int) = a(href := repo + s"/issues/$id", s"#$id")
+  def note = b("NOTE")
   def issues(ids: Int*) = span(ids.map(issue): _*)
-  val pegdown           = new PegDownProcessor
+  val pegdown = new PegDownProcessor
   def database: Database = {
     val cp = Classpath(BuildInfo.semanticClassdirectory)
     val db = Database.load(cp)
-    assert(db.entries.nonEmpty,
+    assert(
+      db.entries.nonEmpty,
       s"""db.entries.nonEmpty.
          |$db
          |$cp
@@ -88,10 +90,10 @@ object Readme {
   def callout(kind: String, msg: Frag*) =
     div(cls := s"bs-callout bs-callout-${kind}", p(msg))
 
-  def info(msg: Frag*)    = callout("info", msg: _*)
+  def info(msg: Frag*) = callout("info", msg: _*)
   def success(msg: Frag*) = callout("success", msg: _*)
   def warning(msg: Frag*) = callout("warning", msg: _*)
-  def danger(msg: Frag*)  = callout("danger", msg: _*)
+  def danger(msg: Frag*) = callout("danger", msg: _*)
   lazy val classpath = this.getClass.getClassLoader match {
     case u: URLClassLoader => u.getURLs.map(_.getPath).toList
   }
@@ -100,7 +102,7 @@ object Readme {
     * repl session that has an invisible "import scala.meta._" attached to it.
     */
   def meta(code0: String) = {
-    val code1   = s"import scala.meta._, contrib._$EOL${unindent(code0).trim}"
+    val code1 = s"import scala.meta._, contrib._$EOL${unindent(code0).trim}"
     val result0 = executeInRepl(code1)
     val result1 = result0.split(EOL).drop(4).mkString(EOL)
     hl.scala(result1)
@@ -122,19 +124,21 @@ object Readme {
   private def executeInRepl(code: String): String = {
     case class RedFlag(pattern: String, directive: String, message: String)
     val redFlags = List(
-      RedFlag("Abandoning crashed session.",
-              "compilation crash",
-              "crash in repl invocation"),
-      RedFlag(s"error:",
-              "compilation error",
-              "compilation error in repl invocation")
+      RedFlag(
+        "Abandoning crashed session.",
+        "compilation crash",
+        "crash in repl invocation"),
+      RedFlag(
+        s"error:",
+        "compilation error",
+        "compilation error in repl invocation")
     )
 
     def validatePrintout(printout: String): Unit = {
       redFlags.foreach {
         case flag @ RedFlag(pat, directive, msg) =>
           if (printout.contains(pat) &&
-              !code.contains("// " + directive)) {
+            !code.contains("// " + directive)) {
             sys.error(s"$flag $msg + : $printout")
           }
       }

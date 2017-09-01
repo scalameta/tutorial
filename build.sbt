@@ -1,6 +1,5 @@
 import Dependencies._
 
-
 lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
@@ -49,10 +48,11 @@ lazy val semantic = project
   .dependsOn(semanticInput)
 
 lazy val readme = scalatex
-  .ScalatexReadme(projectId = "readme",
-                  wd = file(""),
-                  url = "https://github.com/scalameta/tutorial/tree/master",
-                  source = "Readme")
+  .ScalatexReadme(
+    projectId = "readme",
+    wd = file(""),
+    url = "https://github.com/scalameta/tutorial/tree/master",
+    source = "Readme")
   .settings(
     allSettings,
     buildInfoSettings,
@@ -68,7 +68,7 @@ lazy val readme = scalatex
     git.remoteRepo := "git@github.com:scalameta/tutorial.git",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
-      "org.pegdown" % "pegdown"    % "1.6.0"
+      "org.pegdown" % "pegdown" % "1.6.0"
     )
   )
   .dependsOn(semanticInput)
@@ -89,9 +89,8 @@ lazy val macros = project.settings(
   macroSettings,
   // only needed for @generic demo.
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += testkit       % Test
+  libraryDependencies += testkit % Test
 )
-
 
 lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
   buildInfoKeys := Seq[BuildInfoKey](
@@ -99,7 +98,7 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     version,
     "scalameta1" -> MetaVersion1,
     "scalameta2" -> MetaVersion,
-    "paradise"  -> ParadiseVersion,
+    "paradise" -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,
     "scala211" -> scala211,

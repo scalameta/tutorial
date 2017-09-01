@@ -12,7 +12,7 @@ class Argument(arg: Int) extends scala.annotation.StaticAnnotation {
       case q"new $_(${Lit.Int(arg)})" => arg
       // Example if you have more than one argument.
       case q"new $_(${Lit.Int(arg)}, ${Lit.String(foo)})" => arg
-      case _  => ??? // default value
+      case _ => ??? // default value
     }
     println(s"Arg is $arg")
     defn.asInstanceOf[Stat]

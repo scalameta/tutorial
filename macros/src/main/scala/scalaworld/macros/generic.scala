@@ -54,8 +54,7 @@ class generic extends scala.annotation.StaticAnnotation {
   inline def apply(defn: Any): Any = meta {
     defn match {
       // Sealed ADT, create coproduct Generic.
-      case Term.Block(
-          Seq(t @ ClassOrTrait(mods, name), companion: Defn.Object))
+      case Term.Block(Seq(t @ ClassOrTrait(mods, name), companion: Defn.Object))
           if GenericMacro.isSealed(mods) =>
         val oldTemplStats = companion.templ.stats.getOrElse(Nil)
         val subTypes = oldTemplStats.collect {
@@ -68,8 +67,7 @@ class generic extends scala.annotation.StaticAnnotation {
         Term.Block(Seq(t, newCompanion))
       // Plain class with companion object, create HList Generic.
       case Term.Block(
-          Seq(cls @ Defn.Class(_, name, _, ctor, _),
-              companion: Defn.Object)) =>
+          Seq(cls @ Defn.Class(_, name, _, ctor, _), companion: Defn.Object)) =>
         val newStats =
           GenericMacro.mkHListGeneric(name, ctor.paramss) +:
             companion.templ.stats.getOrElse(Nil)
@@ -105,13 +103,14 @@ object GenericMacro {
     if (depth <= 0) p"Inr(cnil)"
     else p"Inr(${mkCantHappen(depth - 1)})"
 
-  def mkGeneric(name: Type.Name,
-                repr: Type,
-                to: Term,
-                from: Seq[Case],
-                importStat: Stat): Stat = {
+  def mkGeneric(
+      name: Type.Name,
+      repr: Type,
+      to: Term,
+      from: Seq[Case],
+      importStat: Stat): Stat = {
     val reprTyp: Stat = q"type Repr = $repr"
-    val toDef: Stat   = q"def to(t: $name): Repr = $to"
+    val toDef: Stat = q"def to(t: $name): Repr = $to"
     val fromDef: Stat =
       q"def from(r: Repr): $name = r match { ..case $from }"
     val implicitName = Pat.Var.Term(Term.Name(name.syntax + "Generic"))
@@ -126,8 +125,9 @@ object GenericMacro {
        """
   }
 
-  def mkCoproductGeneric(superName: Type.Name,
-                         subTypes: Seq[Defn.Class]): Stat = {
+  def mkCoproductGeneric(
+      superName: Type.Name,
+      subTypes: Seq[Defn.Class]): Stat = {
     val coproductType: Type = subTypes.foldRight[Type](t"CNil") {
       case (cls, accum) =>
         t"${cls.name} :+: $accum"
@@ -145,17 +145,18 @@ object GenericMacro {
       p"""case ${mkCantHappen(subTypes.length - 1)} =>
               cnil.impossible
          """
-    mkGeneric(superName,
-              coproductType,
-              coproductTerm,
-              coproductPat :+ cantHappen,
-              q"import shapeless.{CNil, :+:, Inr, Inl}")
+    mkGeneric(
+      superName,
+      coproductType,
+      coproductTerm,
+      coproductPat :+ cantHappen,
+      q"import shapeless.{CNil, :+:, Inr, Inl}")
   }
 
   def mkHListGeneric(name: Type.Name, paramss: Seq[Seq[Term.Param]]): Stat = {
     val params = paramss match {
       case params :: Nil => params
-      case _             => abort("Can't create generic for curried functions yet.")
+      case _ => abort("Can't create generic for curried functions yet.")
     }
     val hlistType: Type = params.foldRight[Type](t"HNil") {
       case (Term.Param(_, _, Some(decltpe: Type), _), accum) =>
@@ -174,11 +175,12 @@ object GenericMacro {
     val args = params.map(param => Term.Name(param.name.value))
     val patmat =
       p"case $hlistPat => new ${Ctor.Ref.Name(name.value)}(..$args)"
-    mkGeneric(name,
-              hlistType,
-              hlistTerm,
-              Seq(patmat),
-              q"import shapeless.{::, HNil}")
+    mkGeneric(
+      name,
+      hlistType,
+      hlistTerm,
+      Seq(patmat),
+      q"import shapeless.{::, HNil}")
   }
 
   def isSealed(mods: Seq[Mod]): Boolean = mods.exists(_.syntax == "sealed")
@@ -188,7 +190,7 @@ object GenericMacro {
   def inherits(superType: Type.Name)(cls: Defn.Class): Boolean =
     cls.templ.parents.headOption.exists {
       case q"$parent()" => parent.syntax == superType.syntax
-      case _            => false
+      case _ => false
     }
 }
 
@@ -196,6 +198,6 @@ object ClassOrTrait {
   def unapply(any: Defn): Option[(Seq[Mod], Type.Name)] = any match {
     case t: Defn.Class => Some((t.mods, t.name))
     case t: Defn.Trait => Some((t.mods, t.name))
-    case _             => None
+    case _ => None
   }
 }
