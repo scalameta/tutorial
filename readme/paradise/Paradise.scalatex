@@ -1,3 +1,4 @@
+@import scalaworld.Readme._
 @import scalaworld.Paradise._
 @import scala.meta.tutorial.BuildInfo
 
@@ -58,82 +59,11 @@
         for how to construct quasiquotes.
       @li
         If you are unsure how to pattern match or construct a tree, you can use @code{.structure}
-        @hl.scala
-          > import scala.collection.immutable.Seq
-          > println(q"def foo[A <: B](implicit e: A): A".structure)
-          Decl.Def(Nil, Term.Name("foo"), Seq(Type.Param(Nil, Type.Name("A"), Nil, Type.Bounds(None, Some(Type.Name("B"))), Nil, Nil)), Seq(Seq(Term.Param(Seq(Mod.Implicit()), Term.Name("e"), Some(Type.Name("A")), None))), Type.Name("A"))
-          > Decl.Def(Nil, Term.Name("foo"), Seq(Type.Param(Nil, Type.Name("A"), Nil, Type.Bounds(None, Some(Type.Name("B"))), Nil, Nil)), Seq(Seq(Term.Param(Seq(Mod.Implicit()), Term.Name("e"), Some(Type.Name("A")), None))), Type.Name("A")).syntax
-          res5: String = "def foo[A <: B](implicit e: A): A"
+        @metaRepl
+          q"def foo[A <: B](implicit e: A): A".structure
+          Decl.Def(Nil, Term.Name("foo"), List(Type.Param(Nil, Type.Name("A"), Nil, Type.Bounds(None, Some(Type.Name("B"))), Nil, Nil)), List(List(Term.Param(List(Mod.Implicit()), Term.Name("e"), Some(Type.Name("A")), None))), Type.Name("A")).syntax
 
-  @sect{Hello World}
-    Here is an example macro annotation:
-
-    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Main.scala")
-
-    The annotation wraps the body of an object into a @code{main} function,
-    serving a similar function as extending @code{App}.
-
-  @sect{Class2Map}
-    Implement a @code{Class2Map} macro annotation that injects a @code{toMap} method
-    that creates a @code{Map[String, Any]} from the fields of this class.
-
-    @p
-      Solution:
-      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Class2Map.scala")
-
-  @sect{WithApply}
-    Implement a @code{WithApply} macro annotation that creates a @code{apply}
-    method to construct an instance of the class (just like is created for case classes).
-
-    @p
-      The challenge here is to handle the companion object correctly.
-
-      @ul
-        @li
-          If the companion object exists, add the @code{apply} method to it.
-        @li
-          If the companion object doesn't exists, create it.
-    @p
-      Solution:
-      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"WithApply.scala")
-
-  @sect{Debug}
-    Open up @code{Debug.scala} and implement a @code{Debug} macro annotation
-    for @b{methods} that:
-
-    @ul
-      @li
-        Prints out the argument names and their values at the beginning of the method.
-      @li
-        Prints out the time it took to run the method.
-      @li
-        Prints out the value of the method result.
-
-    @p
-      Solution:
-      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Debug.scala")
-
-    For extra credit:
-    @ul
-      @li
-        Expand the method into two methods, where one is the original method
-        and the second one has a named suffixed with @code{Debug}
-        and that's where the printing happens.
-
-  @sect{generic}
-    Implement a @code{generic} macro annotation to automatically derive
-    a shapeless @code{Generic[T]} instance.
-
-    @p
-      Note, macro annotations are purely syntactic.
-      As a result, to find subclasses of a sealed trait, we depend on the assumption
-      that all the subclasses are put under the companion class of the sealed
-      trait. The implementation below looks inside the companion class and
-      extracts definitions of classes which extend the sealed trait.
-
-    @p
-      Solution:
-      @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"generic.scala")
+  @Examples()
 
   @sect{Testing macro annotations}
     See MainTest for an example of to both unit test and integration test a
