@@ -1,15 +1,5 @@
 package scalaworld
 
-import scala.meta._
-import scala.collection.mutable
-import scala.compat.Platform.EOL
-import scala.meta.tokenizers.Tokenized
-import scala.tools.nsc.Settings
-import scala.tools.nsc.interpreter.ILoop
-import scala.util.Try
-import scalatags.Text.TypedTag
-import scalatags.Text.all._
-import scalatex.Main._
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -17,11 +7,55 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
+import scala.collection.mutable
+import scala.compat.Platform.EOL
+import scala.meta._
 import scala.meta.tutorial.BuildInfo
+import scala.tools.nsc.Settings
+import scala.tools.nsc.interpreter.ILoop
+import scala.util.Try
 import scalatags.Text
+import scalatags.Text.TypedTag
+import scalatags.Text.all._
+import scalatex.Main._
+import ammonite.ops._
 import org.pegdown.PegDownProcessor
+import org.scalameta.logger
+
+class ScalametaSite(directory: RelPath, frag: => Frag)
+    extends scalatex.site.Main(
+      url = "https://github.com/scalameta/scalameta-tutorial/tree/master",
+      wd = ScalametaSite.pwd,
+      output = ScalametaSite.pwd / "readme" / "target" / "scalatex" / directory,
+      extraAutoResources = Nil,
+      extraManualResources = ScalametaSite.manualResources,
+      frag
+    )
+
+object ScalametaSite {
+  val pwd = Path(BuildInfo.baseDirectory)
+  lazy val manualResources: Seq[ResourcePath] = {
+    BuildInfo.resources.withFilter(_.isDirectory).flatMap { r =>
+      val abs = if (r.isAbsolute) Path(r) else pwd / RelPath(r)
+      ls.rec(skip = _.isDir).!(abs).listed.map { p =>
+        logger.elem(p)
+        resource / p
+      }
+    }
+  }
+}
+
+object Paradise extends ScalametaSite("paradise", scalatex.paradise.Paradise())
+object Tutorial extends ScalametaSite("tutorial", scalatex.Readme()) {
+  def paradise = lnk("scalameta/paradise", "../paradise")
+}
 
 object Readme {
+
+  def main(args: Array[String]): Unit = {
+    Tutorial.main(args)
+    Paradise.main(args)
+  }
 
   lazy val iloopCacheFile: File =
     Paths.get("target", "iloopCache.serialized").toFile

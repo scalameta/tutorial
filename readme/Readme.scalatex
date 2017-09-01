@@ -1,5 +1,4 @@
-@import Main._
-@import scalaworld.Readme._
+@import scalaworld.Tutorial._
 @import scalaworld.Readme._
 
 @raw
@@ -22,7 +21,6 @@
   @scalatex.Semantic()
   @scalatex.Contrib()
   @scalatex.FAQ()
-  @scalatex.Resources()
   @scalatex.Footer()
 
 @raw

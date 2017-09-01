@@ -1,0 +1,157 @@
+@import scalaworld.Paradise._
+@import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
+
+@sect{Faq}
+
+  @sect{How do I test a macro annotation?}
+    You can either unit test or integration test your macro annotation.
+    See @sect.ref{Testing macro annotations}
+
+  @sect{How do identify a particular annotation?}
+    Maybe this help, @lnk{https://stackoverflow.com/questions/43394357/scalameta-identify-particular-annotations}
+
+  @sect{How do I get the type of a tree?}
+    It is not possible to query for type information from a macro annotation.
+    Macro annotations are purely syntactic, and there is no plan to add support
+    for capabilities such as getting the fields/member of a type/class. Why?
+    Because you hit on chicken vs. egg problems. There
+    is a cyclic dependency between
+    @ul
+      @li
+        type checking source code to provide type information
+      @li
+        expanding a macro annotation to generate new definitions.
+
+    The generated definitions are necessary to type check the source file,
+    and the type checker is necessary provide type information to the macro
+    annotation.
+
+  @sect{Do I need to depend on Scalameta at runtime?}
+    No. But your project needs a dependency on Scalameta.
+    If you only use Scalameta at compile time, you can mark the dependency as
+    @code{% "provided"} to exclude it from your runtime application.
+
+  @sect{How do I use macro annotations provided by a third-party library?}
+    If your project depends on a library that provides macro annotations, you need
+    to enable the `paradise` compiler plugin and declare a dependency on `scala-meta`
+    so that macro annotations could be expanded:
+
+    @hl.scala
+      addCompilerPlugin(
+        ("org.scalameta" % "paradise" % paradiseVersion).cross(CrossVersion.full)
+      )
+
+      libraryDependencies +=
+        "org.scalameta" %% "scalameta" % scalametaVersion % Provided
+
+
+    Here is a complete `settings` definition necessary and sufficient to enable
+    dependent project to use the library (including workarounds for features
+    that are being currently worked on):
+
+    @hl.scala
+      lazy val enableMacroAnnotations: Seq[Def.Setting[_]] = Seq(
+        addCompilerPlugin("org.scalameta" % "paradise" % paradiseVersion cross CrossVersion.full),
+        libraryDependencies += "org.scalameta" %% "scalameta" % scalametaVersion % Provided,
+        scalacOptions += "-Xplugin-require:macroparadise",
+        // macroparadise plugin doesn't work in repl yet.
+        scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise"))
+      )
+
+  @sect{How do I reuse code between macros?}
+    If you try to call a method inside you macro class you get a "X not found" error.
+
+    @hl.scala
+      class Argument(arg: Int) extends scala.annotation.StaticAnnotation {
+        def helper(t: Any): Stat = ??? // utility method
+        inline def apply(defn: Any): Any = meta {
+          helper(defn) // ERROR: `helper` not found
+          // Why? `this` is a Scalameta tree.
+      }
+
+    You can move the utility method to an external object.
+
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"MacroUtil.scala")
+
+  @sect{Incremental compiler is messing up / stale code}
+    While editing the macro, it can be handy to keep this command
+    running in SBT
+    @hl.scala
+      ~; macros/test:clean ; macros/test:run
+    Incremental compilation caches the macro expansion you need to clean the
+    test project on every run.
+
+  @sect{My IDE/IntelliJ shows red squiggly marks}
+
+    Your IDE might be all red like this
+    @image("inline.png")
+    There are two possible workarounds:
+
+    @ol
+      @li
+        (Recommended if using IntelliJ)
+        First, install the
+        @lnk("2016.3 EAP", "https://confluence.jetbrains.com/display/IDEADEV/IDEA+2016.3+EAP").
+        Then, select nightly or EAP update channel from Updates tab in Scala plugin settings
+        @code{Settings -> Languages and frameworks -> Scala -> Updates}.
+      @li
+        (hack)
+        Add @code{import autocomplete._} to your file and a semicolon after @code{inline},
+        like this
+        @image("inline2.png")
+        Remember to remove the semicolon when you run your macro.
+  @sect{New-style def macros}
+    Scalameta doesn't yet provide a possibility to write new-style @b{def} macros,
+    but we are working hard on implementing this functionality.
+    Attend
+    @lnk("Eugene Burmako's talk at Scala eXchange 2016",
+         "https://skillsmatter.com/conferences/7432-scala-exchange-2016#program")
+    to learn more about our progress.
+
+
+  @sect{Compatibility with traditional macros}
+    @p
+      At the moment, new-style macros can only take apart existing Scala syntax
+      and generate new syntax (so called syntactic API). This corresponds to the
+      functionality provided by traditional macro annotations that only use
+      tree constructors and quasiquotes.
+
+    @p
+      Even this limited functionality should be enough to port most of the
+      existing macro annotations to Scalameta. Oleksandr Olgashko has ported
+      @lnk("a large subset of Simulacrum's @typeclass features",
+           "https://gitter.im/mpilquist/simulacrum?at=57fd4a7e68f560d80cf89330")
+      to new-style macros,
+      so we are confident that new-style macros are powerful enough to support
+      even more complex annotations.
+
+    @p
+      For new-style def macros, we are working on semantic API, which will
+      provide compiler information such as type inference, name resolution and
+      other functionality that requires typechecking.
+      It is too early to tell how compatible this API will be with what is
+      provided by scala.reflect. We will provide more information as the design
+      of the semantic API shapes up.
+
+
+  @sect{Which versions of Scala do the Scalameta macros support?}
+    2.11.x and 2.12.x.
+
+  @sect{';' expected but 'def' found. inline def apply}
+    Be sure that the org.scalameta:paradise compiler plugin is enabled.
+
+  @sect{How do I pass an argument to the macro annotation?}
+    You match on @code{this} as a Scalameta tree. For example:
+
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Argument.scala")
+
+  @sect{What's the status on new macros style with Dotty?}
+    See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+
+  @sect{Will newstyle macros would remove the limitation of two tiered compilation?}
+    No.
+    The major focus of the new macro system is portability (same implementation
+    running on scalac + dotty + intellij).
+    See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+

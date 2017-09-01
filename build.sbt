@@ -56,6 +56,7 @@ lazy val readme = scalatex
   .settings(
     allSettings,
     buildInfoSettings,
+    mainClass.in(Compile) := Some("scalaworld.Readme"),
     siteSourceDirectory := target.value / "scalatex",
     test := run.in(Compile).toTask(" --validate-links").value,
     libraryDependencies += scalameta,
@@ -96,14 +97,17 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     version,
+    "baseDirectory" -> baseDirectory.in(ThisBuild).value,
     "scalameta1" -> MetaVersion1,
     "scalameta" -> MetaVersion,
     "paradise" -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,
+    "resources" -> resourceDirectories.in(Compile).value,
     "scala211" -> scala211,
     "scala212" -> scala212,
     "semanticScalaVersions" -> List(scala211, scala212),
+    "siteOutput" -> siteSourceDirectory.value,
     sbtVersion
   ),
   buildInfoPackage := "scala.meta.tutorial"
