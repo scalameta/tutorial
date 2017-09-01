@@ -83,7 +83,7 @@
     doesn't compile, a source file must successfully typecheck in order for it
     to be analyzed with the Semantic API.
 
-    @scalatex.SemanticInstallation()
+    @scalatex.tutorial.SemanticInstallation()
 
   @sect{Example}
 
@@ -108,7 +108,7 @@
       @sect.ref{Sugars}.
 
   @sect{Reference}
-    @scalatex.SemanticReference()
+    @scalatex.tutorial.SemanticReference()
 
   @sect{Call for contributors!}
 
@@ -120,5 +120,4 @@
       for even the trickiest snippets of Scala code. We would greatly appreciate if you could add
       the `sbt-scalahost` plugin to your sbt build, generate a semantic database of your project
       and report back at @gitter.
-
 

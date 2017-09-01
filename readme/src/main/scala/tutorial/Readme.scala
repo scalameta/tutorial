@@ -17,7 +17,7 @@ import scala.util.Try
 import scalatags.Text
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
-import scalatex.Main._
+import scalatex.site.Highlighter
 import ammonite.ops._
 import org.pegdown.PegDownProcessor
 import org.scalameta.logger
@@ -46,7 +46,7 @@ object ScalametaSite {
 }
 
 object Paradise extends ScalametaSite("paradise", scalatex.paradise.Paradise())
-object Tutorial extends ScalametaSite("tutorial", scalatex.Readme()) {
+object Tutorial extends ScalametaSite("tutorial", scalatex.tutorial.Readme()) {
   def paradise = lnk("scalameta/paradise", "../paradise")
 }
 
@@ -139,7 +139,7 @@ object Readme {
     val code1 = s"import scala.meta._, contrib._$EOL${unindent(code0).trim}"
     val result0 = executeInRepl(code1)
     val result1 = result0.split(EOL).drop(4).mkString(EOL)
-    hl.scala(result1)
+    Paradise.hl.scala(result1)
   }
 
   val settings = {
@@ -191,7 +191,7 @@ object Readme {
 
   /** Scalatex doesn't support default args */
   def repl(code: String): TypedTag[String] = {
-    hl.scala(executeInRepl(unindent(code)))
+    Paradise.hl.scala(executeInRepl(unindent(code)))
   }
 
   def image(file: String, caption: String = "") = div(
@@ -206,6 +206,6 @@ object Readme {
   def pairs(frags: Frag*) = div(frags, div(clear := "both"))
 
   def sideBySide(left: String, right: String) =
-    pairs(List(left, right).map(x => half(hl.scala(x))): _*)
+    pairs(List(left, right).map(x => half(Paradise.hl.scala(x))): _*)
 
 }

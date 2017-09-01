@@ -56,6 +56,16 @@ lazy val readme = scalatex
   .settings(
     allSettings,
     buildInfoSettings,
+    watchSources ++= {
+      val compileTarget = (target in Compile).value
+      for {
+        f <- (scalatex.SbtPlugin.scalatexDirectory in Compile).value
+          .**("*.scalatex")
+          .get
+        if f.relativeTo(compileTarget).isEmpty
+      } yield f
+    },
+    sourceGenerators.in(Compile) ~= (_.init), // remove scalatex.Main
     mainClass.in(Compile) := Some("scalaworld.Readme"),
     siteSourceDirectory := target.value / "scalatex",
     test := run.in(Compile).toTask(" --validate-links").value,
