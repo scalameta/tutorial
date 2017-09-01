@@ -132,9 +132,7 @@
     @meta
       Term.Apply(
         Term.Name("foo"),
-        scala.collection.immutable.Seq(
-          Term.Name("bar"): Term.Arg
-        )
+        Term.Name("bar") :: Nil
       ).syntax
 
     @p

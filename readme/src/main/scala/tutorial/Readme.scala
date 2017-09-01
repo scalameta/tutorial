@@ -7,6 +7,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
+import java.util.Calendar
 import scala.collection.mutable
 import scala.compat.Platform.EOL
 import scala.meta._
@@ -19,6 +20,8 @@ import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatex.site.Highlighter
 import ammonite.ops._
+import org.langmeta.internal.io.FileIO
+import org.langmeta.internal.io.PathIO
 import org.pegdown.PegDownProcessor
 import org.scalameta.logger
 
@@ -36,15 +39,15 @@ object ScalametaSite {
   val pwd = Path(BuildInfo.baseDirectory)
   lazy val manualResources: Seq[ResourcePath] = {
     BuildInfo.resources.withFilter(_.isDirectory).flatMap { r =>
-      val abs = if (r.isAbsolute) Path(r) else pwd / RelPath(r)
-      ls.rec(skip = _.isDir).!(abs).listed.map { p =>
-        logger.elem(p)
-        resource / p
-      }
+      FileIO
+        .listAllFilesRecursively(AbsolutePath(r))
+        .files
+        .map(p => resource / RelPath(p.toNIO))
     }
   }
 }
 
+object LandingPage extends ScalametaSite("x" / up, scalatex.LandingPage())
 object Paradise extends ScalametaSite("paradise", scalatex.paradise.Paradise())
 object Tutorial extends ScalametaSite("tutorial", scalatex.tutorial.Readme()) {
   def paradise = lnk("scalameta/paradise", "../paradise")
@@ -53,8 +56,21 @@ object Tutorial extends ScalametaSite("tutorial", scalatex.tutorial.Readme()) {
 object Readme {
 
   def main(args: Array[String]): Unit = {
-    Tutorial.main(args)
-    Paradise.main(args)
+    try {
+      Tutorial.main(args)
+      Paradise.main(args)
+      LandingPage.main(args)
+    } finally {
+      saveCache()
+    }
+  }
+
+  def copyrightBadge: TypedTag[String] = {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+    val text = s"(c) 2014 - $currentYear scalameta contributors"
+    div(
+      style := "margin: 0px;color: #ccc;text-align: center;padding: 0.5em 2em 0.5em 0em;border-top: 1px solid #eee;display: block;")(
+      text)
   }
 
   lazy val iloopCacheFile: File =
@@ -82,10 +98,11 @@ object Readme {
     "https://github.com"
   }
   def repo: String = "http://scalameta.org/tutorial"
-  def dotty = a(href := "http://dotty.epfl.ch/", "Dotty")
-  def issue(id: Int) = a(href := repo + s"/issues/$id", s"#$id")
-  def note = b("NOTE")
-  def issues(ids: Int*) = span(ids.map(issue): _*)
+  def dotty: TypedTag[String] = a(href := "http://dotty.epfl.ch/", "Dotty")
+  def issue(id: Int): TypedTag[String] =
+    a(href := repo + s"/issues/$id", s"#$id")
+  def note: TypedTag[String] = b("NOTE")
+  def issues(ids: Int*): TypedTag[String] = span(ids.map(issue): _*)
   val pegdown = new PegDownProcessor
   def database: Database = {
     val cp = Classpath(BuildInfo.semanticClassdirectory)
@@ -99,7 +116,7 @@ object Readme {
     db
   }
 
-  def url(src: String) = a(href := src, src)
+  def url(src: String): TypedTag[String] = a(href := src, src)
 
   private def unindent(frag: String): String = {
     // code frags are passed in raw from *.scalatex.
@@ -112,7 +129,7 @@ object Readme {
     frag.lines.map(_.stripPrefix(toStrip)).mkString("\n")
   }
 
-  def markdown(code: Frag*) =
+  def markdown(code: Frag*): Text.RawFrag =
     raw(pegdown.markdownToHtml(unindent(code.render)))
 
   def getMetaCode(indentedCode: String): String = {
@@ -121,7 +138,7 @@ object Readme {
        |${unindent(indentedCode)}
        """.stripMargin
   }
-  def callout(kind: String, msg: Frag*) =
+  def callout(kind: String, msg: Frag*): TypedTag[String] =
     div(cls := s"bs-callout bs-callout-${kind}", p(msg))
 
   def info(msg: Frag*) = callout("info", msg: _*)
@@ -152,7 +169,19 @@ object Readme {
   }
 
   def evaluateCode(code: String): String = {
-    iloopCache.getOrElseUpdate(code, ILoop.runForTranscript(code, settings))
+    iloopCache.getOrElseUpdate(
+      code, {
+        println(
+          s"""|#################
+              |# Running repl...
+              |#################
+              |$code
+              |""".stripMargin
+        )
+        println(code)
+        ILoop.runForTranscript(code, settings)
+      }
+    )
   }
 
   private def executeInRepl(code: String): String = {
@@ -194,18 +223,19 @@ object Readme {
     Paradise.hl.scala(executeInRepl(unindent(code)))
   }
 
-  def image(file: String, caption: String = "") = div(
+  def image(file: String, caption: String = ""): TypedTag[String] = div(
     cls := "text-center",
     img(style := "width: 100%", src := "img/" + file),
     if (caption.nonEmpty) p("Caption: " + caption)
     else p()
   )
 
-  def half(frags: Frag*) = div(frags, width := "50%", float.left)
+  def half(frags: Frag*): TypedTag[String] =
+    div(frags, width := "50%", float.left)
 
-  def pairs(frags: Frag*) = div(frags, div(clear := "both"))
+  def pairs(frags: Frag*): TypedTag[String] = div(frags, div(clear := "both"))
 
-  def sideBySide(left: String, right: String) =
+  def sideBySide(left: String, right: String): TypedTag[String] =
     pairs(List(left, right).map(x => half(Paradise.hl.scala(x))): _*)
 
 }

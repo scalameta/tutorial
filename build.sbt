@@ -49,10 +49,14 @@ lazy val semantic = project
 
 lazy val readme = scalatex
   .ScalatexReadme(
-    projectId = "readme",
+    projectId = {
+      sys.props("scala.color") = "false" // remove color from repl output
+      "readme"
+    },
     wd = file(""),
     url = "https://github.com/scalameta/tutorial/tree/master",
-    source = "Readme")
+    source = "Readme"
+  )
   .settings(
     allSettings,
     buildInfoSettings,
