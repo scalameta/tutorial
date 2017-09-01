@@ -97,7 +97,7 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     name,
     version,
     "scalameta1" -> MetaVersion1,
-    "scalameta2" -> MetaVersion,
+    "scalameta" -> MetaVersion,
     "paradise" -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,

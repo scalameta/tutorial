@@ -38,7 +38,7 @@
       )
       // Requires scalaVersion @BuildInfo.scala211 or @BuildInfo.scala212
       lazy val projectThatDefinesMacroAnnotations = project.settings(
-        libraryDependencies += "org.scalameta" %% "scalameta" % "@BuildInfo.scalameta" % Provided,
+        libraryDependencies += "org.scalameta" %% "scalameta" % "@BuildInfo.scalameta1" % Provided,
         macroAnnotationSettings
         // ... your other project settings
       )

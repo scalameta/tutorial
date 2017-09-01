@@ -57,8 +57,8 @@ object Readme {
     val cp = Classpath(BuildInfo.semanticClassdirectory)
     val db = Database.load(cp)
     assert(
-      db.entries.nonEmpty,
-      s"""db.entries.nonEmpty.
+      db.documents.nonEmpty,
+      s"""db.documents.nonEmpty.
          |$db
          |$cp
          |""".stripMargin)
