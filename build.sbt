@@ -1,5 +1,6 @@
 import Dependencies._
 
+
 lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
@@ -19,20 +20,12 @@ lazy val library = project.settings(
   libraryDependencies += scalameta
 )
 
-lazy val macros = project.settings(
-  allSettings,
-  macroSettings,
-  // only needed for @generic demo.
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += testkit       % Test
-)
-
-lazy val scalahostSettings = Seq(
+lazy val semanticdbSettings = Seq(
   addCompilerPlugin(
-    "org.scalameta" % "scalahost" % MetaVersion cross CrossVersion.full),
+    "org.scalameta" % "semanticdb-scalac" % MetaVersion cross CrossVersion.full),
   scalacOptions := Seq(
     "-Yrangepos",
-    "-Xplugin-require:scalahost"
+    "-Xplugin-require:semanticdb"
   )
 )
 
@@ -40,7 +33,7 @@ lazy val semanticInput = project
   .in(file("semantic/input"))
   .settings(
     allSettings,
-    scalahostSettings
+    semanticdbSettings
   )
 
 lazy val semantic = project
@@ -86,16 +79,26 @@ lazy val readme = scalatex
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += scalameta,
+  libraryDependencies += scalameta1,
   addCompilerPlugin(paradise),
   scalacOptions += "-Xplugin-require:macroparadise"
 )
+
+lazy val macros = project.settings(
+  allSettings,
+  macroSettings,
+  // only needed for @generic demo.
+  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
+  libraryDependencies += testkit       % Test
+)
+
 
 lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     version,
-    "scalameta" -> MetaVersion,
+    "scalameta1" -> MetaVersion1,
+    "scalameta2" -> MetaVersion,
     "paradise"  -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,
