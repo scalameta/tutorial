@@ -27,5 +27,7 @@ before_cache:
   - find $HOME/.ivy2/cache -name "*scalafix*.xml" -type f -delete
   - rm -rf $HOME/.ivy2/local
 
+before_install:
+  - git submodule update --recursive --remote
 after_success:
 - "./bin/ci-publish.sh"
