@@ -4,43 +4,19 @@
 @import scala.meta.tutorial.BuildInfo
 
 @sect{Semantic API}
-  The Scalameta Semantic API offers operations to query information from the Scala
-  compiler such as naming resolution (@code{println} => @code{_root_.scala.Predef.println}),
-  inferred type annotations, reported compiler messages and more.
+  The semantic API offers operations to query information from the Scala compiler
+  such as name resolution (@code{println} => @code{_root_.scala.Predef.println}),
+  symbol signatures (@code{_root_.com.Example.main([Ljava/lang/String;)V.} =>
+  @code{def main(args: Array[String]): Unit}),
   These operations can for example be used by tools like
-  @lnk("scalafix", "https://scalacenter.github.io/scalafix") to refactor Scala code.
-  The Semantic API cannot be used from @sect.ref{Macro annotations}.
+  @lnk("scalafix", "https://scalacenter.github.io/scalafix") to rewrite Scala source code.
+  The semantic API cannot be used from @sect.ref{Macro annotations}.
 
-  @sect{Mirror}
+  @sect{SemanticDB}
     @p
-      The Semantic API is based on the concept of mirrors.
-      In Scalameta parlance, a mirror is an entity that encapsulates a compilation
-      context, providing a classpath and a sourcepath to perform semantic operations.
-      Most Semantic APIs take an implicit parameter of type Mirror.
-
-    @p
-      Unlike the syntactic API, which is implemented completely in-house,
-      Scalameta delegates implementations of Mirror to external projects.
-      In Scala, performing even the simplest semantic operations requires a
-      full-blown typechecker, so implementing even a simple Mirror in-house would
-      require us to reinvent a Scala typechecker, which is a multi-man-year effort.
-      Currently, we provide a Mirror implementation that is backed by the Scala 2.x
-      compiler, see @sect.ref{Scalahost}. There are plans to implement mirrors
-      for Dotty and IntelliJ.
-
-  @sect{Semantic DB}
-    @p
-      One of the properties of semantic databases is their @b{portability}. Unlike
-      typical representations of semantic information in Scala, semantic
-      databases are not tied to a particular implementation of the Scala
-      typechecker. This makes it possible for metaprograms written against the
-      Scalameta Semantic API to run on multiple platforms.
-
-    @p
-      Another important property is @b{persistence}. Since semantic databases are
-      portable, they can be created and consumed in separate environments. This
-      is a key insight that we promote in Scalameta, and we are confident that
-      it will revolutionize the developer tool ecosystem in Scala.
+      A key property of the Scalameta semantic API is its @b{portability}.
+      "SemanticDB" is the storage format for information that
+      the semantic API consumes.
 
     @p
       Currently, a typical approach to semantic developer tools in Scala is
@@ -51,39 +27,47 @@
 
     @p
       Scalameta enables a much more convenient workflow. First, we use our
-      scalahost compiler plugin to typecheck a given codebase and generate a
-      semantic database for it. This is done only once per unique snapshot of the
-      codebase. Afterwards, using the persisted semantic database, we can launch
+      semanticdb-scalac compiler plugin to generate a semantic database for it
+      during type checking.
+      This is done only once per unique snapshot of the codebase.
+      Afterwards, using the persisted semantic data, we can launch
       any number of developer tools any number of times without having to
       typecheck the codebase again.
+
     @p
-      The storage format used for the Semantic DB is defined using
+      The storage format used for the SemanticDB is defined using
       @lnk("Protocol Buffers", "https://www.google.ch/search?q=protocol+buffers&oq=protocol+buffer&aqs=chrome.0.0j69i61j69i57j69i61j0l2.6856j0j7&sourceid=chrome&ie=UTF-8"),
-      or "protobuf" for short.  The Semantic DB protobuf schema is small, at
+      or "protobuf" for short.  The SemanticDB protobuf schema is small, at
       the time of this writing it is ~50 lines of code.  The full schema is
       available
       @lnk("here",
-           "https://github.com/scalameta/scalameta/blob/master/scalameta/semantic/shared/src/main/protobuf/semanticdb.proto").
-      Files containing Semantic DB binary data use the @code{.semanticdb} file
+           "https://github.com/scalameta/scalameta/blob/master/langmeta/shared/src/main/protobuf/semanticdb.proto").
+      Files containing SemanticDB binary data use the @code{.semanticdb} file
       extension by convention.
 
-  @sect{Scalahost}
-    To build a @sect.ref{Semantic DB} with the Scala 2.x compiler, you will need
-    the "Scalahost" compiler plugin.
-    The Scalahost compiler plugin is developed in the main Scalameta repository.
-    There are several ways to @sect.ref("Installation", "integrate") Scalahost
+  @sect{semanticdb-scalac}
+    To build a @sect.ref{SemanticDB} with the Scala 2.x compiler, you will need
+    the semanticdb-scalac compiler plugin.
+    This compiler plugin is developed in the main Scalameta repository.
+    There are several ways to @sect.ref("Installation", "install") semanticdb-scalac
     into your build.
 
-  @sect{Installation}
-    The required setup for the Semantic API is more involved than for the
-    Syntactic API (parsing/tokenizing).
-    Most importantly, we first need to compile source files with the Scala compiler
-    and Scalahost compiler plugin in order to collect information such as types,
-    symbols and more. While it's possible to tokenize or parse code that
-    doesn't compile, a source file must successfully typecheck in order for it
-    to be analyzed with the Semantic API.
+    @sect{Installation}
+      The required setup for the Semantic API is more involved than for the
+      Syntactic API (parsing/tokenizing).
+      Most importantly, we first need to compile source files with the Scala compiler
+      and semanticdb-scalac compiler plugin in order to collect information such as types,
+      symbols and more. While it's possible to tokenize or parse code that
+      doesn't compile, a source file must successfully typecheck in order for it
+      to be analyzed with the Semantic API.
 
-    @scalatex.tutorial.SemanticInstallation()
+      @scalatex.tutorial.SemanticInstallation()
+
+  @sect{semanticdb-sbt}
+    It's possible to build a SemanticDB for @code{.sbt} and @code{.scala}
+    sources of sbt 0.13 builds.
+    For more details, see
+    @lnk("scalafix/semanticdb-sbt", "https://scalacenter.github.io/scalafix/#semanticdb-sbt").
 
   @sect{Example}
 
@@ -109,15 +93,4 @@
 
   @sect{Reference}
     @scalatex.tutorial.SemanticReference()
-
-  @sect{Call for contributors!}
-
-    @p
-      The Scalameta semantic API is very young, so we need your help to get it mature as fast as possible.
-
-    @p
-      The main area for contributions is ensuring that we can generate semantic databases
-      for even the trickiest snippets of Scala code. We would greatly appreciate if you could add
-      the `sbt-scalahost` plugin to your sbt build, generate a semantic database of your project
-      and report back at @gitter.
 

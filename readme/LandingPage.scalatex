@@ -156,15 +156,16 @@
         @tbody
           @def feature(name: String, supported: String) = tr(td(name), td(supported))
           @feature("Compiler messages", "Yes")
-          @feature("Symbol at position", "Yes")
-          @feature("Symbol signature", "Yes")
-          @feature("Type at position", "No")
-          @feature("Type members (completion)", "No")
-          @feature("Macro expansions", "No")
-          @feature("Inferred type arguments", "Yes")
           @feature("Implicit arguments", "Yes")
           @feature("Implicit conversions", "Yes")
           @feature("Inferred .apply/.unapply", "Yes")
+          @feature("Inferred type arguments", "Yes")
+          @feature("Symbol at position", "Yes")
+          @feature("Symbol signature", "Yes")
+          @feature("Auto completion", "No")
+          @feature("Macro expansions", "No")
+          @feature("Type at position", "No")
+          @feature("Type members", "No")
     @p
       @b
         Cross-platform.
@@ -191,7 +192,7 @@
         @lnk("Stags", "https://github.com/pjrt/stags"): Scala tags generator.
       @li
         @lnk("AST explorer", "https://astexplorer.net/#/gist/22cf8a3fcb2155c087ae94b4d194c1b6/d10c646ecfae4c69c919408aa3aaefb2deda2df7"):
-        interactively explorer of Scala syntax.
+        interactive explorer of Scala syntax trees.
       @li
         @lnk("Metarpheus", "https://blog.buildo.io/metarpheus-a-custom-approach-to-api-contracts-f340a6792d43"):
         extract models and apis from a spray-based server.
@@ -276,7 +277,7 @@
       our vision of next-generation semantic tooling for the Scala ecosystem.
 
     @p
-      Video: coming soon
+      Video:
       @lnk("https://www.youtube.com/watch?v=4yqDFsdKciA", "https://www.youtube.com/watch?v=4yqDFsdKciA")
       @br
       Slides:

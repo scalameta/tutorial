@@ -47,3 +47,6 @@
   A denotation can for example tell you if a definition is a trait or a class,
   of if it has the @code{implicit} modifier.
 
+@sect{Scalahost}
+  "Scalahost" is the old name for @sect.ref{semanticdb-scalac}.
+

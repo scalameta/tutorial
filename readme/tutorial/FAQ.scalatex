@@ -17,8 +17,8 @@
 
   @sect{I'd like to use the semantic api as a replacement for scalac's
         presentation compiler, is this doable? intended usage?}
-    It's not doable and it's not the intended usage. The prime application we
-    are focused on at the moment is refactoring with scalafix.
+    In principle, this should be doable, but it requires custom development
+    and is not supported at the moment.
 
   @sect{How do I use the Semantic API}
     See
@@ -32,8 +32,8 @@
 
   @sect{Does Scalameta integrate with Zinc in order to achieve the semantic api?}
     No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
-    API is enabled with the scalac compiler plugin @sect.ref{Scalahost}.
-    Scalahost is designed to accommodate incremental compilation in order to
+    API is enabled with the scalac compiler plugin @sect.ref{semanticdb-scalac}.
+    semanticdb-scalac is designed to accommodate incremental compilation in order to
     play nicely with Zinc.
 
   @sect{Where can I ask more questions?}
