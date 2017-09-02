@@ -152,7 +152,7 @@ object Readme {
   /**
     * repl session that has an invisible "import scala.meta._" attached to it.
     */
-  def metaRepl(code0: String) =  meta(code0)
+  def metaRepl(code0: String) = meta(code0)
   def meta(code0: String) = {
     val code1 = s"import scala.meta._, contrib._$EOL${unindent(code0).trim}"
     val result0 = executeInRepl(code1)
