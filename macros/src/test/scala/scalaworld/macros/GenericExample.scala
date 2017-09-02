@@ -7,12 +7,12 @@ case class Foo(i: Int, s: String)
 sealed trait Bar
 object Bar {
   class IgnoreMe // is not included in Generic[Bar]
-  case class Baz(i: Int)     extends Bar
+  case class Baz(i: Int) extends Bar
   case class Quux(s: String) extends Bar
 }
 
 object GenericExample {
-  println(implicitly[shapeless.Generic[Foo]].to(Foo(1, "string")))   // 1 :: "string" :: HNil
-  println(implicitly[shapeless.Generic[Bar]].to(Bar.Baz(1)))         // Inl(Baz(1))
+  println(implicitly[shapeless.Generic[Foo]].to(Foo(1, "string"))) // 1 :: "string" :: HNil
+  println(implicitly[shapeless.Generic[Bar]].to(Bar.Baz(1))) // Inl(Baz(1))
   println(implicitly[shapeless.Generic[Bar]].to(Bar.Quux("string"))) // Inr(Inl(Quux(string)))
 }

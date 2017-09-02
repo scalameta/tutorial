@@ -6,6 +6,3 @@ case class Input(x: Int) {
   1 + 2
   List(x).map(num => Input(num + 1) + Input(2) + 3)
 }
-
-
-

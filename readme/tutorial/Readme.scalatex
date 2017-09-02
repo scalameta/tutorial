@@ -1,5 +1,4 @@
-@import Main._
-@import scalaworld.Readme._
+@import scalaworld.Tutorial._
 @import scalaworld.Readme._
 
 @raw
@@ -14,16 +13,15 @@
     @lnk("scala.world", "http://scala.world") conference.
     The workshop material turned out to be useful for many so it has been moved here.
     You will still find occasional references to scala.world.
-  @scalatex.Video()
-  @scalatex.Setup()
-  @scalatex.Tokens()
-  @scalatex.Trees()
-  @scalatex.Macros()
-  @scalatex.Semantic()
-  @scalatex.Contrib()
-  @scalatex.FAQ()
-  @scalatex.Resources()
-  @scalatex.Footer()
+  @scalatex.tutorial.Video()
+  @scalatex.tutorial.Setup()
+  @scalatex.tutorial.Tokens()
+  @scalatex.tutorial.Trees()
+  @scalatex.tutorial.Macros()
+  @scalatex.tutorial.Semantic()
+  @scalatex.tutorial.Contrib()
+  @scalatex.tutorial.FAQ()
+  @scalatex.tutorial.Footer()
 
 @raw
   <script type="text/javascript">

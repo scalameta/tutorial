@@ -1,0 +1,72 @@
+@import scalaworld.Readme._
+@import scalaworld.Paradise._
+@import scala.meta.tutorial.BuildInfo
+
+@sect("scalameta/paradise", "")
+  @p
+    Note, Scalameta-based macro annotations will soon be superseded by
+    @lnk{https://github.com/scalamacros/scalamacros}, see also
+    @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+    Scalameta-based macro annotations have several limitations such as
+    not working with
+    @ul
+      @li
+        @lnk("ENSIME/ScalaIDE", "https://github.com/scalameta/paradise/pull/218"), (although IntelliJ support is good)
+      @li
+        @lnk("Scala REPL/console", "https://github.com/scalameta/paradise/issues/10")
+      @li
+        @lnk("Scaladoc", "https://github.com/scalameta/paradise/issues/216")
+      @li
+        @lnk("Scoverage", "https://github.com/scalameta/paradise/issues/201")
+    In addition, efforts to support def macros and Dotty have been moved to
+    scalamacros/scalamacros.
+    New scalameta/paradise bug reports or feature requests will not be addressed.
+    New scalameta/paradise pull requests to fix known issues will continue to be
+    reviewed and we are happy to cut new releases with contributed fixes.
+
+  @sect{Setup build}
+    It's possible to write macro annotations on Scalameta trees using
+    the Scalameta paradise compiler plugin.
+    To configure the Scalameta paradise plugin, you need to enable it in your build
+    for both the projects that define macro annotation and the projects
+    that use macro annotations
+    @hl.scala
+      lazy val macroAnnotationSettings = Seq(
+        addCompilerPlugin("org.scalameta" % "paradise" % "@BuildInfo.paradise" cross CrossVersion.full),
+        scalacOptions += "-Xplugin-require:macroparadise",
+        scalacOptions in (Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
+      )
+      // Requires scalaVersion @BuildInfo.scala211 or @BuildInfo.scala212
+      lazy val projectThatDefinesMacroAnnotations = project.settings(
+        libraryDependencies += "org.scalameta" %% "scalameta" % "@BuildInfo.scalameta1" % Provided,
+        macroAnnotationSettings
+        // ... your other project settings
+      )
+      lazy val projectThatUsesMacroAnnotations = project.settings(
+        macroAnnotationSettings,
+        // ... your other project settings
+      )
+
+    These settings are already configured in the tutorial repo.
+    Once you are setup, run
+    @hl.scala
+      macros/test:run
+
+  @sect{Tips}
+    @ul
+      @li
+        See @lnk{https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md}
+        for how to construct quasiquotes.
+      @li
+        If you are unsure how to pattern match or construct a tree, you can use @code{.structure}
+        @metaRepl
+          q"def foo[A <: B](implicit e: A): A".structure
+          Decl.Def(Nil, Term.Name("foo"), List(Type.Param(Nil, Type.Name("A"), Nil, Type.Bounds(None, Some(Type.Name("B"))), Nil, Nil)), List(List(Term.Param(List(Mod.Implicit()), Term.Name("e"), Some(Type.Name("A")), None))), Type.Name("A")).syntax
+
+  @Examples()
+
+  @sect{Testing macro annotations}
+    See MainTest for an example of to both unit test and integration test a
+    macro annotation.
+    @hl.ref(wd/'macros/'src/'test/'scala/'scalaworld/'macros/"MainTest.scala")
+

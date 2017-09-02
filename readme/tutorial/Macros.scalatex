@@ -1,0 +1,7 @@
+@import scalaworld.Tutorial._
+@import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
+
+@sect{Macro annotations}
+  @p
+    This section has now moved to @lnk("scalameta/paradise", "../paradise").

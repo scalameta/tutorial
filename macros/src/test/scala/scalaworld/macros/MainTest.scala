@@ -23,8 +23,9 @@ class MainUnitTest extends FunSuite {
   }
 
   test("@Main creates a main method") {
-    val obtained = MainMacroImpl.expand(q"AnswerToEverything",
-                                        List(q"val x = 42", q"println(x)"))
+    val obtained = MainMacroImpl.expand(
+      q"AnswerToEverything",
+      List(q"val x = 42", q"println(x)"))
     val expected =
       q"""
         object AnswerToEverything {

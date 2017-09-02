@@ -26,7 +26,6 @@ import scala.meta._
 //   result
 // }
 class Debug extends scala.annotation.StaticAnnotation {
-  import autocomplete._
   inline def apply(defn: Any): Any = meta {
     defn match {
       case defn: Defn.Def =>
