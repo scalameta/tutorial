@@ -9,5 +9,6 @@ object Dependencies {
   lazy val scalameta = "org.scalameta" %% "scalameta" % MetaVersion
   lazy val contrib = "org.scalameta" %% "contrib" % MetaVersion
   lazy val testkit = "org.scalameta" %% "testkit" % MetaVersion
+  lazy val testkit1 = "org.scalameta" %% "testkit" % MetaVersion1
   lazy val paradise = "org.scalameta" % "paradise" % ParadiseVersion cross CrossVersion.full
 }

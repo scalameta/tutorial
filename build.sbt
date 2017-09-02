@@ -3,7 +3,6 @@ import Dependencies._
 lazy val allSettings = Seq(
   organization := "org.scalameta",
   scalaVersion := scala211,
-  resolvers += Resolver.bintrayRepo("scalameta", "maven"),
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
@@ -104,7 +103,7 @@ lazy val macros = project.settings(
   macroSettings,
   // only needed for @generic demo.
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += testkit % Test
+  libraryDependencies += testkit1 % Test
 )
 
 lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
