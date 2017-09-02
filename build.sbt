@@ -74,6 +74,7 @@ lazy val readme = scalatex
     test := run.in(Compile).toTask(" --validate-links").value,
     libraryDependencies += scalameta,
     libraryDependencies += contrib,
+    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     publish := {
       ghpagesPushSite
         .dependsOn(run.in(Compile).toTask(""))
