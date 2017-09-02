@@ -80,6 +80,10 @@ lazy val readme = scalatex
         .dependsOn(run.in(Compile).toTask(""))
         .value
     },
+    excludeFilter.in(ghpagesCleanSite) := new FileFilter{
+      // Don't remove CNAME.
+      def accept(f: File) = (ghpagesRepository.value / "CNAME").getCanonicalPath == f.getCanonicalPath
+    },
     ghpagesBranch := "master",
     git.remoteRepo := "git@github.com:scalameta/scalameta.github.com.git",
     libraryDependencies ++= Seq(
