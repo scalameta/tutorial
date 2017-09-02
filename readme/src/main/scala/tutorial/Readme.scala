@@ -74,7 +74,7 @@ object Readme {
   }
 
   lazy val iloopCacheFile: File =
-    Paths.get("target", "iloopCache.serialized").toFile
+    Paths.get("target", "iloop", "iloop.serialized").toFile
   lazy val iloopCache: mutable.Map[String, String] = {
     Try {
       val ois = new ObjectInputStream(new FileInputStream(iloopCacheFile))
@@ -84,6 +84,7 @@ object Readme {
     }.getOrElse(mutable.Map.empty[String, String])
   }
   def saveCache(): Unit = {
+    iloopCacheFile.getParentFile.mkdirs()
     val fos = new FileOutputStream(iloopCacheFile)
     val oos = new ObjectOutputStream(fos)
     oos.writeObject(iloopCache)
@@ -179,7 +180,6 @@ object Readme {
               |$code
               |""".stripMargin
         )
-        println(code)
         ILoop.runForTranscript(code, settings)
       }
     )
