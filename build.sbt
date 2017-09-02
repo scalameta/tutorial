@@ -80,6 +80,7 @@ lazy val readme = scalatex
         .dependsOn(run.in(Compile).toTask(""))
         .value
     },
+    ghpagesBranch := "master",
     git.remoteRepo := "git@github.com:scalameta/scalameta.github.com.git",
     libraryDependencies ++= Seq(
       "org.pegdown" % "pegdown" % "1.6.0"
