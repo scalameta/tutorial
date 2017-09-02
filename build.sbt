@@ -79,9 +79,8 @@ lazy val readme = scalatex
         .dependsOn(run.in(Compile).toTask(""))
         .value
     },
-    git.remoteRepo := "git@github.com:scalameta/tutorial.git",
+    git.remoteRepo := "git@github.com:scalameta/scalameta.github.com.git",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "util-eval" % "6.34.0",
       "org.pegdown" % "pegdown" % "1.6.0"
     )
   )

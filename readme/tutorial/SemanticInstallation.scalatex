@@ -10,11 +10,11 @@
 
 @sect{sbt}
   @hl.scala
-    lazy val scalahostSettings = Seq(
-      addCompilerPlugin("org.scalameta" % "scalahost" % "@BuildInfo.scalameta" cross CrossVersion.full),
+    lazy val semanticdb-scalacSettings = Seq(
+      addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "@BuildInfo.scalameta" cross CrossVersion.full),
       scalacOptions ++= Seq(
         "-Yrangepos",
-        "-Xplugin-require:scalahost"
+        "-Xplugin-require:semanticdb"
       )
     )
 
@@ -22,18 +22,18 @@
 
   @hl.scala
     lazy val analyzeMe = project.settings(
-      // Scalahost supports the Scala versions: @BuildInfo.semanticScalaVersions.mkString(", ").
+      // semanticdb-scalac supports the Scala versions: @BuildInfo.semanticScalaVersions.mkString(", ").
       // Note, the Scala version must match down to the latest (PATCH) number.
       scalaVersion := "@BuildInfo.scalaVersion",
-      scalahostVersions
+      semanticdb-scalacVersions
     )
 
 @sect{Other build tools}
-  You can use Scalahost outside of sbt by passing in custom scalac flags.
+  You can use semanticdb-scalac outside of sbt by passing in custom scalac flags.
   @hl.scala
-    // -Xplugin-require:scalahost tells scalac to fail fast if Scalahost failed to load
-    // -Yrangepos is required by Scalahost
-    scalac -Xplugin:/path/to/scalahost.jar -Yrangepos -Xplugin-require:scalahost Code.scala
+    // -Xplugin-require:semanticdb-scalac tells scalac to fail fast if semanticdb-scalac failed to load
+    // -Yrangepos is required by semanticdb-scalac
+    scalac -Xplugin:/path/to/semanticdb-scalac.jar -Yrangepos -Xplugin-require:semanticdb-scalac Code.scala
 
 @sect{scalameta/tutorial semantic/run}
   If you have cloned the repo for this tutorial as explained in
@@ -46,11 +46,11 @@
 
   @hl.scala
     // make sure the version of scalac is @BuildInfo.scalaVersion
-    scalac -Yrangepos -Xplugin-require:scalahost -Xplugin:$(coursier fetch --intransitive org.scalameta:scalahost_@BuildInfo.scalaVersion:1.8.0) Foo.scala
+    scalac -Yrangepos -Xplugin-require:semanticdb-scalac -Xplugin:$(coursier fetch --intransitive org.scalameta:semanticdb-scalac_@BuildInfo.scalaVersion:1.8.0) Foo.scala
 
 
 @sect{Verify installation}
-  To verify that the Scalahost compiler plugin is installed
+  To verify that the semanticdb-scalac compiler plugin is installed
   @ul
     @li
       make sure that you are compiling least one source file
