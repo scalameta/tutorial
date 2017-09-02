@@ -1,0 +1,49 @@
+@import scalaworld.Tutorial._
+@import scalaworld.Readme._
+
+@sect{FAQ}
+  @sect{Macros?}
+    Originally, Scalameta was founded to become a better macro system for Scala,
+    but over time we shifted focus to developer tools and spun off the new macro system
+    into a separate project: @lnk("scalamacros/scalamacros", "https://github.com/scalamacros/scalamacros").
+    See @paradise for more information about the deprecated scalameta macro annotations.
+
+  @sect{What is the quasiquote for X?}
+    Here is an overview of quasiquote syntax: @lnk("https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
+
+  @sect{Can I use Scalameta with Scala.js?}
+    Yes, the main Scalameta modules support Scala.js.
+
+
+  @sect{I'd like to use the semantic api as a replacement for scalac's
+        presentation compiler, is this doable? intended usage?}
+    In principle, this should be doable, but it requires custom development
+    and is not supported at the moment.
+
+  @sect{How do I use the Semantic API}
+    See
+    @ul
+      @li
+        @sect.ref{Installation}
+      @li
+        @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
+      @li
+        @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8")
+
+  @sect{Does Scalameta integrate with Zinc in order to achieve the semantic api?}
+    No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
+    API is enabled with the scalac compiler plugin @sect.ref{semanticdb-scalac}.
+    semanticdb-scalac is designed to accommodate incremental compilation in order to
+    play nicely with Zinc.
+
+  @sect{Where can I ask more questions?}
+    @ul
+      @li
+        use the
+        @lnk("scala-meta", "http://stackoverflow.com/questions/tagged/scala-meta").
+        tag on Stack Overflow.
+      @li
+        We also have a Gitter channel
+        @raw
+          <a href="https://gitter.im/scalameta/scalameta?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/scalameta/scalameta" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
+

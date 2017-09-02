@@ -1,7 +1,15 @@
-@import Main._
+@import scalaworld.Paradise._
 @import scalaworld.Readme._
+@import scala.meta.tutorial.BuildInfo
 
-@sect{FAQ}
+@sect{Faq}
+
+  @sect{How do I test a macro annotation?}
+    You can either unit test or integration test your macro annotation.
+    See @sect.ref{Testing macro annotations}
+
+  @sect{How do identify a particular annotation?}
+    Maybe this help, @lnk{https://stackoverflow.com/questions/43394357/scalameta-identify-particular-annotations}
 
   @sect{How do I get the type of a tree?}
     It is not possible to query for type information from a macro annotation.
@@ -18,39 +26,6 @@
     The generated definitions are necessary to type check the source file,
     and the type checker is necessary provide type information to the macro
     annotation.
-
-
-  @sect{Where can I ask more questions?}
-    @ul
-      @li
-        use the
-        @lnk("scala-meta", "http://stackoverflow.com/questions/tagged/scala-meta").
-        tag on Stack Overflow.
-      @li
-        We also have a Gitter channel
-        @raw
-          <a href="https://gitter.im/scalameta/scalameta?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://camo.githubusercontent.com/da2edb525cde1455a622c58c0effc3a90b9a181c/68747470733a2f2f6261646765732e6769747465722e696d2f4a6f696e253230436861742e737667" alt="Join the chat at https://gitter.im/scalameta/scalameta" data-canonical-src="https://badges.gitter.im/Join%20Chat.svg" style="max-width:100%;"></a>
-
-  @sect{How do I test a macro annotation?}
-    You can either unit test or integration test your macro annotation.
-    See @sect.ref{Testing macro annotations}
-
-  @sect{How do identify a particular annotation?}
-    Maybe this help, @lnk{https://stackoverflow.com/questions/43394357/scalameta-identify-particular-annotations}
-
-  @sect{What is the quasiquote for X?}
-    Here is an overview of quasiquote syntax: @lnk("https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
-
-  @sect{';' expected but 'def' found. inline def apply}
-    Be sure that the org.scalameta:paradise compiler plugin is enabled.
-
-  @sect{Can I use Scalameta with Scala.js?}
-    Yes, the main Scalameta modules support Scala.js.
-
-  @sect{How do I pass an argument to the macro annotation?}
-    You match on @code{this} as a Scalameta tree. For example:
-
-    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Argument.scala")
 
   @sect{Do I need to depend on Scalameta at runtime?}
     No. But your project needs a dependency on Scalameta.
@@ -163,25 +138,13 @@
   @sect{Which versions of Scala do the Scalameta macros support?}
     2.11.x and 2.12.x.
 
-  @sect{I'd like to use the semantic api as a replacement for scalac's presentation compiler, is this doable? intended usage?}
-    It's not doable and it's not the intended usage. The prime application we
-    are focused on at the moment is refactoring with scalafix.
+  @sect{';' expected but 'def' found. inline def apply}
+    Be sure that the org.scalameta:paradise compiler plugin is enabled.
 
-  @sect{How do I use the Semantic API}
-    See
-    @ul
-      @li
-        @sect.ref{Installation}
-      @li
-        @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
-      @li
-        @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8")
+  @sect{How do I pass an argument to the macro annotation?}
+    You match on @code{this} as a Scalameta tree. For example:
 
-  @sect{Does Scalameta integrate with Zinc in order to achieve the semantic api?}
-    No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
-    API is enabled with the scalac compiler plugin @sect.ref{Scalahost}.
-    Scalahost is designed to accommodate incremental compilation in order to
-    play nicely with Zinc.
+    @hl.ref(wd/'macros/'src/'main/'scala/'scalaworld/'macros/"Argument.scala")
 
   @sect{What's the status on new macros style with Dotty?}
     See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
@@ -191,3 +154,4 @@
     The major focus of the new macro system is portability (same implementation
     running on scalac + dotty + intellij).
     See @lnk{https://github.com/scalacenter/advisoryboard/pull/30}.
+

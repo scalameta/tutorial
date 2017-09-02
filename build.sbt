@@ -19,20 +19,12 @@ lazy val library = project.settings(
   libraryDependencies += scalameta
 )
 
-lazy val macros = project.settings(
-  allSettings,
-  macroSettings,
-  // only needed for @generic demo.
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += testkit       % Test
-)
-
-lazy val scalahostSettings = Seq(
+lazy val semanticdbSettings = Seq(
   addCompilerPlugin(
-    "org.scalameta" % "scalahost" % MetaVersion cross CrossVersion.full),
+    "org.scalameta" % "semanticdb-scalac" % MetaVersion cross CrossVersion.full),
   scalacOptions := Seq(
     "-Yrangepos",
-    "-Xplugin-require:scalahost"
+    "-Xplugin-require:semanticdb"
   )
 )
 
@@ -40,7 +32,7 @@ lazy val semanticInput = project
   .in(file("semantic/input"))
   .settings(
     allSettings,
-    scalahostSettings
+    semanticdbSettings
   )
 
 lazy val semantic = project
@@ -56,13 +48,29 @@ lazy val semantic = project
   .dependsOn(semanticInput)
 
 lazy val readme = scalatex
-  .ScalatexReadme(projectId = "readme",
-                  wd = file(""),
-                  url = "https://github.com/scalameta/tutorial/tree/master",
-                  source = "Readme")
+  .ScalatexReadme(
+    projectId = {
+      sys.props("scala.color") = "false" // remove color from repl output
+      "readme"
+    },
+    wd = file(""),
+    url = "https://github.com/scalameta/tutorial/tree/master",
+    source = "Readme"
+  )
   .settings(
     allSettings,
     buildInfoSettings,
+    watchSources ++= {
+      val compileTarget = (target in Compile).value
+      for {
+        f <- (scalatex.SbtPlugin.scalatexDirectory in Compile).value
+          .**("*.scalatex")
+          .get
+        if f.relativeTo(compileTarget).isEmpty
+      } yield f
+    },
+    sourceGenerators.in(Compile) ~= (_.init), // remove scalatex.Main
+    mainClass.in(Compile) := Some("scalaworld.Readme"),
     siteSourceDirectory := target.value / "scalatex",
     test := run.in(Compile).toTask(" --validate-links").value,
     libraryDependencies += scalameta,
@@ -75,7 +83,7 @@ lazy val readme = scalatex
     git.remoteRepo := "git@github.com:scalameta/tutorial.git",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-eval" % "6.34.0",
-      "org.pegdown" % "pegdown"    % "1.6.0"
+      "org.pegdown" % "pegdown" % "1.6.0"
     )
   )
   .dependsOn(semanticInput)
@@ -86,22 +94,34 @@ lazy val readme = scalatex
 
 // Macro setting is any module that has macros, or manipulates meta trees
 lazy val macroSettings = Seq(
-  libraryDependencies += scalameta,
+  libraryDependencies += scalameta1,
   addCompilerPlugin(paradise),
   scalacOptions += "-Xplugin-require:macroparadise"
+)
+
+lazy val macros = project.settings(
+  allSettings,
+  macroSettings,
+  // only needed for @generic demo.
+  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
+  libraryDependencies += testkit % Test
 )
 
 lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
   buildInfoKeys := Seq[BuildInfoKey](
     name,
     version,
+    "baseDirectory" -> baseDirectory.in(ThisBuild).value,
+    "scalameta1" -> MetaVersion1,
     "scalameta" -> MetaVersion,
-    "paradise"  -> ParadiseVersion,
+    "paradise" -> ParadiseVersion,
     scalaVersion,
     semanticClassDirectory.value,
+    "resources" -> resourceDirectories.in(Compile).value,
     "scala211" -> scala211,
     "scala212" -> scala212,
     "semanticScalaVersions" -> List(scala211, scala212),
+    "siteOutput" -> siteSourceDirectory.value,
     sbtVersion
   ),
   buildInfoPackage := "scala.meta.tutorial"

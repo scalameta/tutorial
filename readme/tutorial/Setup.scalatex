@@ -1,4 +1,4 @@
-@import Main._
+@import scalaworld.Tutorial._
 @import scalaworld.Readme._
 @import scala.meta.tutorial.BuildInfo
 
