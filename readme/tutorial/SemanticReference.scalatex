@@ -25,28 +25,31 @@
   The @code{Messages} section is a list of the reporter compiler messages (info/warn/error).
   Note, some reported messages like deprecation warnings are not yet collected, see @issue(759).
 
-@sect{Sugars}
-  @b{EXPERIMENTAL/NEW}.
-  The @code{Sugars} section is a list "sugars" that are inserted by the compiler.
-  Sugars don't have positions in the original source file.
-  Sugars include inferred type parameters, type annotations of definitions
-  and implicit arguments.
-  Note that sugars are currently not enriched with semantic information
-  such as symbols or denotations, see @issue(822).
+@sect{Synthetics}
+  The @code{Synthetics} section lists the code that is inserted/inferred by the compiler.
+  Syntehtics don't appear in the original source file.
+  Synthetics include inferred type parameters, type annotations of definitions,
+  implicit arguments and more.
+  It is possible to resolve symbols of synthetics, just like with regular names
+  that appear in the source file.
 
 @sect{Symbol}
   Every definition such as a class/trait/val/var/def/object has a unique identifier.
   This unique identifier is called a @code{Symbol}.
-  The string representation of a symbol is the erased JVM signature of the definition.
+  By convention, @sect.ref{semanticdb-scalac} uses the the erased JVM signature of the definition
+  to represent a Scala symbol .
   This makes it possible to distinguish between overloaded methods.
-  To understand what a symbol means, inspect its @sect.ref{Denotation}.
+  A symbol is an opaque identifier, to understand the signature
+  of a symbol inspect its @sect.ref{Denotation}.
 
 @sect{Denotation}
-  A denotation represents a @sect.ref{Symbol}'s meaning, including modifiers,
-  annotations, visibility restrictions and type signature.
+  A denotation represents a @sect.ref{Symbol}'s "meaning", including modifiers,
+  visibility restrictions and type signature.
   A denotation can for example tell you if a definition is a trait or a class,
-  of if it has the @code{implicit} modifier.
+  if it has the @code{implicit} modifier or what it's return type is.
 
 @sect{Scalahost}
   "Scalahost" is the old name for @sect.ref{semanticdb-scalac}.
 
+@sect{Sugars}
+  "Sugars" is the old name for @sect.ref{Synthetics}.

@@ -92,5 +92,7 @@
       @sect.ref{Sugars}.
 
   @sect{Reference}
+    @p
+      Below are explanations of the terminology used in SemanticDB.
     @scalatex.tutorial.SemanticReference()
 
