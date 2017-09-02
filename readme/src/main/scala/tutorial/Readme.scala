@@ -7,6 +7,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
 import java.nio.file.Paths
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import scala.collection.mutable
 import scala.compat.Platform.EOL
@@ -74,7 +75,7 @@ object Readme {
   }
 
   lazy val iloopCacheFile: File =
-    Paths.get("target", "iloopCache.serialized").toFile
+    Paths.get("target", "iloop", "iloop.serialized").toFile
   lazy val iloopCache: mutable.Map[String, String] = {
     Try {
       val ois = new ObjectInputStream(new FileInputStream(iloopCacheFile))
@@ -84,6 +85,7 @@ object Readme {
     }.getOrElse(mutable.Map.empty[String, String])
   }
   def saveCache(): Unit = {
+    iloopCacheFile.getParentFile.mkdirs()
     val fos = new FileOutputStream(iloopCacheFile)
     val oos = new ObjectOutputStream(fos)
     oos.writeObject(iloopCache)
@@ -179,7 +181,6 @@ object Readme {
               |$code
               |""".stripMargin
         )
-        println(code)
         ILoop.runForTranscript(code, settings)
       }
     )
@@ -238,5 +239,26 @@ object Readme {
 
   def sideBySide(left: String, right: String): TypedTag[String] =
     pairs(List(left, right).map(x => half(Paradise.hl.scala(x))): _*)
+
+  def stableVersionBadge: String = {
+    def timestampOfTag(tag: String): String = {
+      import sys.process._
+      // TODO(olafur) use jgit to fetch this data.
+      val gitShow = Process(
+        List("git", "show", tag, "--pretty=%aD"),
+        cwd = Some(new File("scalameta"))
+      )
+      val stdout = gitShow.!!
+      val original_dateOfTag = stdout.split(EOL).apply(4)
+      val rfc2822 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z")
+      val dateOfTag = rfc2822.parse(original_dateOfTag)
+      val pretty = new SimpleDateFormat("dd MMM yyyy")
+      val pretty_dateOfTag = pretty.format(dateOfTag)
+      s" (released on $pretty_dateOfTag)"
+    }
+    val stableVersion = BuildInfo.scalameta
+    val timestamp = timestampOfTag("v" + stableVersion)
+    stableVersion + timestamp
+  }
 
 }

@@ -3,7 +3,7 @@
 @import scalaworld.LandingPage._
 @import scala.meta._
 
-@sect("Scalameta", BuildInfo.scalameta)
+@sect("Scalameta", stableVersionBadge)
 
   @p
     Scalameta is a modern metaprogramming library for Scala that supports
