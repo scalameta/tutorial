@@ -2,7 +2,7 @@
 @import scalaworld.Readme._
 @import scala.meta.tutorial.BuildInfo
 
-@sect{Faq}
+@sect{FAQ}
 
   @sect{How do I test a macro annotation?}
     You can either unit test or integration test your macro annotation.

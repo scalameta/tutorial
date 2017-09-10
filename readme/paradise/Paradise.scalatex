@@ -65,6 +65,8 @@
 
   @Examples()
 
+  @FAQ()
+
   @sect{Testing macro annotations}
     See MainTest for an example of to both unit test and integration test a
     macro annotation.

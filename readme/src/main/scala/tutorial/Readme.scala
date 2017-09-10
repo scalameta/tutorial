@@ -19,12 +19,9 @@ import scala.util.Try
 import scalatags.Text
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
-import scalatex.site.Highlighter
 import ammonite.ops._
 import org.langmeta.internal.io.FileIO
-import org.langmeta.internal.io.PathIO
 import org.pegdown.PegDownProcessor
-import org.scalameta.logger
 
 class ScalametaSite(directory: RelPath, frag: => Frag)
     extends scalatex.site.Main(
