@@ -59,7 +59,8 @@ object LandingPage extends ScalametaSite("x" / up, scalatex.LandingPage()) {
               headerH1,
               img(
                 src := "img/scalameta-logo.png",
-                paddingRight := "1em",
+                padding := "0",
+                marginRight := "0.2em",
                 height := "0.6em"),
               h,
               l
