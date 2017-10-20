@@ -60,13 +60,15 @@ object LandingPage extends ScalametaSite("x" / up, scalatex.LandingPage()) {
               img(
                 src := "img/scalameta-logo.png",
                 padding := "0",
-                marginRight := "0.2em",
-                height := "0.6em"),
+                marginRight := "0.4em",
+                verticalAlign := "-0.35em",
+                height := "1.1em"),
               h,
               l
             ),
             br,
-            if (s != "") h2(headerH2, s) else ()),
+            if (s != "") h2(headerH2, s) else ()
+        ),
         f => div(Styles.content, f)
       ) +: new Section {}.headers.tail
   }
