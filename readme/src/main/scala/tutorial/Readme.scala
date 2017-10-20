@@ -19,9 +19,12 @@ import scala.util.Try
 import scalatags.Text
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
+import scalatex.site.Section
+import scalatex.site.Styles
 import ammonite.ops._
 import org.langmeta.internal.io.FileIO
 import org.pegdown.PegDownProcessor
+import org.scalameta.logger
 
 class ScalametaSite(directory: RelPath, frag: => Frag)
     extends scalatex.site.Main(
@@ -45,7 +48,28 @@ object ScalametaSite {
   }
 }
 
-object LandingPage extends ScalametaSite("x" / up, scalatex.LandingPage())
+object LandingPage extends ScalametaSite("x" / up, scalatex.LandingPage()) {
+  override val sect = new Section {
+    override val headers: Seq[Header] =
+      Header(
+        (l, h, s) =>
+          div(
+            header,
+            h1(
+              headerH1,
+              img(
+                src := "img/scalameta-logo.png",
+                paddingRight := "1em",
+                height := "0.6em"),
+              h,
+              l
+            ),
+            br,
+            if (s != "") h2(headerH2, s) else ()),
+        f => div(Styles.content, f)
+      ) +: new Section {}.headers.tail
+  }
+}
 object Paradise extends ScalametaSite("paradise", scalatex.paradise.Paradise())
 object Tutorial extends ScalametaSite("tutorial", scalatex.tutorial.Readme()) {
   def paradise = lnk("scalameta/paradise", "../paradise")
