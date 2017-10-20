@@ -270,7 +270,10 @@ object Readme {
         cwd = Some(new File("scalameta"))
       )
       val stdout = gitShow.!!
-      val original_dateOfTag = stdout.split(EOL).apply(4)
+      val original_dateOfTag = {
+        val split = stdout.split(EOL)
+        split.lift.apply(4).getOrElse(split.head) // :sob:
+      }
       val rfc2822 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z")
       val dateOfTag = rfc2822.parse(original_dateOfTag)
       val pretty = new SimpleDateFormat("dd MMM yyyy")
