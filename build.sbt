@@ -2,7 +2,7 @@ import Dependencies._
 
 lazy val allSettings = Seq(
   organization := "org.scalameta",
-  scalaVersion := scala211,
+  scalaVersion := scala212,
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
