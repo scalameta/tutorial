@@ -10,7 +10,6 @@
   @code{def main(args: Array[String]): Unit}),
   These operations can for example be used by tools like
   @lnk("scalafix", "https://scalacenter.github.io/scalafix") to rewrite Scala source code.
-  The semantic API cannot be used from @sect.ref{Macro annotations}.
 
   @sect{SemanticDB}
     @p

@@ -88,7 +88,7 @@
       However, @code{.parse[Stat]} and @code{.parse[Source]} are
       usually all you need.
 
-  @sect{dialects}
+  @sect{Dialects}
     @p
       I didn't tell the whole story when I said you need to pass in a type
       argument to parse statements.
@@ -222,6 +222,6 @@
         However, occasionally you may need to debug the types of the trees you have.
 
       @p
-        For your convenience, I've compiled together the most common types in
+        For your convenience, we've compiled together the most common types in
         this handy diagram:
         @image("tree.png")
