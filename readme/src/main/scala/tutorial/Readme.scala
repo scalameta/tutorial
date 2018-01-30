@@ -6,6 +6,7 @@ import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.URLClassLoader
+import java.nio.file.Files
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -268,9 +269,18 @@ object Readme {
     def timestampOfTag(tag: String): String = {
       import sys.process._
       // TODO(olafur) use jgit to fetch this data.
+      val tempDir = Files.createTempDirectory("scalameta_")
+      val gitClone = Process(
+        List(
+          "git",
+          "clone",
+          "https://github.com/scalameta/scalameta.git",
+          tempDir.toString)
+      )
+      gitClone.!!
       val gitShow = Process(
         List("git", "show", tag, "--pretty=%aD"),
-        cwd = Some(new File("scalameta"))
+        cwd = Some(tempDir.toFile)
       )
       val stdout = gitShow.!!
       val original_dateOfTag = {
