@@ -22,18 +22,11 @@
     and is not supported at the moment.
 
   @sect{How do I use the Semantic API}
-    See
-    @ul
-      @li
-        @sect.ref{Installation}
-      @li
-        @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
-      @li
-        @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8")
+    See @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8").
 
   @sect{Does Scalameta integrate with Zinc in order to achieve the Semantic API?}
     No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
-    API is enabled with the scalac compiler plugin @sect.ref{semanticdb-scalac}.
+    API is enabled with a scalac compiler plugin called semanticdb-scalac.
     semanticdb-scalac is designed to accommodate incremental compilation in order to
     play nicely with Zinc.
 

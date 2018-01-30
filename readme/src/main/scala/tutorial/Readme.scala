@@ -131,17 +131,6 @@ object Readme {
   def note: TypedTag[String] = b("NOTE")
   def issues(ids: Int*): TypedTag[String] = span(ids.map(issue): _*)
   val pegdown = new PegDownProcessor
-  def database: Database = {
-    val cp = Classpath(BuildInfo.semanticClassdirectory)
-    val db = Database.load(cp)
-    assert(
-      db.documents.nonEmpty,
-      s"""db.documents.nonEmpty.
-         |$db
-         |$cp
-         |""".stripMargin)
-    db
-  }
 
   def url(src: String): TypedTag[String] = a(href := src, src)
 

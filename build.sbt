@@ -18,34 +18,6 @@ lazy val library = project.settings(
   libraryDependencies += scalameta
 )
 
-lazy val semanticdbSettings = Seq(
-  addCompilerPlugin(
-    "org.scalameta" % "semanticdb-scalac" % MetaVersion cross CrossVersion.full),
-  scalacOptions := Seq(
-    "-Yrangepos",
-    "-Xplugin-require:semanticdb"
-  )
-)
-
-lazy val semanticInput = project
-  .in(file("semantic/input"))
-  .settings(
-    allSettings,
-    semanticdbSettings
-  )
-
-lazy val semantic = project
-  .in(file("semantic/app"))
-  .settings(
-    allSettings,
-    libraryDependencies += scalameta,
-    buildInfoPackage := "scalaworld.semantic",
-    test := run.in(Compile).toTask("").value,
-    buildInfoKeys := Seq[BuildInfoKey](semanticClassDirectory.value)
-  )
-  .enablePlugins(BuildInfoPlugin)
-  .dependsOn(semanticInput)
-
 lazy val readme = scalatex
   .ScalatexReadme(
     projectId = {
@@ -92,7 +64,6 @@ lazy val readme = scalatex
       "org.pegdown" % "pegdown" % "1.6.0"
     )
   )
-  .dependsOn(semanticInput)
   .enablePlugins(
     GhpagesPlugin,
     BuildInfoPlugin
@@ -122,18 +93,11 @@ lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
     "scalameta" -> MetaVersion,
     "paradise" -> ParadiseVersion,
     scalaVersion,
-    semanticClassDirectory.value,
     "resources" -> resourceDirectories.in(Compile).value,
     "scala211" -> scala211,
     "scala212" -> scala212,
-    "semanticScalaVersions" -> List(scala211, scala212),
     "siteOutput" -> siteSourceDirectory.value,
     sbtVersion
   ),
   buildInfoPackage := "scala.meta.tutorial"
-)
-
-lazy val semanticClassDirectory = Def.setting(
-  "semanticClassdirectory" ->
-    classDirectory.in(semanticInput, Compile).value.getAbsolutePath
 )
