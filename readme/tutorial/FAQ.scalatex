@@ -5,8 +5,7 @@
   @sect{Macros?}
     Originally, Scalameta was founded to become a better macro system for Scala,
     but over time we shifted focus to developer tools and spun off the new macro system
-    into a separate project: @lnk("scalamacros/scalamacros", "https://github.com/scalamacros/scalamacros").
-    See @paradise for more information about the deprecated scalameta macro annotations.
+    into a separate project: @lnk("scalacenter/macros", "https://github.com/scalacenter/macros").
 
   @sect{What is the quasiquote for X?}
     Here is an overview of quasiquote syntax: @lnk("https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
@@ -14,25 +13,20 @@
   @sect{Can I use Scalameta with Scala.js?}
     Yes, the main Scalameta modules support Scala.js.
 
+  @sect{Can I use Scalameta with Scala Native?}
+    No, but we're @lnk("almost there", "https://github.com/scalameta/scalameta/issues/772").
 
-  @sect{I'd like to use the semantic api as a replacement for scalac's
+  @sect{I'd like to use the Semantic API as a replacement for scalac's
         presentation compiler, is this doable? intended usage?}
     In principle, this should be doable, but it requires custom development
     and is not supported at the moment.
 
   @sect{How do I use the Semantic API}
-    See
-    @ul
-      @li
-        @sect.ref{Installation}
-      @li
-        @lnk("sbt-semantic-example", "https://github.com/scalameta/sbt-semantic-example")
-      @li
-        @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8")
+    See @lnk("scalacenter/scalafix.g8", "https://scalacenter.github.io/scalafix/#scalacenter/scalafix.g8").
 
-  @sect{Does Scalameta integrate with Zinc in order to achieve the semantic api?}
+  @sect{Does Scalameta integrate with Zinc in order to achieve the Semantic API?}
     No, Zinc and Scalameta and unrelated.  The Scalameta Semantic
-    API is enabled with the scalac compiler plugin @sect.ref{semanticdb-scalac}.
+    API is enabled with a scalac compiler plugin called semanticdb-scalac.
     semanticdb-scalac is designed to accommodate incremental compilation in order to
     play nicely with Zinc.
 

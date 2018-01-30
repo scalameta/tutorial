@@ -1,6 +1,6 @@
 import sbt._, Keys._
 object Dependencies {
-  lazy val MetaVersion = "2.1.2"
+  lazy val MetaVersion = "2.1.7"
   lazy val MetaVersion1 = "1.8.0"
   lazy val ParadiseVersion = "3.0.0-M10"
   lazy val scala211 = "2.11.12"

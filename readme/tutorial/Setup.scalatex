@@ -3,8 +3,6 @@
 @import scala.meta.tutorial.BuildInfo
 
 @sect{Setup}
-  There are several ways to install and run Scalameta.
-
   @sect{Library}
     You can use Scalameta as a library, the @code{scalameta} umbrella package
     includes modules for trees, tokens, parsing, pretty printing, semantic API
@@ -21,10 +19,7 @@
     that you can clone and run locally.
     @ol
       @li
-        Clone the @lnk("workshop repo", "https://github.com/scalameta/tutorial").
-        Alternatively, for a minimal project template that uses the bleeding edge
-        version of scalameta/paradise, clone
-        @lnk("this repo", "https://github.com/olafurpg/scalameta-macro-template").
+        Clone the @lnk("accompanying repo", "https://github.com/scalameta/tutorial").
       @li
         Run @code{sbt test} to make sure everything works.
       @li
@@ -39,14 +34,4 @@
     To experiment with Scalameta in the REPL, you can run the following
     in the @lnk("Ammonite REPL", "http://www.lihaoyi.com/Ammonite/#Ammonite-REPL")
     @hl.scala
-      import $ivy.`org.scalameta:scalameta_2.11:@(BuildInfo.scalameta)`, scala.meta._
-    @b{Note.} The macro annotation examples will not run in the REPL, follow
-    @lnk("scalameta/paradise#10", "https://github.com/scalameta/paradise/issues/10")
-    for updates.
-
-  @sect{Video}
-    @p
-      To accompany the workshop, here is the recording from the original
-      scala.world conference talk.
-    @raw
-      <iframe width="100%" style="height: 28em" src="https://www.youtube.com/embed/-l7pV0sFq1c" frameborder="0" allowfullscreen></iframe>
+      import $ivy.`org.scalameta:scalameta_2.12:@(BuildInfo.scalameta)`, scala.meta._

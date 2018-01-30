@@ -136,39 +136,14 @@
     @p
       @b
         Semantic API.
-      Semantic analysis of Scala programs has typically been tricky business, requiring
-      intimate familiarity with compiler internals.
-      Scalameta involves none of that. Our semantic API is powered by
-      @lnk("Semantic DB", "http://scalameta.org/tutorial/#SemanticDB"), a simple
-      @lnk("schema", "https://github.com/scalameta/scalameta/blob/master/langmeta/semanticdb/shared/src/main/protobuf/semanticdb.proto")
-      for persisting semantic information extracted from the Scala compiler.
-      Saved semantic information can then be used in multiple applications running on
-      different platforms, potentially in a distributed fashion.
-      @table
-        @(cls := "pure-table")
-        @(margin := "auto")
-        @thead
-          @tr
-            @th
-              Feature
-            @th
-              Supported?
-        @tbody
-          @def feature(name: String, supported: String) = tr(td(name), td(supported))
-          @feature("Compiler messages", "Yes")
-          @feature("Implicit arguments", "Yes")
-          @feature("Implicit conversions", "Yes")
-          @feature("Inferred .apply/.unapply", "Yes")
-          @feature("Inferred type arguments", "Yes")
-          @feature("Symbol at position", "Yes")
-          @feature("Symbol signature", "Yes")
-          @feature("Auto completion", "No")
-          @feature("Macro expansions", "No")
-          @feature("Type at position", "No")
-          @feature("Type members", "No")
+      Scalameta supports SemanticDB - a data format for semantic information
+      about programs in Scala and other languages. This ensures that our Semantic
+      API works consistently across compilers and even across languages.
+      Learn more about SemanticDB @lnk("here", "http://scalameta.org/tutorial/#SemanticDB").
+
     @p
       @b
-        Cross-platform.
+        Multiple platforms.
       Scalameta is available as a JVM library and as a JavaScript module
       via @lnk("Scala.js", "http://www.scala-js.org/").
       Support for a native library via @lnk("Scala Native", "http://www.scala-native.org/") is
@@ -196,22 +171,22 @@
       @li
         @lnk("Metarpheus", "https://blog.buildo.io/metarpheus-a-custom-approach-to-api-contracts-f340a6792d43"):
         extract models and apis from a spray-based server.
+      @li
+        @lnk("Metals", "https://geirsson.com/assets/metals/"):
+        @lnk("Language Server Protocol", "https://microsoft.github.io/language-server-protocol")
+        implementation.
 
   @sect{Releases}
 
     @p
       @b
-        Train model.
-      Every six weeks, we publish a release with the latest changes.
-    @p
-      @b
         Semantic versioning.
-      With Scalameta 2.0 onwards, we follow
+      With Scalameta 2.0.0 onwards, we follow
       @lnk("semantic versioning", "http://semver.org/") enforced with
       @lnk("MiMa", "https://github.com/typesafehub/migration-manager/").
-      Binary breaking changes bump up the major version (e.g., 2.0 -> 3.0),
+      Binary breaking changes bump up the major version (e.g., 2.0.0 -> 3.0.0),
       binary compatible improvements bump up the minor version (e.g.,
-      2.0 -> 2.1).
+      2.0.0 -> 2.1.0).
 
     @p
       @b
@@ -237,16 +212,22 @@
   @sect{Tutorial}
     @p
       To learn more about practical aspects of using scalameta, take a look at
-      our tutorial that is based on a workshop given by Ólafur Pall Geirsson at Scala World 2016:
-      @lnk("http://scalameta.org/tutorial", "http://scalameta.org/tutorial").
+      our tutorial: @lnk("http://scalameta.org/tutorial", "http://scalameta.org/tutorial").
 
   @sect{Roadmap}
     @p
       @b
-        Refactoring.
+        Rewriting and linting.
       @lnk("Scalafix", "https://scalacenter.github.io/scalafix/") is a
-      code rewriting tool developed at the @lnk("Scala Center", "https://scala.epfl.ch/").
+      rewrite and linting tool for Scala developed at the @lnk("Scala Center", "https://scala.epfl.ch/").
       Scalafix rewrites use the Scalameta to automate migration between different library and compiler versions.
+
+    @p
+      @b
+        Language server protocol.
+      @lnk("Metals", "https://geirsson.com/assets/metals/") is an experimental project
+      that use Scalameta-based tools to implement the
+      @lnk("Language Server Protocol", "https://microsoft.github.io/language-server-protocol").
 
     @p
       @b
@@ -303,15 +284,15 @@
     @p
       @raw
         <center>
-          <a href="https://twitter.com/"><img width="112" height="90" src="images/twitter.png" /></a>
+          <a href="https://twitter.com/"><img width="112" height="90" src="img/twitter.png" /></a>
           &nbsp; &nbsp;
-          <a href="https://www.jetbrains.com/"><img width="95" height="95" src="images/jetbrains.png" /></a>
+          <a href="https://www.jetbrains.com/"><img width="95" height="95" src="img/jetbrains.png" /></a>
           &nbsp; &nbsp;
-          <a href="https://www.codacy.com/"><img width="105" height="105" src="images/codacy.png" /></a>
+          <a href="https://www.codacy.com/"><img width="105" height="105" src="img/codacy.png" /></a>
           &nbsp; &nbsp;
-          <a href="https://scala.epfl.ch/"><img width="70" height="100" src="images/scala_center.png"/></a>
+          <a href="https://scala.epfl.ch/"><img width="70" height="100" src="img/scala_center.png"/></a>
           &nbsp; &nbsp;
-          <a href="https://www.evolutiongaming.com/"><img width="75" height="95" src="images/evolution_gaming.png"/></a>
+          <a href="https://www.evolutiongaming.com/"><img width="75" height="95" src="img/evolution_gaming.png"/></a>
         </center>
 
 @copyrightBadge
