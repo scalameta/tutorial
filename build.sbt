@@ -81,9 +81,10 @@ lazy val readme = scalatex
         .value
     },
     excludeFilter.in(ghpagesCleanSite) := new FileFilter {
-      // Don't remove CNAME.
+      // Don't remove: 1) CNAME, 2) presentation slides.
       def accept(f: File) =
-        (ghpagesRepository.value / "CNAME").getCanonicalPath == f.getCanonicalPath
+        (ghpagesRepository.value / "CNAME").getCanonicalPath == f.getCanonicalPath ||
+          f.getName.endsWith(".pdf")
     },
     ghpagesBranch := "master",
     git.remoteRepo := "git@github.com:scalameta/scalameta.github.com.git",
