@@ -6,6 +6,7 @@ lazy val allSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % Test
   ),
+  resolvers += Resolver.sonatypeRepo("releases"),
   updateOptions := updateOptions.value.withCachedResolution(true)
 )
 

@@ -23,10 +23,10 @@
       The storage format used for the SemanticDB is defined using
       @lnk("Protocol Buffers", "https://developers.google.com/protocol-buffers/"),
       or "protobuf" for short.  The SemanticDB protobuf schema is small, at
-      the time of this writing it is ~60 lines of code.  The full schema is
+      the time of this writing it is ~100 lines of code.  The full schema is
       available
       @lnk("here",
-           "https://github.com/scalameta/scalameta/blob/master/semanticdb/semanticdb2/semanticdb2.proto").
+           "https://github.com/scalameta/scalameta/blob/master/semanticdb/README.md").
       Files containing SemanticDB binary data use the @code{.semanticdb} file
       extension by convention.
 
