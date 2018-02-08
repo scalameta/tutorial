@@ -181,18 +181,19 @@
     @p
       @b
         Semantic versioning.
-      With Scalameta 2.0.0 onwards, we follow
-      @lnk("semantic versioning", "http://semver.org/") enforced with
-      @lnk("MiMa", "https://github.com/typesafehub/migration-manager/").
-      Binary breaking changes bump up the major version (e.g., 2.0.0 -> 3.0.0),
-      binary compatible improvements bump up the minor version (e.g.,
-      2.0.0 -> 2.1.0).
+      With Scalameta 2.0.0 onwards, we follow semantic versioning.
+      Breaking changes to the public API bump the major version (e.g., 2.0.0 -> 3.0.0),
+      backward compatible changes to the public API bump the minor version
+      (e.g., 2.0.0 -> 2.1.0), bugfixes bump the patch version (e.g. 2.0.0 -> 2.0.1).
+      For details, check out @lnk("our versioning policy", "https://github.com/scalameta/scalameta/blob/master/VERSIONING.md").
 
     @p
       @b
-        Milestone releases.
-      At any point in the release cycle, we may cut
-      milestone releases to test out work-in-progress changes.
+        Strong compatibility guarantees.
+      With Scalameta 2.0.0 onwards, we take a strong stance on compatibility.
+      We communicate changes to the public API in version numbers
+      and we have set up our build to make sure that no mistakes are made.
+      For details, check out @lnk("our compatibility policy", "https://github.com/scalameta/scalameta/blob/master/COMPATIBILITY.md").
 
   @sect{Getting started}
     @p
