@@ -86,7 +86,9 @@
       Scalameta has dozens of parsers:
       @image("parse.png")
       However, @code{.parse[Stat]} and @code{.parse[Source]} are
-      usually all you need.
+      usually all you need. However, a comprehensive list of the parsers,
+      and their quasiquote syntax is @lnk("documented here", 
+      "https://github.com/scalameta/scalameta/blob/master/notes/quasiquotes.md").
 
   @sect{Dialects}
     @p
