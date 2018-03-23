@@ -175,6 +175,9 @@
         @lnk("Metals", "https://geirsson.com/assets/metals/"):
         @lnk("Language Server Protocol", "https://microsoft.github.io/language-server-protocol")
         implementation.
+      @li
+        @lnk("sbt-example", "https://github.com/ThoughtWorksInc/sbt-example"):
+        an sbt plug-in for creating unit tests from Scaladoc.
 
   @sect{Releases}
 
