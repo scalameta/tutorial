@@ -255,9 +255,26 @@
   @sect("Talks")
     @p
       @b
+        How We Built Tools That Scale to Millions of Lines of Code
+      (ScalaDays New York 2018). This talk outlines the work that we did
+      at Twitter to add semantic functionality to code browsing, code review and
+      code evolution tools. We use SemanticDB - an opensource data model for
+      semantic information developed in Scalameta. We have implemented experimental
+      improvements to the Twitter development workflow, integrating opensource and
+      closed-source solutions.
+
+    @p
+      Video:
+      Coming soon.
+      @br
+      Slides:
+      @lnk("http://scalameta.org/talks/2018-06-20-HowWeBuiltToolsThatScaleToMillionsOfLoc.pdf", "http://scalameta.org/talks/2018-06-20-HowWeBuiltToolsThatScaleToMillionsOfLoc.pdf")
+
+    @p
+      @b
         Semantic Tooling at Twitter
       (ScalaDays Copenhagen 2017). This talk introduces semantic databases, the cornerstone of
-      the scalameta semantic API, and explains how semantic databases can be used to integrate
+      the Scalameta semantic API, and explains how semantic databases can be used to integrate
       with Kythe, a language-agnostic ecosystem for developer tools. In this talk, we presented
       our vision of next-generation semantic tooling for the Scala ecosystem.
 
@@ -271,7 +288,7 @@
     @p
       @b
         Metaprogramming 2.0
-      (ScalaDays Berlin 2016). This talk explains the status of scalameta, demonstrates key features,
+      (ScalaDays Berlin 2016). This talk explains the status of Scalameta, demonstrates key features,
       presents the early adopters and publishes our plans for the future. The centerpiece of the talk
       is the demo of a new macro system for Scala, which is no longer part of Scalameta.
       Nonetheless, the talk still does a good job of showcasing potential usecases for Scalameta
