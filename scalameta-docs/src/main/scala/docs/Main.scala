@@ -3,10 +3,13 @@ package docs
 import java.nio.file.Paths
 
 object Main {
+
   def main(args: Array[String]): Unit = {
+    val out = Paths.get("docs-out")
+    ScalametaDocs.download(out)
     val settings = mdoc
       .MainSettings()
-      .withOut(Paths.get("docs-out"))
+      .withOut(out)
       .withSiteVariables(
         Map(
           "VERSION" -> BuildInfo.scalameta

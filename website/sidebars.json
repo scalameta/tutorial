@@ -1,5 +1,6 @@
 {
   "docs": {
-    "Overview": ["trees", "scastie"]
+    "Trees": ["trees", "quasiquotes", "scastie"],
+    "SemanticDB": ["semanticdb"]
   }
 }

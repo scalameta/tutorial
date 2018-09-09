@@ -1,11 +1,12 @@
 ---
 id: trees
 sidebar_label: Guide
-title: Scalameta Guide
+title: Trees Guide
 ---
 
-Scalameta is a library you can use to read, analyze, transform and generate
-Scala programs. In this guide, you will learn how to use Scalameta to
+A core functionality of Scalameta is syntax trees, which enable you to read,
+analyze, transform and generate Scala programs at a high level of abstraction.
+In this guide, you will learn how to
 
 - parse source code into syntax trees
 - construct new syntax trees
@@ -59,16 +60,17 @@ You can try out Scalameta online with the [Scastie playground](scastie.md).
 
 ## What is a syntax tree?
 
-Syntax trees are a representation of source code in text format that makes it
-easier to analyze the source code. Scalameta has syntax trees that represent
+Syntax trees are a representation of source code that makes it easier to
+programmatically analyze programs. Scalameta has syntax trees that represent
 Scala programs.
 
 ![](assets/img/tree.svg)
 
 Scalameta trees are **lossless**, meaning that they represent Scala programs in
-sufficient details to go from text to trees and from trees to the original text
-without significant loss of details. Lossless syntax trees are great for
-fine-grained analysis of source code.
+sufficient details to go from text to trees and vice-versa without significant
+loss of details. Lossless syntax trees are great for fine-grained analysis of
+source code, which is useful for a range of applications including formatting,
+refactoring, linting and documentation tools
 
 ## Parse trees
 
@@ -87,7 +89,7 @@ val program = """object Main extends App { print("Hello!") }"""
 val tree = program.parse[Source].get
 ```
 
-Once parsed you can print the tree back into its original source code
+Once parsed, you can print the tree back into its original source code
 
 ```scala mdoc
 println(tree.syntax)
@@ -159,10 +161,11 @@ If we use `parse[Stat]` to parse types we get an error
 println("A with B".parse[Stat])
 ```
 
-### From programs with top-level statements like scripts and sbt files
+### From programs with multiple top-level statements
 
-To parse multiple top-level statements like `build.sbt` files we get an error
-when using `parse[Source]`.
+To parse programs with multiple top-level statements such as `build.sbt` files
+or Ammonite scripts we use the `Sbt1` dialect. By default, we get an error when
+using `parse[Source]`.
 
 ```scala mdoc:silent
 val buildSbt = """
@@ -209,18 +212,83 @@ println(
 
 ## Construct trees
 
-Sometimes we want to dynamically construct syntax trees instead of parsing them
-from source code. Constructing trees becomes important
+Sometimes we need to dynamically construct syntax trees instead of parsing them
+from source code. There are two primary ways to construct trees: normal
+constructors and quasiquotes.
 
 ### With normal constructors
 
-### With quasi-quotes
+Normal tree constructors as plain functions
+
+```scala mdoc
+println(Term.Apply(Term.Name("function"), List(Term.Name("argument"))))
+```
+
+Although normal constructors are verbose, they give most flexibility when
+constructing trees.
+
+To learn tree node names you can use `.structure` on existing tree nodes
+
+```scala mdoc
+println("function(argument)".parse[Stat].get.structure)
+```
+
+The output of structure is safe to copy-past into programs.
+
+Another good way to learn the structure of trees is
+[AST Explorer](http://astexplorer.net/#/gist/ec56167ffafb20cbd8d68f24a37043a9/97da19c8212688ceb232708b67228e3839dadc7c).
+
+### With quasiquotes
+
+Quasiquotes are macro interpolators that expand at compile-time into normal
+constructor calls
+
+```scala mdoc
+println(q"function(argument)".structure)
+```
+
+You can write multiline quasiquotes to construct large programs
+
+```scala mdoc
+println(
+  q"""
+  object Example extends App {
+    println(42)
+  }
+  """.structure
+)
+```
+
+> It's important to keep in mind that quasiquotes expand at compile-time into
+> the same program as if you had written normal constructors by hand. This means
+> for example that formatting details or comments are not preserved
+
+```scala mdoc
+println(q"function  (    argument   ) // comment")
+```
+
+Quasiquotes can be composed together with dollar splices `..$`
+
+```scala mdoc
+val arguments = List(q"arg1", q"arg2")
+println(q"function(..$arguments)")
+```
+
+To construct curried argument lists use triple dot splices `...$`
+
+```scala mdoc
+val arguments2 = List(q"arg3", q"arg4")
+val allArguments = List(arguments, arguments2)
+println(q"function(...$allArguments)")
+```
+
+To learn more about quasiquotes, consult the [quasiquote spec](quasiquotes.md).
 
 ## Pattern match trees
 
 ### With normal constructors
 
-### With quasi-quotes
+### With quasiquotes
 
 ## Compare trees for equality
 
@@ -318,7 +386,7 @@ new Transformer {
 ```
 
 
-Quasi-quotes are a simple way to construct tree nodes
+Quasiquotes are a simple way to construct tree nodes
 
 ```scala mdoc
 val quasiquote = q"a + b"

@@ -4,12 +4,20 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Library to read, analyze, transform and generate Scala programs",
+    "quasiquotes": "Quasiquotes",
+    "Quasiquotes": "Quasiquotes",
     "scastie": "Scastie playground",
-    "trees": "Scalameta Guide",
+    "semanticdb": "SemanticDB Specification",
+    "Specification": "Specification",
+    "trees": "Trees Guide",
     "Guide": "Guide",
     "Docs": "Docs",
+    "Scalafmt": "Scalafmt",
+    "Scalafix": "Scalafix",
+    "Metals": "Metals",
     "GitHub": "GitHub",
-    "Overview": "Overview"
+    "Trees": "Trees",
+    "SemanticDB": "SemanticDB"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

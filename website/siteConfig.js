@@ -22,6 +22,21 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { doc: "trees", label: "Docs" },
+    {
+      href: "http://scalameta.org/scalafmt",
+      label: "Scalafmt",
+      external: true
+    },
+    {
+      href: "http://scalacenter.github.io/scalafix",
+      label: "Scalafix",
+      external: true
+    },
+    {
+      href: "http://scalameta.org/metals",
+      label: "Metals",
+      external: true
+    },
     { href: repoUrl, label: "GitHub", external: true }
   ],
 

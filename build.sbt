@@ -26,6 +26,7 @@ lazy val docs = project
     moduleName := "scalameta-docs",
     mainClass.in(Compile) := Some("docs.Main"),
     libraryDependencies ++= List(
+      "com.geirsson" % "mdoc" % "0.4.3" cross CrossVersion.full,
       "org.scalameta" %% "testkit" % scalameta,
       "ch.epfl.scala" %% "scalafix-core" % scalafix
     )
