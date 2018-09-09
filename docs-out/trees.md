@@ -328,104 +328,279 @@ println(q"function(...$allArguments)")
 // function(arg1, arg2)(arg3, arg4)
 ```
 
+A common mistake is to splice an empty type parameter list into type application
+nodes . Imagine we have a list of type arguments that happens to be empty
+
+```scala
+val typeArguments = List.empty[Type]
+```
+
+If we directly splice the lists into a type application we get a cryptic error
+message "invariant failed"
+
+```scala
+q"function[..$typeArguments]()"
+// org.scalameta.invariants.InvariantFailedException: invariant failed:
+// when verifying targs.!=(null).&&(targs.nonEmpty)
+// found that targs.nonEmpty is false
+// where targs = List()
+// 	at org.scalameta.invariants.InvariantFailedException$.raise(Exceptions.scala:15)
+// 	at scala.meta.Term$ApplyType$.internal$49(Trees.scala:82)
+// 	at scala.meta.Term$ApplyType$.apply(Trees.scala:82)
+// 	at repl.Session.$anonfun$app$39(/Users/ollie/dev/scalameta-tutorial/docs/trees.md:195)
+```
+
+The quasiquote above is equivalent to calling the normal constructor
+`Type.ApplyType(.., typeArguments)`. Scalameta trees perform strict runtime
+validation for invariants such as "type application arguments must be
+non-empty". To fix this problem, guard the splice against the length of the list
+
+```scala
+println(
+  (if (typeArguments.isEmpty) q"function()"
+   else q"function[..$typeArguments]()").structure
+)
+// Term.Apply(Term.Name("function"), List())
+```
+
 To learn more about quasiquotes, consult the [quasiquote spec](quasiquotes.md).
 
 ## Pattern match trees
 
+Use pattern matching to target interesting tree nodes and deconstruct them. A
+core design principle of Scalameta trees is that tree pattern matching is the
+dual of tree construction. If you know how to construct a tree, you know how to
+de-construct it.
+
 ### With normal constructors
+
+Normal constructors work in pattern position the same way they work in regular
+term position.
+
+```scala
+"function(arg1, arg2)".parse[Term].get match {
+  case Term.Apply(function, List(arg1, arg2)) =>
+    println("1 " + function)
+    println("2 " + arg1)
+    println("3 " + arg2)
+}
+// 1 function
+// 2 arg1
+// 3 arg2
+```
+
+Repeated fields are always `List[T]`, so you can safely deconstruct trees with
+the `List(arg1, arg2)` syntax or if you prefer the `arg1 :: arg2 :: Nil` syntax.
+There is no need to use `Seq(arg1, arg2)` or `arg1 +: arg2 +: Nil`.
 
 ### With quasiquotes
 
+Quasiquotes expand at compile-time and work the same way in pattern position as
+in term position
+
+```scala
+Term.Apply(
+  Term.Name("function"),
+  List(Term.Name("arg1"), Term.Name("arg2"))
+) match {
+  case q"$function(..$args)" =>
+    println("1 " + function)
+    println("2 " + args)
+}
+// 1 function
+// 2 List(arg1, arg2)
+```
+
+Use triple dollar splices `...$` to extract curried argument lists
+
+```scala
+"function(arg1, arg2)(arg3, arg4)".parse[Term].get match {
+  case q"$function(...$args)" =>
+    println("1 " + function)
+    println("2 " + args)
+}
+// 1 function
+// 2 List(List(arg1, arg2), List(arg3, arg4))
+```
+
 ## Compare trees for equality
+
+Scalameta trees use reference equality by default, which may result in
+surprising behavior for beginners. A common mistake is to use `==` between
+parsed syntax trees and quasiquotes
+
+```scala
+"true".parse[Term].get == q"true"
+// res24: Boolean = false
+```
+
+Comparing trees by `==` is the same as comparing them with `eq`. Even identical
+quasiquotes produce different references
+
+```scala
+q"true" == q"true"
+// res25: Boolean = false
+```
+
+Equality checks with `==` will only return true when the reference is the same.j
+
+```scala
+{ val treeReference = q"true"
+  treeReference == treeReference }
+// res26: Boolean = true
+```
+
+The idiomatic way to compare trees for structural equality is to use pattern
+matching
+
+```scala
+q"true" match { case q"true" => println("YAY!") }
+// YAY!
+```
+
+If you can't use pattern matching to compare trees by structural equality, you
+can use `.structure`
+
+```scala
+q"true".structure == q"true".structure
+// res28: Boolean = true
+```
+
+The `.structure` method produces large strings for large programs, which may
+become prohibitively slow. The Scalameta contrib module contains a more
+efficient `isEqual` helper method to compare trees structurally.
+
+```scala
+import scala.meta.contrib._
+
+q"true".isEqual(q"true")
+// res29: Boolean = true
+```
 
 ## Traverse trees
 
+Scalameta includes utilities to recursively visit tree nodes for both simple and
+advanced use-cases. Simple use-cases have high-level APIs that require minimal
+ceremony while advanced use-cases use lower-level APIs that typically involve
+more side-effects.
+
 ### Simple traversals
+
+Use `.traverse` to visit every tree node and perform a side-effect, similarly to
+`.foreach`
+
+```scala
+q"val x = 2".traverse {
+  case node =>
+    println(s"${node.productPrefix}: $node")
+}
+// Defn.Val: val x = 2
+// Pat.Var: x
+// Term.Name: x
+// Lit.Int: 2
+```
+
+Use `.collect` to visit every tree node and collect a value instead of
+performing a side-effect
+
+```scala
+q"val x = 2".collect {
+  case node => node.productPrefix -> node.toString
+}
+// res31: List[(String, String)] = List(("Defn.Val", "val x = 2"), ("Pat.Var", "x"), ("Term.Name", "x"), ("Lit.Int", "2"))
+```
+
+The methods `.traverse` and `.collect` don't support customizing the recursion.
+For more fine-grained control over which tree nodes to visit implement a custom
+`Traverser`.
 
 ### Custom traversals
 
+Extend `Traverser` if you need to implement a custom tree traversal
+
+```scala
+val traverser = new Traverser {
+  override def apply(tree: Tree): Unit = tree match {
+    case Pat.Var(name) =>
+      println(s"stop: $name")
+    case node =>
+      println(s"${node.productPrefix}: $node")
+      super.apply(node)
+  }
+}
+```
+
+The `super.apply(node)` call continues the recursion, so in this case we will
+recursively visit all nodes except children of `Pat.Var` nodes.
+
+```scala
+traverser(q"val x = 2")
+// Defn.Val: val x = 2
+// stop: x
+// Lit.Int: 2
+```
+
+There is no `.collect` equivalent for custom traversals. To collect a value,
+it's recommended to use `List.newBuilder[T]` for the type you are interested in
+and append values inside the `apply` method.
+
 ## Transform trees
+
+Scalameta includes utilities to transform trees for simple and advanced
+use-cases.
+
+> Transformed trees do not preserve comments and formatting details when
+> pretty-printed. Look into [Scalafix](https://scalacenter.github.io/scalafix/)
+> if you need to implement fine-grained refactorings that preserve comments and
+> formatting details.
 
 ### Simple transformations
 
+Use `.transform` to visit every tree node and transform interesting tree nodes.
+
+```scala
+println(
+  q"val x = 2".transform { case q"2" => q"42" }
+)
+// val x = 42
+```
+
+The contract of `.transform` is that it will recursively visit all tree nodes,
+including the transformed trees. Due to this behavior, a common mistake is to
+introduce infinite recursion in `.transform`
+
+```scala
+q"a + b".transform {
+  case name @ Term.Name("b") => q"function($name)"
+}.toString
+// [error] java.lang.StackOverflowError
+// at scala.meta.transversers.Api$XtensionCollectionLikeUI$transformer$2$.apply(Api.scala:10)
+// at scala.meta.transversers.Transformer.apply(Transformer.scala:4)
+```
+
+The best solution to fix this problem is to implement a custom transformer to
+gain fine-grained control over the recursion.
+
 ### Custom transformations
 
-<!-- You can parse source code from a string
-```scala mdoc:silent
-val programString = "a + b"
-val tree = programString.parse[Term].get
-```
-You can also parse source code from a file
-```scala mdoc
-import java.nio.file._
-val programFile = Files.createTempFile("scalameta", "program.scala")
-Files.write(programFile, "a + b".getBytes())
-val treeFromFile = programFile.parse[Term].get
-```
-Use `.traverse` to visit every tree node without collecting values, similarly to
-`.foreach`
-```scala mdoc
-tree.traverse {
-case node =>
-println(s"${node.productPrefix}: $node")
+Extend `Transformer` if you need to implement a custom tree transformation
+
+```scala
+val transformer = new Transformer {
+  override def apply(tree: Tree): Tree = tree match {
+    case name @ Term.Name("b") => q"function($name)"
+    case node => super.apply(node)
+  }
 }
 ```
-Use `.collect` to visit every tree node and collect a computed value for
-intersting tree nodes
-```scala mdoc
-tree.collect {
-case Term.Name(name) =>
-name
-}
-```
-Use `.transform` to change the shape of the tree
-```scala mdoc
-tree.transform {
-case Term.Name(name) =>
-Term.Name(name.toUpperCase)
-}.toString
-```
-The methods `traverse`, `collect` and `transform` don't allow you to customize
-the recursion of the tree traversal. For more fine-grained control you can
-implement custom `Traverser` and `Transformer` instances.
-A `Traverser` implements a `Tree => Unit` function
-```scala mdoc
-new Traverser {
-override def apply(tree: Tree): Unit = tree match {
-case infix: Term.ApplyInfix =>
-println(infix.op)
-case _ =>
-super.apply(tree)
-}
-}.apply(tree)
-```
-A `Transformer` implements a `Tree => Tree` function
-```scala mdoc
-new Transformer {
-override def apply(tree: Tree): Tree = tree match {
-case Term.Name(name) =>
-Term.Name(name.toUpperCase)
-case Term.ApplyInfix(lhs, op, targs, args) =>
-Term.ApplyInfix(
-this.apply(lhs).asInstanceOf[Term],
-op, targs, args
+
+By avoiding the call to `super.transform` in the first case, we prevent a stack
+overflow.
+
+```scala
+println(
+  transformer(q"a + b")
 )
-case _ =>
-super.apply(tree)
-}
-}.apply(tree).toString
+// a + function(b)
 ```
-Quasiquotes are a simple way to construct tree nodes
-```scala mdoc
-val quasiquote = q"a + b"
-quasiquote.collect { case Term.Name(name) => name }
-```
-Quasi-quotes expand at compile-time into direct calls to tree constructors. The
-quasi-quote above is equivalent to the manually written `Term.Apply(...)`
-expression below
-```scala mdoc
-val noQuasiquote = Term.ApplyInfix(Term.Name("a"), Term.Name("+"), List(), List(Term.Name("b")))
-noQuasiquote.toString
-```
-Trees use reference equality by default. This may seem counter intuitive at -->
 

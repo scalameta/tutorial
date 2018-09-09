@@ -103,22 +103,26 @@ const Block = props => (
 const Features = props => {
   const features = [
     {
-      title: "Compiled code examples",
-      content: "Make sure Scala code examples type-check and work as expected",
-      image: docUrl("assets/mdoc.png"),
+      title: "Syntactic API",
+      content:
+        "Parse, transform and pretty-print Scala source code with high-level APIs and out-of-the-box IDE support.",
+      image: docUrl("assets/syntactic-api.png"),
       imageAlign: "right"
     },
     {
-      title: "Fast",
-      content: "Get instant feedback as you write documentation",
-      image: docUrl("assets/docusaurus-live.gif"),
+      title: "Semantic API",
+      content: "Build developers tools that understand Scala symbols and types",
+      image: docUrl("assets/semantic-api.png"),
       imageAlign: "left"
     },
     {
-      title: "Simple publish",
+      title: "Established",
       content:
-        "Publish the Docusaurus website to GitHub pages with a familiar workflow",
-      image: docUrl("assets/publish.png"),
+        "Scalameta have over 100,000 unique module downloads a month, " +
+        "Scalameta quasiquotes have built-in support in IntelliJ, and " +
+        "Scalameta is actively developed and maintained by engineers at Twitter, " +
+        "the Scala Center and from the community.",
+      image: docUrl("assets/downloads.png"),
       imageAlign: "right"
     }
   ];

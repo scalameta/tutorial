@@ -33,7 +33,7 @@ object ScalametaDocs {
 
   def files = List(
     MarkdownFile(
-      title = "Quasiquotes",
+      title = "Quasiquotes Specification",
       id = "quasiquotes",
       sidebarLabel = "Quasiquotes",
       url = s"$root/notes/quasiquotes.md"

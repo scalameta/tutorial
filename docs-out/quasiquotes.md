@@ -1,6 +1,6 @@
 ---
 id: quasiquotes
-title: Quasiquotes
+title: Quasiquotes Specification
 sidebar_label: Quasiquotes
 ---
 Below you can find a comprehensive map between Scala's language constructs and
