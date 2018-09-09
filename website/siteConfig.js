@@ -39,7 +39,7 @@ const siteConfig = {
     secondaryColor: "#181A1F"
   },
 
-  customDocsPath: "website/target/docs",
+  customDocsPath: "docs-out",
 
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
   copyright: `Copyright © ${new Date().getFullYear()} Scalameta`,

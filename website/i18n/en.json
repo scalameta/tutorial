@@ -4,10 +4,9 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Library to read, analyze, transform and generate Scala programs",
-    "guide": "Scalameta Guide",
-    "Guide": "Guide",
     "scastie": "Scastie playground",
     "trees": "Scalameta Guide",
+    "Guide": "Guide",
     "Docs": "Docs",
     "GitHub": "GitHub",
     "Overview": "Overview"

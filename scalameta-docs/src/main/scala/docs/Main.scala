@@ -6,7 +6,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     val settings = mdoc
       .MainSettings()
-      .withOut(Paths.get("website", "target", "docs"))
+      .withOut(Paths.get("docs-out"))
       .withSiteVariables(
         Map(
           "VERSION" -> BuildInfo.scalameta
