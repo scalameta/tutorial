@@ -8,10 +8,10 @@ const siteConfig = {
   title: "Scalameta",
   tagline: "Library to read, analyze, transform and generate Scala programs",
   url: "https://scalameta.org",
-  baseUrl: "/",
+  baseUrl: "/scalameta/",
 
   // Used for publishing and more
-  projectName: "scalameta.github.io",
+  projectName: "scalameta",
   organizationName: "olafurpg",
 
   // algolia: {
@@ -21,22 +21,8 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    { doc: "trees", label: "Docs" },
-    {
-      href: "http://scalameta.org/scalafmt",
-      label: "Scalafmt",
-      external: true
-    },
-    {
-      href: "http://scalacenter.github.io/scalafix",
-      label: "Scalafix",
-      external: true
-    },
-    {
-      href: "http://scalameta.org/metals",
-      label: "Metals",
-      external: true
-    },
+    { doc: "trees/guide", label: "Docs" },
+    { doc: "semanticdb/guide", label: "SemanticDB" },
     { href: repoUrl, label: "GitHub", external: true }
   ],
 

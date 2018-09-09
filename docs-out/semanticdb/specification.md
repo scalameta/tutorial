@@ -1,5 +1,5 @@
 ---
-id: semanticdb
+id: specification
 title: SemanticDB Specification
 sidebar_label: Specification
 ---

@@ -30,13 +30,19 @@ class Footer extends React.Component {
           )}
           <div>
             <h5>Docs</h5>
-            <a href={` ${this.props.config.baseUrl}docs/trees.html`}>
+            <a href={` ${this.props.config.baseUrl}docs/trees/guide.html`}>
               Trees Guide
             </a>
-            <a href={` ${this.props.config.baseUrl}docs/semanticdb.html`}>
+            <a
+              href={` ${this.props.config.baseUrl}docs/trees/quasiquotes.html`}
+            >
               Quasiquotes
             </a>
-            <a href={` ${this.props.config.baseUrl}docs/semanticdb.html`}>
+            <a
+              href={` ${
+                this.props.config.baseUrl
+              }docs/semanticdb/specification.html`}
+            >
               SemanticDB
             </a>
           </div>

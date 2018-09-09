@@ -5,12 +5,14 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 import scala.meta.internal.io.InputStreamIO
 import scala.util.control.NonFatal
 
 case class MarkdownFile(
     title: String,
     id: String,
+    filename: String,
     sidebarLabel: String,
     url: String,
     postProcess: String => String = identity
@@ -35,12 +37,29 @@ object ScalametaDocs {
     MarkdownFile(
       title = "Quasiquotes Specification",
       id = "quasiquotes",
+      filename = "trees/quasiquotes.md",
       sidebarLabel = "Quasiquotes",
       url = s"$root/notes/quasiquotes.md"
     ),
     MarkdownFile(
+      title = "SemanticDB Guide",
+      id = "guide",
+      filename = "semanticdb/guide.md",
+      sidebarLabel = "Guide",
+      url = s"$root/semanticdb/semanticdb3/guide.md",
+      postProcess = { guide =>
+        val toc =
+          Pattern.compile("- \\[Installation.*#metals\\)", Pattern.DOTALL)
+        val header = Pattern.compile("^# SemanticDB.*")
+        List(toc, header).foldLeft(guide) {
+          case (g, p) => p.matcher(g).replaceFirst("")
+        }
+      }
+    ),
+    MarkdownFile(
       title = "SemanticDB Specification",
-      id = "semanticdb",
+      id = "specification",
+      filename = "semanticdb/specification.md",
       sidebarLabel = "Specification",
       url = s"$root/semanticdb/semanticdb3/semanticdb3.md",
       postProcess = { spec =>
@@ -60,7 +79,7 @@ object ScalametaDocs {
   private def downloadFile(out: Path, md: MarkdownFile): Unit = {
     try {
       val uri = new URL(md.url)
-      val filename = Paths.get(md.id + ".md")
+      val filename = Paths.get(md.filename)
       val file = out.resolve(filename)
       val in = uri.openStream()
       val bytes =
@@ -74,6 +93,7 @@ object ScalametaDocs {
            |sidebar_label: ${md.sidebarLabel}
            |---
            |""".stripMargin
+      Files.createDirectories(file.getParent)
       Files.write(
         file,
         frontMatter.getBytes(),
@@ -87,7 +107,7 @@ object ScalametaDocs {
       )
     } catch {
       case NonFatal(e) =>
-        println(e.getMessage)
+        println("error: " + e.getMessage)
     }
 
   }
