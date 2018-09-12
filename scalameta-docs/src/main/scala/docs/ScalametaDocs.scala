@@ -30,8 +30,20 @@ object ScalametaDocs {
 
   // TODO: https://github.com/scalameta/scalameta/pull/1764
   // val root = "https://raw.githubusercontent.com/scalameta/scalameta/master"
+  val orgRepo = "olafurpg/scalameta"
+  val branch = "master"
   val root =
-    "https://raw.githubusercontent.com/olafurpg/scalameta/d0563939390908239675810770f60799bd17b543"
+    s"https://raw.githubusercontent.com/$orgRepo/$branch"
+  val repoPath =
+    s"https://github.com/$orgRepo/blob/$branch"
+
+  def applyReplacements(
+      string: String,
+      replacements: (Pattern, String)*): String =
+    replacements.iterator.foldLeft(string) {
+      case (nextString, (nextPattern, replacement)) =>
+        nextPattern.matcher(nextString).replaceAll(replacement)
+    }
 
   def files = List(
     MarkdownFile(
@@ -49,11 +61,19 @@ object ScalametaDocs {
       url = s"$root/semanticdb/semanticdb3/guide.md",
       postProcess = { guide =>
         val toc =
-          Pattern.compile("- \\[Installation.*#metals\\)", Pattern.DOTALL)
+          Pattern.compile(
+            "- \\[Installation.*\\  \\* \\[Metals\\]\\(#metals\\)",
+            Pattern.DOTALL)
         val header = Pattern.compile("^# SemanticDB.*")
-        List(toc, header).foldLeft(guide) {
-          case (g, p) => p.matcher(g).replaceFirst("")
-        }
+        val semanticdb3 = Pattern.compile("\\(semanticdb3.md\\)")
+        val semanticdbProto = Pattern.compile("\\(semanticdb.proto\\)")
+        applyReplacements(
+          guide,
+          toc -> "",
+          header -> "",
+          semanticdb3 -> "(specification.md)",
+          semanticdbProto -> s"($repoPath/semanticdb/semanticdb/semanticdb.proto)"
+        )
       }
     ),
     MarkdownFile(

@@ -14,9 +14,163 @@ In this document, we introduce practical aspects of working with SemanticDB. We
 describe the tools that can be used to produce SemanticDB payloads, the tools
 can be used to consume SemanticDB payloads and useful tips & tricks for working
 with SemanticDB. If you're looking for a comprehensive reference of SemanticDB
-features, check out [the specification](semanticdb3.md).
+features, check out [the specification](specification.md).
 
- don't need to know about compiler
+
+
+## Installation
+
+This guide covers several non-standard command-line tools: `metac`, `metacp`,
+`metap`. To install these tools on your computer, you can do the following:
+
+1. Install the `coursier` command-line tool by following the
+[instructions here](https://github.com/coursier/coursier/#command-line).
+Make sure you are using the latest coursier version (1.1.0-M6 or newer).
+2. Add the following aliases to your shell:
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12)
+
+```bash
+alias metac="coursier launch org.scalameta:metac_2.12.6:4.0.0-M10 -- -cp $(coursier fetch -p org.scala-lang:scala-library:2.12.6)"
+alias metacp='coursier launch org.scalameta:metacp_2.12:4.0.0-M6 -- --dependency-classpath $(echo $JAVA_HOME/jre/lib/rt.jar):$(coursier fetch org.scala-lang:scala-library:2.12.4 -p)'
+alias metap="coursier launch org.scalameta:metap_2.11:4.0.0-M10 --"
+```
+NOTE. These installation instructions are for the current unstable `master` branch,
+it's recommended to view this document at the latest git tag instead of `master`.
+
+(Optional) Instead of running `metap` on the JVM, you can build a native binary
+on macOS or Linux. Thanks to [Scala Native](https://scala-native.readthedocs.io/en/latest/),
+native Metap works much faster than regular Metap (on a personal laptop of
+one of the authors of this guide, a simple Metap invocation takes 500+ ms on JVM
+and 10 ms on native).
+
+1. Install the [`coursier`](https://github.com/coursier/coursier/#command-line-1) command-line
+   version 1.1.0-M6 or later.
+1. Setup the [development environment for Scala Native](http://www.scala-native.org/en/latest/user/setup.html#installing-clang-and-runtime-dependencies).
+1. Link a native `metap` binary.
+
+```bash
+coursier bootstrap org.scalameta:metap_native0.3_2.11:4.0.0-M6 -o metap -f --native --main scala.meta.cli.Metap
+```
+
+## Example
+
+Let's generate SemanticDB for a simple Scala program. (At the moment,
+our SemanticDB producers provide full Scala support and partial Java support.
+Theoretically, [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto)
+can accommodate other languages as well, but we haven't attempted to do that yet).
+
+```scala
+object Test {
+  def main(args: Array[String]): Unit = {
+    println("hello world")
+  }
+}
+```
+
+In order to obtain a SemanticDB corresponding to this program, let's use
+the Metac command-line tool. For more information on other tools that can
+produce SemanticDB, [see below](#producing-semanticdb).
+
+```
+$ metac Test.scala
+```
+
+`metac` is a thin wrapper over the Scala compiler. It supports the same
+command-line arguments as `scalac` supports, but instead of generating .class
+files it generates .semanticdb files. Newer versions of Metac may also generate
+an accompanying .semanticidx file, but it's an experimental feature, so we won't
+won't be discussing it in this document.
+
+```
+$ tree
+.
+├── META-INF
+│   └── semanticdb
+│       └── Test.scala.semanticdb
+└── Test.scala
+```
+
+If we take a look inside Test.scala.semanticdb, we'll see a weird mix of
+legible-looking text and special characters. That's because .semanticdb
+files store protobuf payloads.
+
+```
+$ xxd META-INF/semanticdb/Test.scala.semanticdb
+00000000: 0aaa 0408 0412 0a54 6573 742e 7363 616c  .......Test.scal
+00000010: 612a 580a 1a5f 656d 7074 795f 2f54 6573  a*X.._empty_/Tes
+00000020: 742e 6d61 696e 2829 2e28 6172 6773 2918  t.main().(args).
+00000030: 082a 0461 7267 7380 0101 8a01 2e22 2c0a  .*.args......",.
+00000040: 2a12 2812 0c73 6361 6c61 2f41 7272 6179  *.(..scala/Array
+00000050: 231a 1812 1612 1473 6361 6c61 2f50 7265  #......scala/Pre
+00000060: 6465 662e 5374 7269 6e67 232a 530a 0d5f  def.String#*S.._
+00000070: 656d 7074 795f 2f54 6573 742e 180a 2008  empty_/Test... .
+00000080: 2a04 5465 7374 8001 018a 012f 0a2d 0a00  *.Test...../.-..
+00000090: 1211 120f 120d 7363 616c 612f 416e 7952  ......scala/AnyR
+000000a0: 6566 2322 160a 145f 656d 7074 795f 2f54  ef#"..._empty_/T
+000000b0: 6573 742e 6d61 696e 2829 2e92 0102 3a00  est.main()....:.
+000000c0: 2a5c 0a14 5f65 6d70 7479 5f2f 5465 7374  *\.._empty_/Test
+...
+```
+
+In order to make sense of .semanticdb files, we can use the Metap
+command-line tool. For more information on other tools that can
+consume SemanticDB, [see below](#consuming-semanticdb).
+
+```
+$ metap .
+Test.scala
+----------
+
+Summary:
+Schema => SemanticDB v4
+Uri => Test.scala
+Text => empty
+Language => Scala
+Symbols => 3 entries
+Occurrences => 7 entries
+
+Symbols:
+_empty_/Test. => final object Test extends AnyRef { +1 decls }
+_empty_/Test.main(). => method main(args: Array[String]): Unit
+_empty_/Test.main().(args) => param args: Array[String]
+
+Occurrences:
+[0:7..0:11) <= _empty_/Test.
+[1:6..1:10) <= _empty_/Test.main().
+[1:11..1:15) <= _empty_/Test.main().(args)
+[1:17..1:22) => scala/Array#
+[1:23..1:29) => scala/Predef.String#
+[1:33..1:37) => scala/Unit#
+[2:4..2:11) => scala/Predef.println(+1).
+```
+
+Metap prettyprints various parts of the SemanticDB payload in correspondence
+with [the SemanticDB specification](specification.md). Here are the most
+important parts:
+  * `Uri` stores the URI of the source file relative to
+    the directory where the SemanticDB producer was invoked.
+  * `Symbols` contains information about definitions in the source
+    file, including modifiers, signatures, etc.
+
+    For example, `_empty_/Test.main(). => method main: (args: Array[String]): Unit`
+    says that `main` is a method with one parameter of type `Array[String]`.
+  * `Occurrences` contains a list of identifiers from the source file with
+    their line/column-based positions and unique identifiers pointing to
+    corresponding definitions resolved by the compiler.
+
+    For example, `[2:4..2:11): println => scala/Predef.println(+1).` says that
+    the identifier `println` on line 3 (zero-based numbering scheme!) refers
+    to the second overload of `println` from `scala/Predef`.
+
+## What is SemanticDB good for?
+
+SemanticDB decouples producers and consumers of semantic information about
+programs and establishes [a rigorous specification](specification.md) of the
+interchange format.
+
+Thanks to that, SemanticDB-based tools like [Scalafix](#scalafix),
+[Metadoc](#metadoc) and [Metals](#metals) don't need to know about compiler
 internals and can work with any compiler that supports SemanticDB.
 This demonstrably improves developer experience, portability and scalability.
 Next-generation semantic tools at Twitter are based on SemanticDB.
@@ -325,6 +479,54 @@ metacp [options] <classpath>
       <code>--no-par</code>
     </td>
   </tr>
+  <tr>
+    <td><code>--verbose</code></td>
+    <td></td>
+    <td>
+      Toggles periodic progress printouts that help gauge Metacp's progress
+      for long-running invocations.
+    </td>
+    <td>
+      <code></code>
+    </td>
+  </tr>
+  <tr>
+    <td><code>--usejavacp</code></td>
+    <td></td>
+    <td>
+      Attempts to autodetect the locations of JDK libraries and the Scala library
+      based on the Metacp's classloader, so that these libraries don't have to be
+      specified in <code>--dependency-classpath</code>.
+    </td>
+    <td>
+      <code></code>
+    </td>
+  </tr>
+  <tr>
+    <td><code>--stub-broken-signatures</code></td>
+    <td></td>
+    <td>
+      Catches exceptions that arise during generation of `Signature` payloads
+      and stubs these payloads with `NoSignature` values instead of failing Metacp
+      invocations. May be useful for dealing with missing symbol errors arising
+      from missing optional dependencies.
+    </td>
+    <td>
+      <code></code>
+    </td>
+  </tr>
+  <tr>
+    <td><code>--log-broken-signatures</code></td>
+    <td></td>
+    <td>
+      Logs exceptions that arise during generation of `Signature` payloads.
+      May be useful in combination with <code>--stub-broken-signatures</code>
+      to have a sense of what exactly is being stubbed.
+    </td>
+    <td>
+      <code></code>
+    </td>
+  </tr>
 </table>
 
 Metacp understands classfiles produced by both the Scala and Java compiler.
@@ -335,7 +537,7 @@ Because Metacp only works with classfiles and not sources, SemanticDB files
 that it produces only contain the `Symbols` section. Neither `Occurrences`
 nor `Diagnostics` sections are present, because they both require source
 information. For more information about the SemanticDB format, check out
-[the specification](semanticdb3.md).
+[the specification](specification.md).
 
 As an example of using Metacp, let's compile Test.scala from
 [Example](#example) using Scalac and then convert
@@ -389,7 +591,7 @@ _empty_/Test.main().(args) => param args: Array[String]
 ### Scala bindings
 
 The `semanticdb` library contains [ScalaPB](https://scalapb.github.io/)
-bindings to [the SemanticDB protobuf schema](semanticdb.proto). Using this
+bindings to [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto). Using this
 library, one can model SemanticDB entities as Scala case classes and
 serialize/deserialize them into bytes and streams.
 
@@ -476,7 +678,7 @@ For an example of using Metap, check out [Example](#example).
 
 The Protocol Compiler tool (`protoc`) can inspect protobuf payloads in
 `--decode` (takes a schema) and `--decode_raw` (doesn't need a schema) modes.
-For the reference, here's [the SemanticDB protobuf schema](semanticdb.proto).
+For the reference, here's [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto).
 
 ```
 $ tree

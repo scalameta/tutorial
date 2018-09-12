@@ -14,16 +14,8 @@ const GridBlock = CompLibrary.GridBlock;
 
 const siteConfig = require(process.cwd() + "/siteConfig.js");
 
-function imgUrl(img) {
-  return siteConfig.baseUrl + "img/" + img;
-}
-
 function docUrl(doc, language) {
   return siteConfig.baseUrl + "docs/" + (language ? language + "/" : "") + doc;
-}
-
-function pageUrl(page, language) {
-  return siteConfig.baseUrl + (language ? language + "/" : "") + page;
 }
 
 class Button extends React.Component {
@@ -117,10 +109,10 @@ const Features = props => {
     {
       title: "Established",
       content:
-        "Scalameta have over 100,000 unique module downloads a month, " +
+        "Scalameta has over 100,000 unique module downloads a month, " +
         "Scalameta quasiquotes have built-in support in IntelliJ, and " +
         "Scalameta is actively developed and maintained by engineers at Twitter, " +
-        "the Scala Center and from the community.",
+        "the Scala Center and members from the community.",
       image: docUrl("assets/established.png"),
       imageAlign: "right"
     }
