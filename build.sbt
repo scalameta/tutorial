@@ -1,104 +1,34 @@
-import Dependencies._
+def scalameta = "4.0.0-RC1"
+def scalafix = "0.6.0-M20"
+def scala212 = "2.12.6"
 
-lazy val allSettings = Seq(
-  organization := "org.scalameta",
-  scalaVersion := scala212,
-  libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.1" % Test
-  ),
-  resolvers += Resolver.sonatypeRepo("releases"),
-  updateOptions := updateOptions.value.withCachedResolution(true)
+inThisBuild(
+  List(
+    organization := "org.scalameta",
+    scalaVersion := scala212,
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.0.1" % Test
+    ),
+    resolvers += Resolver.sonatypeRepo("releases")
+  )
 )
-
-allSettings
 
 name := "scalameta-tutorial"
+skip in publish := true
 
-lazy val library = project.settings(
-  allSettings,
-  libraryDependencies += scalameta
-)
-
-lazy val readme = scalatex
-  .ScalatexReadme(
-    projectId = {
-      sys.props("scala.color") = "false" // remove color from repl output
-      "readme"
-    },
-    wd = file(""),
-    url = "https://github.com/scalameta/tutorial/tree/master",
-    source = "Readme"
-  )
+lazy val docs = project
+  .in(file("scalameta-docs"))
   .settings(
-    allSettings,
-    buildInfoSettings,
-    watchSources ++= {
-      val compileTarget = (target in Compile).value
-      for {
-        f <- (scalatex.SbtPlugin.scalatexDirectory in Compile).value
-          .**("*.scalatex")
-          .get
-        if f.relativeTo(compileTarget).isEmpty
-      } yield f
-    },
-    sourceGenerators.in(Compile) ~= (_.init), // remove scalatex.Main
-    mainClass.in(Compile) := Some("scalaworld.Readme"),
-    siteSourceDirectory := target.value / "scalatex",
-    test := run.in(Compile).toTask(" --validate-links").value,
-    libraryDependencies += scalameta,
-    libraryDependencies += contrib,
-    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-    publish := {
-      ghpagesPushSite
-        .dependsOn(run.in(Compile).toTask(""))
-        .value
-    },
-    excludeFilter.in(ghpagesCleanSite) := new FileFilter {
-      // Don't remove: 1) CNAME, 2) presentation slides.
-      def accept(f: File) =
-        (ghpagesRepository.value / "CNAME").getCanonicalPath == f.getCanonicalPath ||
-          f.getName.endsWith(".pdf")
-    },
-    ghpagesBranch := "master",
-    git.remoteRepo := "git@github.com:scalameta/scalameta.github.com.git",
-    libraryDependencies ++= Seq(
-      "org.pegdown" % "pegdown" % "1.6.0"
+    buildInfoKeys := Seq[BuildInfoKey](
+      "scalameta" -> scalameta
+    ),
+    buildInfoPackage := "docs",
+    moduleName := "scalameta-docs",
+    mainClass.in(Compile) := Some("docs.Main"),
+    libraryDependencies ++= List(
+      "com.geirsson" % "mdoc" % "0.4.5" cross CrossVersion.full,
+      "org.scalameta" %% "testkit" % scalameta,
+      "ch.epfl.scala" %% "scalafix-core" % scalafix
     )
   )
-  .enablePlugins(
-    GhpagesPlugin,
-    BuildInfoPlugin
-  )
-
-// Macro setting is any module that has macros, or manipulates meta trees
-lazy val macroSettings = Seq(
-  libraryDependencies += scalameta1,
-  addCompilerPlugin(paradise),
-  scalacOptions += "-Xplugin-require:macroparadise"
-)
-
-lazy val macros = project.settings(
-  allSettings,
-  macroSettings,
-  // only needed for @generic demo.
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += testkit1 % Test
-)
-
-lazy val buildInfoSettings: Seq[Def.Setting[_]] = Seq(
-  buildInfoKeys := Seq[BuildInfoKey](
-    name,
-    version,
-    "baseDirectory" -> baseDirectory.in(ThisBuild).value,
-    "scalameta1" -> MetaVersion1,
-    "scalameta" -> MetaVersion,
-    "paradise" -> ParadiseVersion,
-    scalaVersion,
-    "resources" -> resourceDirectories.in(Compile).value,
-    "scala211" -> scala211,
-    "scala212" -> scala212,
-    "siteOutput" -> siteSourceDirectory.value,
-    sbtVersion
-  ),
-  buildInfoPackage := "scala.meta.tutorial"
-)
+  .enablePlugins(BuildInfoPlugin, DocusaurusPlugin)
