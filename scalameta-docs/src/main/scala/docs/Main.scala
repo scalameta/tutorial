@@ -3,7 +3,6 @@ package docs
 import java.nio.file.Paths
 
 object Main {
-
   def main(args: Array[String]): Unit = {
     val out = Paths.get("docs-out")
     ScalametaDocs.download(out)
@@ -15,11 +14,7 @@ object Main {
           "VERSION" -> BuildInfo.scalameta
         )
       )
-      .withStringModifiers(
-        List(
-          new mdoc.modifiers.ScastieModifier("light")
-        )
-      )
+      .withReportRelativePaths(!args.contains("-w"))
       .withArgs(args.toList)
     val exit = mdoc.Main.process(settings)
     if (exit != 0) sys.exit(exit)

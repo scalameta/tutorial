@@ -61,7 +61,7 @@ Syntax trees are a representation of source code that makes it easier to
 programmatically analyze programs. Scalameta has syntax trees that represent
 Scala programs.
 
-![](assets/img/tree.svg)
+![](assets/tree.svg)
 
 Scalameta trees are **lossless**, meaning that they represent Scala programs in
 sufficient to go from text to trees and vice-versa. Lossless syntax trees are
