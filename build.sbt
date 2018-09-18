@@ -1,4 +1,4 @@
-def scalameta = "4.0.0-M11"
+def scalameta = "4.0.0-RC1"
 def scalafix = "0.6.0-M20"
 def scala212 = "2.12.6"
 
@@ -26,7 +26,7 @@ lazy val docs = project
     moduleName := "scalameta-docs",
     mainClass.in(Compile) := Some("docs.Main"),
     libraryDependencies ++= List(
-      "com.geirsson" % "mdoc" % "0.4.3" cross CrossVersion.full,
+      "com.geirsson" % "mdoc" % "0.4.5" cross CrossVersion.full,
       "org.scalameta" %% "testkit" % scalameta,
       "ch.epfl.scala" %% "scalafix-core" % scalafix
     )

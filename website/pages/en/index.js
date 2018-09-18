@@ -96,7 +96,7 @@ const Features = props => {
     {
       title: "Syntactic API",
       content:
-        "Parse, transform and pretty-print Scala source code with high-level APIs and out-of-the-box IDE support.",
+        "Parse, transform and prettyprint Scala source code with high-level APIs and out-of-the-box IDE support.",
       image: docUrl("assets/syntactic-api.png"),
       imageAlign: "right"
     },
@@ -107,7 +107,7 @@ const Features = props => {
       imageAlign: "left"
     },
     {
-      title: "Established",
+      title: "Industrial adoption",
       content:
         "Scalameta has over 100,000 unique module downloads a month, " +
         "Scalameta quasiquotes have built-in support in IntelliJ, and " +

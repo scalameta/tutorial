@@ -1,21 +1,18 @@
 ---
 id: guide
 sidebar_label: Guide
-title: Trees Guide
+title: Tree Guide
 ---
 
 A core functionality of Scalameta is syntax trees, which enable you to read,
-analyze, transform and generate Scala programs at a high level of abstraction.
-In this guide, you will learn how to
+analyze, transform and generate Scala programs at a level of abstraction. In
+this guide, you will learn how to
 
 - parse source code into syntax trees
 - construct new syntax trees
 - pattern match syntax trees
 - traverse syntax trees
 - transform syntax trees
-
-This guide assumes you have basic knowledge of programming with Scala. Let's get
-started!
 
 ## Installation
 
@@ -26,10 +23,10 @@ Scala 2.11, Scala 2.12, Scala.js and Scala Native.
 
 ```scala
 // build.sbt
-libraryDependencies += "org.scalameta" %% "scalameta" % "4.0.0-M11"
+libraryDependencies += "org.scalameta" %% "scalameta" % "4.0.0-RC1"
 
 // For Scala.js, Scala Native
-libraryDependencies += "org.scalameta" %%% "scalameta" % "4.0.0-M11"
+libraryDependencies += "org.scalameta" %%% "scalameta" % "4.0.0-RC1"
 ```
 
 
@@ -48,7 +45,7 @@ A great way to experiment with Scalameta is to use the
 
 ```scala
 // Ammonite REPL
-import $ivy.`org.scalameta::scalameta:4.0.0-M11`, scala.meta._
+import $ivy.`org.scalameta::scalameta:4.0.0-RC1`, scala.meta._
 ```
 
 ### Scastie
@@ -64,10 +61,9 @@ Scala programs.
 ![](assets/img/tree.svg)
 
 Scalameta trees are **lossless**, meaning that they represent Scala programs in
-sufficient details to go from text to trees and vice-versa without significant
-loss of details. Lossless syntax trees are great for fine-grained analysis of
-source code, which is useful for a range of applications including formatting,
-refactoring, linting and documentation tools
+sufficient to go from text to trees and vice-versa. Lossless syntax trees are
+great for fine-grained analysis of source code, which is useful for a range of
+applications including formatting, refactoring, linting and documentation tools
 
 ## Parse trees
 
@@ -106,7 +102,7 @@ println(
 ```
 
 To make error messages more helpful it's recommended to always use virtual files
-when possible.
+when possible, as explained below.
 
 ### From files
 
@@ -259,14 +255,14 @@ println("function(argument)".parse[Stat].get.structure)
 // Term.Apply(Term.Name("function"), List(Term.Name("argument")))
 ```
 
-The output of structure is safe to copy-past into programs.
+The output of structure is safe to copy-paste into programs.
 
 Another good way to learn the structure of trees is
 [AST Explorer](http://astexplorer.net/#/gist/ec56167ffafb20cbd8d68f24a37043a9/97da19c8212688ceb232708b67228e3839dadc7c).
 
 ### With quasiquotes
 
-Quasiquotes are macro interpolators that expand at compile-time into normal
+Quasiquotes are string interpolators that expand at compile-time into normal
 constructor calls
 
 ```scala
@@ -305,25 +301,38 @@ println(q"function  (    argument   ) // comment")
 // function(argument)
 ```
 
-Quasiquotes can be composed together with dollar splices `..$`
+Quasiquotes can be composed together like normal string interpolators with
+dollar splices `$`
+
+```scala
+val left = q"Left()"
+// left: Term.Apply = Term.Apply(Term.Name("Left"), List())
+val right = q"Right()"
+// right: Term.Apply = Term.Apply(Term.Name("Right"), List())
+println(q"$left + $right")
+// Left() + Right()
+```
+
+A list of trees can be inserted into a quasiquote with double dots `..$`
 
 ```scala
 val arguments = List(q"arg1", q"arg2")
 // arguments: List[Term.Name] = List(Term.Name("arg1"), Term.Name("arg2"))
-
 println(q"function(..$arguments)")
 // function(arg1, arg2)
 ```
 
-To construct curried argument lists use triple dot splices `...$`
+A curried argument argument lists can be inserted into a quasiquotes with triple
+dots `...$`
 
 ```scala
 val arguments2 = List(q"arg3", q"arg4")
 // arguments2: List[Term.Name] = List(Term.Name("arg3"), Term.Name("arg4"))
-
 val allArguments = List(arguments, arguments2)
-// allArguments: List[List[Term.Name]] = List(List(Term.Name("arg1"), Term.Name("arg2")), List(Term.Name("arg3"), Term.Name("arg4")))
-
+// allArguments: List[List[Term.Name]] = List(
+//   List(Term.Name("arg1"), Term.Name("arg2")),
+//   List(Term.Name("arg3"), Term.Name("arg4"))
+// )
 println(q"function(...$allArguments)")
 // function(arg1, arg2)(arg3, arg4)
 ```
@@ -347,7 +356,7 @@ q"function[..$typeArguments]()"
 // 	at org.scalameta.invariants.InvariantFailedException$.raise(Exceptions.scala:15)
 // 	at scala.meta.Term$ApplyType$.internal$49(Trees.scala:82)
 // 	at scala.meta.Term$ApplyType$.apply(Trees.scala:82)
-// 	at repl.Session.$anonfun$app$39(/Users/ollie/dev/scalameta-tutorial/docs/trees/guide.md:195)
+// 	at repl.Session.$anonfun$app$42(/Users/ollie/dev/scalameta-tutorial/docs/trees/guide.md:207)
 ```
 
 The quasiquote above is equivalent to calling the normal constructor
@@ -396,7 +405,7 @@ There is no need to use `Seq(arg1, arg2)` or `arg1 +: arg2 +: Nil`.
 ### With quasiquotes
 
 Quasiquotes expand at compile-time and work the same way in pattern position as
-in term position
+in term position.
 
 ```scala
 Term.Apply(
@@ -423,15 +432,36 @@ Use triple dollar splices `...$` to extract curried argument lists
 // 2 List(List(arg1, arg2), List(arg3, arg4))
 ```
 
+> Pattern matching with quasiquotes is generally discouraged because it's easy
+> to write patterns that result in unintended match errors.
+
+```scala
+q"final val x = 2" match {
+  case q"val x = 2" =>
+}
+// scala.MatchError: final val x = 2 (of class scala.meta.Defn$Val$DefnValImpl)
+// 	at repl.Session.$anonfun$app$47(/Users/ollie/dev/scalameta-tutorial/docs/trees/guide.md:252)
+```
+
+To fix this pattern, we specify that the `final` modifier should be ignored
+using `$_`
+
+```scala
+q"final val x = 2" match {
+  case q"$_ val x = 2" => println("OK")
+}
+// OK
+```
+
 ## Compare trees for equality
 
 Scalameta trees use reference equality by default, which may result in
-surprising behavior for beginners. A common mistake is to use `==` between
-parsed syntax trees and quasiquotes
+surprising behavior. A common mistake is to use `==` between parsed syntax trees
+and quasiquotes
 
 ```scala
 "true".parse[Term].get == q"true"
-// res24: Boolean = false
+// res26: Boolean = false
 ```
 
 Comparing trees by `==` is the same as comparing them with `eq`. Even identical
@@ -439,7 +469,7 @@ quasiquotes produce different references
 
 ```scala
 q"true" == q"true"
-// res25: Boolean = false
+// res27: Boolean = false
 ```
 
 Equality checks with `==` will only return true when the reference is the same.j
@@ -447,7 +477,7 @@ Equality checks with `==` will only return true when the reference is the same.j
 ```scala
 { val treeReference = q"true"
   treeReference == treeReference }
-// res26: Boolean = true
+// res28: Boolean = true
 ```
 
 The idiomatic way to compare trees for structural equality is to use pattern
@@ -463,7 +493,7 @@ can use `.structure`
 
 ```scala
 q"true".structure == q"true".structure
-// res28: Boolean = true
+// res30: Boolean = true
 ```
 
 The `.structure` method produces large strings for large programs, which may
@@ -472,9 +502,8 @@ efficient `isEqual` helper method to compare trees structurally.
 
 ```scala
 import scala.meta.contrib._
-
 q"true".isEqual(q"true")
-// res29: Boolean = true
+// res31: Boolean = true
 ```
 
 ## Traverse trees
@@ -507,7 +536,12 @@ performing a side-effect
 q"val x = 2".collect {
   case node => node.productPrefix -> node.toString
 }
-// res31: List[(String, String)] = List(("Defn.Val", "val x = 2"), ("Pat.Var", "x"), ("Term.Name", "x"), ("Lit.Int", "2"))
+// res33: List[(String, String)] = List(
+//   ("Defn.Val", "val x = 2"),
+//   ("Pat.Var", "x"),
+//   ("Term.Name", "x"),
+//   ("Lit.Int", "2")
+// )
 ```
 
 The methods `.traverse` and `.collect` don't support customizing the recursion.

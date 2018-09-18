@@ -22,6 +22,6 @@ object Main {
       )
       .withArgs(args.toList)
     val exit = mdoc.Main.process(settings)
-    sys.exit(exit)
+    if (exit != 0) sys.exit(exit)
   }
 }

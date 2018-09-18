@@ -1,21 +1,18 @@
 ---
 id: guide
 sidebar_label: Guide
-title: Trees Guide
+title: Tree Guide
 ---
 
 A core functionality of Scalameta is syntax trees, which enable you to read,
-analyze, transform and generate Scala programs at a high level of abstraction.
-In this guide, you will learn how to
+analyze, transform and generate Scala programs at a level of abstraction. In
+this guide, you will learn how to
 
 - parse source code into syntax trees
 - construct new syntax trees
 - pattern match syntax trees
 - traverse syntax trees
 - transform syntax trees
-
-This guide assumes you have basic knowledge of programming with Scala. Let's get
-started!
 
 ## Installation
 
@@ -67,10 +64,9 @@ Scala programs.
 ![](assets/img/tree.svg)
 
 Scalameta trees are **lossless**, meaning that they represent Scala programs in
-sufficient details to go from text to trees and vice-versa without significant
-loss of details. Lossless syntax trees are great for fine-grained analysis of
-source code, which is useful for a range of applications including formatting,
-refactoring, linting and documentation tools
+sufficient to go from text to trees and vice-versa. Lossless syntax trees are
+great for fine-grained analysis of source code, which is useful for a range of
+applications including formatting, refactoring, linting and documentation tools
 
 ## Parse trees
 
@@ -105,7 +101,7 @@ println(
 ```
 
 To make error messages more helpful it's recommended to always use virtual files
-when possible.
+when possible, as explained below.
 
 ### From files
 
@@ -233,14 +229,14 @@ To learn tree node names you can use `.structure` on existing tree nodes
 println("function(argument)".parse[Stat].get.structure)
 ```
 
-The output of structure is safe to copy-past into programs.
+The output of structure is safe to copy-paste into programs.
 
 Another good way to learn the structure of trees is
 [AST Explorer](http://astexplorer.net/#/gist/ec56167ffafb20cbd8d68f24a37043a9/97da19c8212688ceb232708b67228e3839dadc7c).
 
 ### With quasiquotes
 
-Quasiquotes are macro interpolators that expand at compile-time into normal
+Quasiquotes are string interpolators that expand at compile-time into normal
 constructor calls
 
 ```scala mdoc
@@ -267,14 +263,24 @@ println(
 println(q"function  (    argument   ) // comment")
 ```
 
-Quasiquotes can be composed together with dollar splices `..$`
+Quasiquotes can be composed together like normal string interpolators with
+dollar splices `$`
+
+```scala mdoc
+val left = q"Left()"
+val right = q"Right()"
+println(q"$left + $right")
+```
+
+A list of trees can be inserted into a quasiquote with double dots `..$`
 
 ```scala mdoc
 val arguments = List(q"arg1", q"arg2")
 println(q"function(..$arguments)")
 ```
 
-To construct curried argument lists use triple dot splices `...$`
+A curried argument argument lists can be inserted into a quasiquotes with triple
+dots `...$`
 
 ```scala mdoc
 val arguments2 = List(q"arg3", q"arg4")
@@ -338,7 +344,7 @@ There is no need to use `Seq(arg1, arg2)` or `arg1 +: arg2 +: Nil`.
 ### With quasiquotes
 
 Quasiquotes expand at compile-time and work the same way in pattern position as
-in term position
+in term position.
 
 ```scala mdoc
 Term.Apply(
@@ -361,11 +367,29 @@ Use triple dollar splices `...$` to extract curried argument lists
 }
 ```
 
+> Pattern matching with quasiquotes is generally discouraged because it's easy
+> to write patterns that result in unintended match errors.
+
+```scala mdoc:crash
+q"final val x = 2" match {
+  case q"val x = 2" => // boom!
+}
+```
+
+To fix this pattern, we specify that the `final` modifier should be ignored
+using `$_`
+
+```scala mdoc
+q"final val x = 2" match {
+  case q"$_ val x = 2" => println("OK")
+}
+```
+
 ## Compare trees for equality
 
 Scalameta trees use reference equality by default, which may result in
-surprising behavior for beginners. A common mistake is to use `==` between
-parsed syntax trees and quasiquotes
+surprising behavior. A common mistake is to use `==` between parsed syntax trees
+and quasiquotes
 
 ```scala mdoc
 "true".parse[Term].get == q"true"

@@ -1,6 +1,6 @@
 ---
-id: talks
-title: Talks
+id: presentations
+title: Presentations
 ---
 
 ## How We Built Tools That Scale to Millions of Lines of Code (ScalaDays New York 2018)

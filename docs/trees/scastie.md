@@ -1,6 +1,6 @@
 ---
 id: scastie
-title: Scastie playground
+title: Scastie
 ---
 
 ```scala mdoc:scastie:olafurpg/lVeDktOuRci4NAzjWqkG9g
