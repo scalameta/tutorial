@@ -46,6 +46,7 @@ object ScalametaDocs {
     }
 
   def semanticdbProto = Pattern.compile("\\(semanticdb.proto\\)")
+  def semanticdbProto2 = Pattern.compile("\\[semanticdb.proto\\]: semanticdb.proto")
 
   def files = List(
     MarkdownFile(
@@ -94,6 +95,7 @@ object ScalametaDocs {
           spec.lines.dropWhile(!_.startsWith("## Motivation")).mkString("\n")
         applyReplacements(
           prelude + body,
+          semanticdbProto2 -> s"[semanticdb.proto]: $repoPath/semanticdb/semanticdb/semanticdb.proto",
           semanticdbProto -> s"($repoPath/semanticdb/semanticdb/semanticdb.proto)"
         )
       }

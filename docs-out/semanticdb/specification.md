@@ -3634,7 +3634,7 @@ the Java language. We intend to improve on this in the future.
 At this moment, there is no tool that supports Synthetic for
 the Java language. We may improve on this in the future.
 
-[semanticdb.proto]: semanticdb.proto
+[semanticdb.proto]: https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto
 [1]: https://semver.org/
 [2]: https://microsoft.github.io/language-server-protocol/
 [3]: https://scalacenter.github.io/bsp/
