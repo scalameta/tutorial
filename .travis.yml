@@ -12,7 +12,7 @@ jobs:
     - env: TEST="scalafmt"
       script: ./bin/scalafmt --test
     - env: TEST="compile"
-      script: sbt compile
+      script: sbt docs/compile
     - stage: release
       script: sbt docs/docusaurusPublishGhpages
 

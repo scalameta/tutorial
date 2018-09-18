@@ -14,7 +14,6 @@ object Main {
           "VERSION" -> BuildInfo.scalameta
         )
       )
-      .withReportRelativePaths(!args.contains("-w"))
       .withArgs(args.toList)
     val exit = mdoc.Main.process(settings)
     if (exit != 0) sys.exit(exit)

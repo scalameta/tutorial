@@ -8,11 +8,16 @@ const siteConfig = {
   title: "Scalameta",
   tagline: "Library to read, analyze, transform and generate Scala programs",
   url: "https://scalameta.org",
-  baseUrl: "/scalameta/",
+  cname: "scalameta.org",
 
-  // Used for publishing and more
-  projectName: "scalameta",
-  organizationName: "olafurpg",
+  baseUrl: "/",
+  projectName: "scalameta.github.com",
+  organizationName: "scalameta",
+
+  // For publishing to personal organization, uncomment below:
+  // baseUrl: "/scalameta/",
+  // projectName: "scalameta",
+  // organizationName: "olafurpg",
 
   // algolia: {
   //   apiKey: "???",
