@@ -4,22 +4,43 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Library to read, analyze, transform and generate Scala programs",
-    "misc/built-with-scalameta": "Built with Scalameta",
-    "misc/presentations": "Presentations",
-    "semanticdb/guide": "SemanticDB Guide",
-    "Guide": "Guide",
-    "semanticdb/specification": "SemanticDB Specification",
-    "Specification": "Specification",
-    "trees/guide": "Tree Guide",
-    "trees/quasiquotes": "Quasiquotes Specification",
-    "Quasiquotes": "Quasiquotes",
-    "trees/scalafiddle": "ScalaFiddle Playground",
-    "trees/scastie": "Scastie",
-    "Docs": "Docs",
-    "SemanticDB": "SemanticDB",
-    "GitHub": "GitHub",
-    "Trees": "Trees",
-    "Community": "Community"
+    "docs": {
+      "misc/built-with-scalameta": {
+        "title": "Built with Scalameta"
+      },
+      "misc/presentations": {
+        "title": "Presentations"
+      },
+      "semanticdb/guide": {
+        "title": "SemanticDB Guide",
+        "sidebar_label": "Guide"
+      },
+      "semanticdb/specification": {
+        "title": "SemanticDB Specification",
+        "sidebar_label": "Specification"
+      },
+      "trees/guide": {
+        "title": "Tree Guide",
+        "sidebar_label": "Guide"
+      },
+      "trees/quasiquotes": {
+        "title": "Quasiquotes Specification",
+        "sidebar_label": "Quasiquotes"
+      },
+      "trees/scalafiddle": {
+        "title": "ScalaFiddle Playground"
+      }
+    },
+    "links": {
+      "Docs": "Docs",
+      "SemanticDB": "SemanticDB",
+      "GitHub": "GitHub"
+    },
+    "categories": {
+      "Trees": "Trees",
+      "SemanticDB": "SemanticDB",
+      "Community": "Community"
+    }
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

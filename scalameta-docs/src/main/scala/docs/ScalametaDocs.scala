@@ -45,6 +45,8 @@ object ScalametaDocs {
         nextPattern.matcher(nextString).replaceAll(replacement)
     }
 
+  def semanticdbProto = Pattern.compile("\\(semanticdb.proto\\)")
+
   def files = List(
     MarkdownFile(
       title = "Quasiquotes Specification",
@@ -66,12 +68,11 @@ object ScalametaDocs {
             Pattern.DOTALL)
         val header = Pattern.compile("^# SemanticDB.*")
         val semanticdb3 = Pattern.compile("\\(semanticdb3.md\\)")
-        val semanticdbProto = Pattern.compile("\\(semanticdb.proto\\)")
         applyReplacements(
           guide,
           toc -> "",
           header -> "",
-          semanticdb3 -> "(specification.md)",
+          semanticdb3 -> "(specification.html)",
           semanticdbProto -> s"($repoPath/semanticdb/semanticdb/semanticdb.proto)"
         )
       }
@@ -91,7 +92,10 @@ object ScalametaDocs {
             |""".stripMargin
         val body =
           spec.lines.dropWhile(!_.startsWith("## Motivation")).mkString("\n")
-        prelude + body
+        applyReplacements(
+          prelude + body,
+          semanticdbProto -> s"($repoPath/semanticdb/semanticdb/semanticdb.proto)"
+        )
       }
     )
   )
