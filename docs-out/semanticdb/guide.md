@@ -57,7 +57,7 @@ coursier bootstrap org.scalameta:metap_native0.3_2.11:4.0.0-M6 -o metap -f --nat
 
 Let's generate SemanticDB for a simple Scala program. (At the moment,
 our SemanticDB producers provide full Scala support and partial Java support.
-Theoretically, [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto)
+Theoretically, [the SemanticDB protobuf schema](https://github.com/scalameta/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto)
 can accommodate other languages as well, but we haven't attempted to do that yet).
 
 ```scala
@@ -591,7 +591,7 @@ _empty_/Test.main().(args) => param args: Array[String]
 ### Scala bindings
 
 The `semanticdb` library contains [ScalaPB](https://scalapb.github.io/)
-bindings to [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto). Using this
+bindings to [the SemanticDB protobuf schema](https://github.com/scalameta/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto). Using this
 library, one can model SemanticDB entities as Scala case classes and
 serialize/deserialize them into bytes and streams.
 
@@ -678,7 +678,7 @@ For an example of using Metap, check out [Example](#example).
 
 The Protocol Compiler tool (`protoc`) can inspect protobuf payloads in
 `--decode` (takes a schema) and `--decode_raw` (doesn't need a schema) modes.
-For the reference, here's [the SemanticDB protobuf schema](https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto).
+For the reference, here's [the SemanticDB protobuf schema](https://github.com/scalameta/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto).
 
 ```
 $ tree
@@ -730,9 +730,9 @@ documents {
 but nowadays it's a bit too low-level. It is recommended to use `metap`
 instead of `protoc`.
 
-# SemanticDB-based tools
+## SemanticDB-based tools
 
-## Scalafix
+### Scalafix
 
 [Scalafix](https://github.com/scalacenter/scalafix) is a rewrite and linting
 tool for Scala developed at the Scala Center with the goal to help automate
@@ -754,7 +754,7 @@ Thanks to SemanticDB, Scalafix is:
     rewrites and lints in parallel. (Unlike compiler plugin-based linters
     that are limited by the single-threaded architecture of Scalac).
 
-## Metadoc
+### Metadoc
 
 [Metadoc](https://github.com/scalameta/metadoc) is an experiment with SemanticDB
 to build online code browser with IDE-like features. Check out
@@ -774,7 +774,7 @@ Thanks to SemanticDB, Metadoc is:
     which means that it can seamlessly work with any compiler / compiler version
     that supports [the SemanticDB compiler plugin](#scalac-compiler-plugin).
 
-## Metals
+### Metals
 
 [Metals](https://github.com/scalameta/metals) is an experiment to implement a
 [language server](https://github.com/Microsoft/language-server-protocol) for Scala

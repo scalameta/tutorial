@@ -30,7 +30,7 @@ object ScalametaDocs {
 
   // TODO: https://github.com/scalameta/scalameta/pull/1764
   // val root = "https://raw.githubusercontent.com/scalameta/scalameta/master"
-  val orgRepo = "olafurpg/scalameta"
+  val orgRepo = "scalameta/scalameta"
   val branch = "master"
   val root =
     s"https://raw.githubusercontent.com/$orgRepo/$branch"
@@ -46,7 +46,8 @@ object ScalametaDocs {
     }
 
   def semanticdbProto = Pattern.compile("\\(semanticdb.proto\\)")
-  def semanticdbProto2 = Pattern.compile("\\[semanticdb.proto\\]: semanticdb.proto")
+  def semanticdbProto2 =
+    Pattern.compile("\\[semanticdb.proto\\]: semanticdb.proto")
 
   def files = List(
     MarkdownFile(

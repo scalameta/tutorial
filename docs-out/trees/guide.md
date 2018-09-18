@@ -357,7 +357,7 @@ q"function[..$typeArguments]()"
 // 	at org.scalameta.invariants.InvariantFailedException$.raise(Exceptions.scala:15)
 // 	at scala.meta.Term$ApplyType$.internal$49(Trees.scala:82)
 // 	at scala.meta.Term$ApplyType$.apply(Trees.scala:82)
-// 	at repl.Session.$anonfun$app$42(guide.md:207)
+// 	at repl.Session.$anonfun$app$42(/Users/ollie/dev/scalameta-tutorial/docs/trees/guide.md:207)
 ```
 
 The quasiquote above is equivalent to calling the normal constructor
@@ -442,7 +442,7 @@ q"final val x = 2" match {
   case q"val x = 2" =>
 }
 // scala.MatchError: final val x = 2 (of class scala.meta.Defn$Val$DefnValImpl)
-// 	at repl.Session.$anonfun$app$47(guide.md:252)
+// 	at repl.Session.$anonfun$app$47(/Users/ollie/dev/scalameta-tutorial/docs/trees/guide.md:252)
 ```
 
 To fix this pattern, we specify that the `final` modifier should be ignored

@@ -2480,7 +2480,7 @@ message SymbolOccurrence {
 
 There is a Scala compiler plugin
 that generates [SymbolOccurrences](#symboloccurrence) for Scala code.
-The implementation [\[71\]][71] is used at Twitter scale, and it works well -
+The implementation is used at Twitter scale, and it works well -
 both in terms of handling sizeable codebases and understanding esoteric
 language constructs and idioms. However, but we do not yet have a specification
 that comprehensively describes how Scala language features map onto symbol
@@ -3634,7 +3634,7 @@ the Java language. We intend to improve on this in the future.
 At this moment, there is no tool that supports Synthetic for
 the Java language. We may improve on this in the future.
 
-[semanticdb.proto]: https://github.com/olafurpg/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto
+[semanticdb.proto]: https://github.com/scalameta/scalameta/blob/master/semanticdb/semanticdb/semanticdb.proto
 [1]: https://semver.org/
 [2]: https://microsoft.github.io/language-server-protocol/
 [3]: https://scalacenter.github.io/bsp/
@@ -3705,7 +3705,6 @@ the Java language. We may improve on this in the future.
 [68]: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html
 [69]: https://github.com/scalameta/scalameta/blob/master/semanticdb/metacp/src/main/scala/scala/meta/internal/javacp/Javacp.scala
 [70]: https://www.scala-lang.org/files/archive/spec/2.12/02-identifiers-names-and-scopes.html
-[71]: https://github.com/scalameta/scalameta/blob/master/semanticdb/scalac/library/src/main/scala/scala/meta/internal/semanticdb/scalac/DocumentOps.scala
 [72]: https://docs.oracle.com/javase/specs/jls/se8/html/jls-10.html#jls-10.1
 [73]: https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-PrimitiveType
 [74]: https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html
