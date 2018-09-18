@@ -11,7 +11,7 @@ const siteConfig = {
   cname: "scalameta.org",
 
   baseUrl: "/",
-  projectName: "scalameta.github.com",
+  projectName: "scalameta.github.io",
   organizationName: "scalameta",
 
   // For publishing to personal organization, uncomment below:
