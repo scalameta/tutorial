@@ -11,7 +11,7 @@ const siteConfig = {
   cname: "scalameta.org",
 
   baseUrl: "/",
-  projectName: "scalameta.github.com",
+  projectName: "scalameta.github.io",
   organizationName: "scalameta",
 
   // For publishing to personal organization, uncomment below:
@@ -58,7 +58,8 @@ const siteConfig = {
   /* On page navigation for the current documentation page */
   onPageNav: "separate",
 
-  editUrl: `${repoUrl}/edit/master/docs/`,
+  // Disabled because some markdown files are from scalameta/tutorial and some are from scalameta/scalameta.
+  // editUrl: `${repoUrl}/edit/master/docs/`,
 
   repoUrl,
   gitterUrl
