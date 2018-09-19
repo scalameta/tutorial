@@ -19,6 +19,9 @@
         "title": "SemanticDB Specification",
         "sidebar_label": "Specification"
       },
+      "trees/astexplorer": {
+        "title": "AST Explorer"
+      },
       "trees/guide": {
         "title": "Tree Guide",
         "sidebar_label": "Guide"
