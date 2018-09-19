@@ -23,10 +23,10 @@ Scala 2.11, Scala 2.12, Scala.js and Scala Native.
 
 ```scala
 // build.sbt
-libraryDependencies += "org.scalameta" %% "scalameta" % "4.0.0-RC1"
+libraryDependencies += "org.scalameta" %% "scalameta" % "4.0.0"
 
 // For Scala.js, Scala Native
-libraryDependencies += "org.scalameta" %%% "scalameta" % "4.0.0-RC1"
+libraryDependencies += "org.scalameta" %%% "scalameta" % "4.0.0"
 ```
 
 
@@ -45,7 +45,7 @@ A great way to experiment with Scalameta is to use the
 
 ```scala
 // Ammonite REPL
-import $ivy.`org.scalameta::scalameta:4.0.0-RC1`, scala.meta._
+import $ivy.`org.scalameta::scalameta:4.0.0`, scala.meta._
 ```
 
 ### ScalaFiddle

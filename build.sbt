@@ -1,4 +1,4 @@
-def scalameta = "4.0.0-RC1"
+def scalameta = "4.0.0"
 def scalafix = "0.6.0-M20"
 def scala212 = "2.12.6"
 
