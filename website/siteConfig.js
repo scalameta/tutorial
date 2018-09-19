@@ -19,10 +19,10 @@ const siteConfig = {
   // projectName: "scalameta",
   // organizationName: "olafurpg",
 
-  // algolia: {
-  //   apiKey: "???",
-  //   indexName: "sbt-docusaurus"
-  // },
+  algolia: {
+    apiKey: "0460d1c693a278bc1ad07ada3fb96c63",
+    indexName: "scalameta"
+  },
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
