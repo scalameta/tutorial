@@ -3,7 +3,8 @@ id: built-with-scalameta
 title: Built with Scalameta
 ---
 
-Feel free to add your project to this list.
+Feel free to add your project to this list by submitting a pull request
+[here](https://github.com/scalameta/tutorial/blob/master/docs/misc/built-with-scalameta.md).
 
 - [Scalafmt](https://scalameta.org/scalafmt): code formatter.
 - [Scalafix](https://scalacenter.github.io/scalafix/): refactoring and linting
