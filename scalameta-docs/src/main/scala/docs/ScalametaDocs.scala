@@ -58,6 +58,20 @@ object ScalametaDocs {
       url = s"$root/notes/quasiquotes.md"
     ),
     MarkdownFile(
+      title = "Tree Examples",
+      id = "examples",
+      filename = "trees/examples.md",
+      sidebarLabel = "Examples",
+      url = s"$root/notes/trees.md",
+      postProcess = { notes =>
+        val header = Pattern.compile("^# Tree Examples.*")
+        applyReplacements(
+          notes,
+          header -> ""
+        )
+      }
+    ),
+    MarkdownFile(
       title = "SemanticDB Guide",
       id = "guide",
       filename = "semanticdb/guide.md",
