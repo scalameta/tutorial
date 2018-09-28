@@ -3,11 +3,11 @@
 
 const repoUrl = "https://github.com/scalameta/scalameta";
 const gitterUrl = "https://gitter.im/scalameta/scalameta";
-// Trees.scala is not the best demo for metadoc since the macro annotations break the navigation.
+// Trees.scala is not the best demo for mbrowse since the macro annotations break the navigation.
 // Howevever, I can't think of a better source file in the Scalameta codebase to link to.
 // We should fix semanticdb-scalac to emit occurrences for macro annotations so this won't be a problem.
-const metadocUrl =
-  "https://scalameta.org/metadoc/#/scalameta/scalameta/trees/shared/src/main/scala/scala/meta/Trees.scala#L10C13-L10C17";
+const mbrowseUrl =
+  "https://scalameta.org/mbrowse/#/scalameta/scalameta/trees/shared/src/main/scala/scala/meta/Trees.scala#L10C13-L10C17";
 
 const siteConfig = {
   title: "Scalameta",
@@ -33,7 +33,7 @@ const siteConfig = {
   headerLinks: [
     { doc: "trees/guide", label: "Trees" },
     { doc: "semanticdb/guide", label: "SemanticDB" },
-    { href: metadocUrl, label: "Browse sources", external: true },
+    { href: mbrowseUrl, label: "Browse sources", external: true },
     { href: repoUrl, label: "GitHub", external: true }
   ],
 

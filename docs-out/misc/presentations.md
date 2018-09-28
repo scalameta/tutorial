@@ -31,7 +31,7 @@ interactive editing experience for Scala.
 This talk covers what SemanticDB is and how it enables a new way to build
 developer tools for Scala. We show how SemanticDB data looks like, explain how
 to use the utilities metac, metacp, mtags and mtags to produce and read
-SemanticDB, and how applications like Scalafix, Metadoc and Metals are using
+SemanticDB, and how applications like Scalafix, mbrowse and Metals are using
 SemanticDB today.
 
 - Video: https://youtu.be/1p_sYlgs7Lg
