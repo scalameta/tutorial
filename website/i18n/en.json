@@ -30,10 +30,6 @@
         "title": "Tree Guide",
         "sidebar_label": "Guide"
       },
-      "trees/notes": {
-        "title": "Tree Notes",
-        "sidebar_label": "Trees"
-      },
       "trees/quasiquotes": {
         "title": "Quasiquotes Specification",
         "sidebar_label": "Quasiquotes"
@@ -45,6 +41,7 @@
     "links": {
       "Trees": "Trees",
       "SemanticDB": "SemanticDB",
+      "Browse sources": "Browse sources",
       "GitHub": "GitHub"
     },
     "categories": {
