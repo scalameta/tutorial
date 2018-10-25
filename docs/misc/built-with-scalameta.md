@@ -11,7 +11,7 @@ Feel free to add your project to this list by submitting a pull request
   tool.
 - [Metals](https://scalameta.org/metals/): Language Server Protocol
   implementation.
-- [Metadoc](https://scalameta.org/metadoc): static site generator to browse
+- [Metabrowse](https://scalameta.org/metabrowse): static site generator to browse
   source code with "Jump to definition" and "Find references".
 - [Stags](https://github.com/pjrt/stags): Scala tags generator.
 - [AST explorer](https://astexplorer.net/#/gist/ec56167ffafb20cbd8d68f24a37043a9/74efb238ad02abaa8fa69fc80342563efa8a1bdc):
