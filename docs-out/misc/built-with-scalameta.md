@@ -22,4 +22,5 @@ Feel free to add your project to this list by submitting a pull request
   for creating unit tests from Scaladoc.
 - [sbt-doctest](https://github.com/tkawachi/sbt-doctest/): generates tests from
   examples in Scaladoc.
+- [Stryker4s](https://github.com/stryker-mutator/stryker4s): Test your tests with mutation testing.
 
