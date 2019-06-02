@@ -30,4 +30,4 @@ lazy val docs = project
       "ch.epfl.scala" %% "scalafix-core" % scalafix
     )
   )
-  .enablePlugins(BuildInfoPlugin, MdocPlugin)
+  .enablePlugins(BuildInfoPlugin, DocusaurusPlugin)
