@@ -11,7 +11,8 @@ object Main {
       .withOut(out)
       .withSiteVariables(
         Map(
-          "VERSION" -> BuildInfo.scalameta
+          "VERSION" -> BuildInfo.scalameta,
+          "SCALA_VERSION" -> util.Properties.versionNumberString,
         )
       )
       .withArgs(args.toList)

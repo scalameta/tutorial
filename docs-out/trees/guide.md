@@ -23,10 +23,10 @@ Scala 2.11, Scala 2.12, Scala.js and Scala Native.
 
 ```scala
 // build.sbt
-libraryDependencies += "org.scalameta" %% "scalameta" % "4.1.0"
+libraryDependencies += "org.scalameta" %% "scalameta" % "4.1.9"
 
 // For Scala.js, Scala Native
-libraryDependencies += "org.scalameta" %%% "scalameta" % "4.1.0"
+libraryDependencies += "org.scalameta" %%% "scalameta" % "4.1.9"
 ```
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12)
@@ -44,7 +44,7 @@ A great way to experiment with Scalameta is to use the
 
 ```scala
 // Ammonite REPL
-import $ivy.`org.scalameta::scalameta:4.1.0`, scala.meta._
+import $ivy.`org.scalameta::scalameta:4.1.9`, scala.meta._
 ```
 
 ### ScalaFiddle
@@ -356,7 +356,8 @@ q"function[..$typeArguments]()"
 // 	at org.scalameta.invariants.InvariantFailedException$.raise(Exceptions.scala:15)
 // 	at scala.meta.Term$ApplyType$.internal$49(Trees.scala:82)
 // 	at scala.meta.Term$ApplyType$.apply(Trees.scala:82)
-// 	at repl.Session.$anonfun$app$42(/Users/olafurpg/dev/tutorial/docs/trees/guide.md:219)
+// 	at repl.Session$App$$anonfun$39.apply(guide.md:220)
+// 	at repl.Session$App$$anonfun$39.apply(guide.md:220)
 ```
 
 The quasiquote above is equivalent to calling the normal constructor
@@ -441,7 +442,7 @@ q"final val x = 2" match {
   case q"val x = 2" => // boom!
 }
 // scala.MatchError: final val x = 2 (of class scala.meta.Defn$Val$DefnValImpl)
-// 	at repl.Session.$anonfun$app$47(/Users/olafurpg/dev/tutorial/docs/trees/guide.md:270)
+// 	at repl.Session$App$$anonfun$44.apply(guide.md:271)
 ```
 
 To fix this pattern, we specify that the `final` modifier should be ignored
