@@ -1,4 +1,4 @@
-language: scala
+language: node_js
 dist: trusty
 jdk:
   - oraclejdk8
