@@ -1,6 +1,6 @@
-def scalameta = "4.1.9"
-def scalafix = "0.9.1"
-def scala212 = "2.12.7"
+def scalameta = "4.2.3"
+def scalafix = "0.9.7"
+def scala212 = "2.12.10"
 
 inThisBuild(
   List(
