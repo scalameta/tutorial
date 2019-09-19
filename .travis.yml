@@ -15,9 +15,9 @@ jobs:
     - env: TEST="scalafmt"
       script: ./bin/scalafmt --test
     - env: TEST="compile"
-      script: sbt docs/compile
+      script: ./sbt docs/compile
     - stage: release
-      script: sbt docs/docusaurusPublishGhpages
+      script: ./sbt docs/docusaurusPublishGhpages
 
 cache:
   directories:
@@ -26,6 +26,7 @@ cache:
     - $HOME/.sbt/launchers
     - $HOME/.ivy2/cache
     - $HOME/.coursier
+    - $HOME/.cache
   yarn: true
 
 before_cache:
