@@ -1,14 +1,11 @@
-def scalameta = "4.2.3"
-def scalafix = "0.9.7"
+def scalameta = "4.3.0"
+def scalafix = "0.9.11"
 def scala212 = "2.12.10"
 
 inThisBuild(
   List(
     organization := "org.scalameta",
     scalaVersion := scala212,
-    libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.0.5" % Test
-    ),
     resolvers += Resolver.sonatypeRepo("releases")
   )
 )

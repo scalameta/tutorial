@@ -23,10 +23,10 @@ Scala 2.11, Scala 2.12, Scala.js and Scala Native.
 
 ```scala
 // build.sbt
-libraryDependencies += "org.scalameta" %% "scalameta" % "4.2.3"
+libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.0"
 
 // For Scala.js, Scala Native
-libraryDependencies += "org.scalameta" %%% "scalameta" % "4.2.3"
+libraryDependencies += "org.scalameta" %%% "scalameta" % "4.3.0"
 ```
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.scalameta/scalameta_2.12)
@@ -44,7 +44,7 @@ A great way to experiment with Scalameta is to use the
 
 ```scala
 // Ammonite REPL
-import $ivy.`org.scalameta::scalameta:4.2.3`, scala.meta._
+import $ivy.`org.scalameta::scalameta:4.3.0`, scala.meta._
 ```
 
 ### ScalaFiddle
